@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: "StudyDock | 33-Week Product Engineer Tracker",
   description:
     "Local-first, single-user learning management dashboard backed by PostgreSQL. Zero external telemetry.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
