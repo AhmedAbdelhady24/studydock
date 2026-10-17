@@ -24,6 +24,7 @@ export function getTaskResource(
   const desc = task.description.toLowerCase();
   const weekNum = week.weekNumber;
 
+  // 1. DSA & Algorithms Track
   if (cat === "dsa") {
     const dsaConceptsMap: Record<number, string[]> = {
       1: ["Big O Notation", "Time Complexity O(1)/O(n)", "Array Traversal", "Hash Map Lookup"],
@@ -75,116 +76,394 @@ export function getTaskResource(
     }
   }
 
+  // 2. Software Design & Architecture Track
   if (cat === "design") {
-    const archConceptsMap: Record<number, string[]> = {
-      1: ["Function Boundaries", "Pure vs Impure Functions", "Input/Output Contracts", "Side Effect Isolation"],
-      2: ["Separation of Concerns", "Transport vs Transformation", "Retry Policy", "Function Composition"],
-      3: ["Type-Driven Design", "Tagged / Discriminated Unions", "Illegal State Elimination", "Pattern Matching"],
-      4: ["Interface Segregation", "Reusable Abstractions", "Generic Constraints", "Minimal Surface Area"],
-      5: ["Single Responsibility Principle (SRP)", "Domain vs Transport Types", "State Modeling", "Validation Seams"],
-      6: ["Component Boundaries", "Semantic HTML Primitives", "Accessible Scoping", "Markup Hierarchy"],
-      7: ["Design Tokens", "Layout Primitives", "Spacing Conventions", "Mobile-First Design"],
-      8: ["Composition over Inheritance", "Props Contracts", "Unidirectional Data Flow", "Component Seams"],
-      9: ["Finite State Machines", "Action Boundaries", "Loading / Ready / Error States", "State Reducers"],
-      10: ["Adapter Pattern", "API Normalization Layer", "Presentation vs Data Fetching", "Contract Decoupling"],
-      11: ["Dependency Seams", "Test Doubles & Mocks", "Design for Testability", "Inversion of Control"],
-      12: ["Module Graph", "Frontend Architecture", "Component Contracts", "Bundle Boundaries"],
-      13: ["Module Boundaries", "Error Taxonomy", "Dependency Direction", "Node Architecture"],
-      14: ["Layered Architecture", "Controller / Service / Repository", "Thin Route Handlers", "DTOs"],
-      15: ["Strategy Pattern", "Interchangeable Validation Rules", "Business Logic Isolation", "Zod Pipelines"],
-      16: ["Middleware & Guard Pattern", "Authentication vs Authorization", "Least Privilege", "Security Seams"],
-      17: ["Repository Interface", "Domain to Relational Mapping", "Foreign Key Integrity", "Query Contracts"],
-      18: ["Unit of Work", "Transaction Boundaries", "ACID Guarantees", "Concurrency & Isolation"],
-      19: ["Data Access Layer (DAL)", "ORM vs Raw SQL Trade-offs", "Boundary Isolation", "Schema Migrations"],
-      20: ["Dependency Injection (DI)", "Inversion of Control (IoC)", "NestJS Providers", "Modular Decomposition"],
-      21: ["Guard & Decorator Pattern", "Interceptor Pipeline", "Exception Filters", "Cross-Cutting Concerns"],
-      22: ["Observer / Pub-Sub", "Event Emitters", "Background Task Queues", "Framework Trade-offs"],
-      23: ["Full-Stack Architecture", "Server Components DAL", "Command/Query Separation", "Hydration Boundaries"],
-      24: ["Server Action Safety", "Data Ownership", "Cache Invalidation", "CQS Primitives"],
-      25: ["Fault Boundaries", "Idempotency", "Graceful Shutdown", "Defensive Defaults"],
-      26: ["Reliability Engineering", "Health Check Architecture", "12-Factor App", "Container Isolation"],
-      27: ["Product Telemetry Architecture", "Event Taxonomy", "Privacy by Design", "No-PII Boundaries"],
-      28: ["Pub/Sub Analytics Model", "Funnel Tracking", "Feature Flag Seams", "Event Sampling"],
-      29: ["Code Smell Refactoring", "Refactoring to Patterns (Fowler)", "Safe Incremental Extraction", "Test Coverage"],
-      30: ["SOLID Principles", "Strategy / Factory / Adapter", "Low-Level Design (LLD)", "Object Modeling"],
-      31: ["System Design Primer", "Horizontal Scaling & Load Balancing", "Caching & Sharding", "CAP Theorem"],
-      32: ["Facade / State / Decorator", "Production Code Audits", "Extensibility vs Over-Engineering"],
-      33: ["High-Level Architecture", "Requirements Clarification", "System Trade-off Analysis", "Interview Mocks"],
-    };
+    if (weekNum === 1) {
+      return {
+        resourceName: "Clean Code (Robert C. Martin) — Chapter 3: Functions & Clean Code JS Guide",
+        resourceCategory: "architecture",
+        resourceLabel: "Clean Code (Ch. 3: Functions)",
+        referenceUrl: "https://github.com/ryanmcdermott/clean-code-javascript#functions",
+        topicBadge: "Clean Function Boundaries",
+        taskConcepts: [
+          "Clean Function Boundaries",
+          "Pure vs Impure Functions",
+          "Single Level of Abstraction",
+          "Side Effect Isolation",
+          "Input/Output Contracts",
+        ],
+      };
+    }
 
-    const concepts = archConceptsMap[weekNum] || [
-      "Software Architecture Principles",
-      "Separation of Concerns",
-      "System Modularity",
-      "Trade-off Analysis",
-    ];
+    if (weekNum === 2) {
+      return {
+        resourceName: "Clean Code (Robert C. Martin) — Chapter 10: Classes & Separation of Concerns",
+        resourceCategory: "architecture",
+        resourceLabel: "Clean Code (Separation of Concerns)",
+        referenceUrl: "https://github.com/ryanmcdermott/clean-code-javascript#classes",
+        topicBadge: "Separation of Concerns",
+        taskConcepts: [
+          "Separation of Concerns",
+          "Transport vs Transformation",
+          "Retry Policy Isolation",
+          "Function Composition",
+        ],
+      };
+    }
 
-    if (weekNum <= 5) {
+    if (weekNum === 3) {
       return {
-        resourceName: "Software Design: Function Boundaries, Tagged Unions & State Modeling",
+        resourceName: "Effective TypeScript (Dan Vanderkam) — Item 28: Valid States & Discriminated Unions",
         resourceCategory: "architecture",
-        resourceLabel: "Clean Code & State Modeling",
-        referenceUrl: "https://refactoring.guru/design-patterns/typescript",
-        topicBadge: "Domain & State Design",
-        taskConcepts: concepts,
+        resourceLabel: "Effective TypeScript (Item 28)",
+        referenceUrl: "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions",
+        topicBadge: "Tagged Unions & State",
+        taskConcepts: [
+          "Type-Driven State Modeling",
+          "Tagged / Discriminated Unions",
+          "Illegal State Elimination",
+          "Narrowing Invariants",
+        ],
       };
-    } else if (weekNum <= 12) {
+    }
+
+    if (weekNum === 4) {
       return {
-        resourceName: "Frontend Architecture: Component Composition, State Machines & Adapters",
+        resourceName: "Clean Code & Total TypeScript — Interface Segregation & Reusable Abstractions",
         resourceCategory: "architecture",
-        resourceLabel: "Component Architecture & Composition",
-        referenceUrl: "https://refactoring.guru/design-patterns/typescript",
-        topicBadge: "Component Architecture",
-        taskConcepts: concepts,
+        resourceLabel: "Interface Segregation Principle",
+        referenceUrl: "https://www.totaltypescript.com/",
+        topicBadge: "Interface Segregation",
+        taskConcepts: [
+          "Interface Segregation Principle (ISP)",
+          "Reusable Generic Abstractions",
+          "Minimal Interface Contracts",
+          "Speculative Generics Avoidance",
+        ],
       };
-    } else if (weekNum <= 19) {
+    }
+
+    if (weekNum === 5) {
       return {
-        resourceName: "Backend Architecture: Layered Architecture (Controller / Service / DAL) & Transactions",
+        resourceName: "Effective TypeScript (Items 31 & 32) & Clean Architecture — Domain vs Transport Types",
         resourceCategory: "architecture",
-        resourceLabel: "Enterprise Layered Architecture",
-        referenceUrl: "https://refactoring.guru/design-patterns/structural-patterns",
-        topicBadge: "Backend Architecture",
-        taskConcepts: concepts,
+        resourceLabel: "Effective TypeScript (Items 31-32)",
+        referenceUrl: "https://effectivetypescript.com/",
+        topicBadge: "Domain State Modeling",
+        taskConcepts: [
+          "Single Responsibility Principle (SRP)",
+          "Domain vs Transport Types",
+          "State Invariants",
+          "Boundary Validation Seams",
+        ],
       };
-    } else if (weekNum <= 22) {
+    }
+
+    if (weekNum === 6) {
       return {
-        resourceName: "NestJS Architecture: Dependency Injection, Guards, Decorators & Pub/Sub",
+        resourceName: "MDN Web Docs: HTML Semantic Elements & Accessible Component Boundaries",
+        resourceCategory: "architecture",
+        resourceLabel: "MDN: Semantic HTML",
+        referenceUrl: "https://developer.mozilla.org/en-US/docs/Glossary/Semantics",
+        topicBadge: "Semantic Component Boundaries",
+        taskConcepts: [
+          "Semantic Component Boundaries",
+          "Semantic HTML vs Div Soup",
+          "Accessible DOM Hierarchy",
+          "Form Semantics & Landmark Roles",
+        ],
+      };
+    }
+
+    if (weekNum === 7) {
+      return {
+        resourceName: "Tailwind CSS & Refactoring UI — Design Tokens & Layout Primitives",
+        resourceCategory: "architecture",
+        resourceLabel: "Tailwind: Design Tokens",
+        referenceUrl: "https://tailwindcss.com/docs/utility-first",
+        topicBadge: "Design Tokens & Spacing",
+        taskConcepts: [
+          "Design Tokens Scale",
+          "Layout Primitives",
+          "Spacing Conventions",
+          "Mobile-First Responsiveness",
+        ],
+      };
+    }
+
+    if (weekNum === 8) {
+      return {
+        resourceName: "React.dev Official Guide: Thinking in React & Composition over Inheritance",
+        resourceCategory: "architecture",
+        resourceLabel: "React.dev: Composition",
+        referenceUrl: "https://react.dev/learn/thinking-in-react",
+        topicBadge: "Component Composition",
+        taskConcepts: [
+          "Composition over Inheritance",
+          "Props Contracts",
+          "Unidirectional Data Flow",
+          "Component Seams",
+        ],
+      };
+    }
+
+    if (weekNum === 9) {
+      return {
+        resourceName: "React.dev Official Guide: Extracting State Logic into a Reducer & State Machines",
+        resourceCategory: "architecture",
+        resourceLabel: "React.dev: Finite State Logic",
+        referenceUrl: "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+        topicBadge: "State Machine Thinking",
+        taskConcepts: [
+          "Finite State Machines",
+          "Loading / Ready / Error Boundaries",
+          "Action Types",
+          "State Reducers",
+        ],
+      };
+    }
+
+    if (weekNum === 10) {
+      return {
+        resourceName: "Refactoring.Guru: Adapter Pattern (API Data Normalization)",
+        resourceCategory: "architecture",
+        resourceLabel: "Refactoring.Guru: Adapter",
+        referenceUrl: "https://refactoring.guru/design-patterns/adapter",
+        topicBadge: "Adapter & Data Normalization",
+        taskConcepts: [
+          "Adapter Pattern",
+          "API Normalization Layer",
+          "Separation of Presentation & Data Fetching",
+          "Contract Decoupling",
+        ],
+      };
+    }
+
+    if (weekNum === 11) {
+      return {
+        resourceName: "Martin Fowler: Test Doubles (Mocks, Stubs, Fakes) & Dependency Seams",
+        resourceCategory: "architecture",
+        resourceLabel: "Martin Fowler: Test Doubles",
+        referenceUrl: "https://martinfowler.com/bliki/TestDouble.html",
+        topicBadge: "Testability & Seams",
+        taskConcepts: [
+          "Dependency Seams",
+          "Test Doubles (Mocks, Stubs, Fakes)",
+          "Design for Testability",
+          "Inversion of Control",
+        ],
+      };
+    }
+
+    if (weekNum === 12) {
+      return {
+        resourceName: "Bulletproof React & Clean Architecture — Modular Frontend Boundaries",
+        resourceCategory: "architecture",
+        resourceLabel: "Bulletproof React: Module Graph",
+        referenceUrl: "https://github.com/alan2207/bulletproof-react",
+        topicBadge: "Modular Frontend Architecture",
+        taskConcepts: [
+          "Module Graph",
+          "Feature-Based Modular Architecture",
+          "Component Contracts",
+          "Boundary Enforcement",
+        ],
+      };
+    }
+
+    if (weekNum === 13) {
+      return {
+        resourceName: "Node.js Best Practices & Architecture: Modular Structure & Error Taxonomy",
+        resourceCategory: "architecture",
+        resourceLabel: "Node.js Best Practices",
+        referenceUrl: "https://github.com/goldbergyoni/nodebestpractices#1-project-structure-practices",
+        topicBadge: "Backend Module Boundaries",
+        taskConcepts: [
+          "Module Boundaries",
+          "Error Taxonomy",
+          "Dependency Direction",
+          "Layered Isolation",
+        ],
+      };
+    }
+
+    if (weekNum === 14) {
+      return {
+        resourceName: "Martin Fowler: Patterns of Enterprise Application Architecture — Service Layer",
+        resourceCategory: "architecture",
+        resourceLabel: "Martin Fowler: Service Layer",
+        referenceUrl: "https://martinfowler.com/eaaCatalog/serviceLayer.html",
+        topicBadge: "Layered Architecture",
+        taskConcepts: [
+          "Controller / Service / Repository",
+          "Thin Route Handlers",
+          "Data Transfer Objects (DTOs)",
+          "Business Logic Isolation",
+        ],
+      };
+    }
+
+    if (weekNum === 15) {
+      return {
+        resourceName: "Refactoring.Guru: Strategy Pattern (Interchangeable Validation Rules)",
+        resourceCategory: "architecture",
+        resourceLabel: "Refactoring.Guru: Strategy Pattern",
+        referenceUrl: "https://refactoring.guru/design-patterns/strategy",
+        topicBadge: "Strategy Pattern",
+        taskConcepts: [
+          "Strategy Pattern",
+          "Interchangeable Validation Rules",
+          "Business Rule Pluggability",
+          "Zod Validation Pipelines",
+        ],
+      };
+    }
+
+    if (weekNum === 16) {
+      return {
+        resourceName: "Martin Fowler: Interceptor & Middleware Pattern — Authentication & Authorization Seams",
+        resourceCategory: "architecture",
+        resourceLabel: "Middleware & Guard Pattern",
+        referenceUrl: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/EnvelopeWrapper.html",
+        topicBadge: "Middleware & Security Guards",
+        taskConcepts: [
+          "Middleware / Guard Pattern",
+          "Authentication vs Authorization",
+          "Least Privilege Principle",
+          "Cross-Cutting Security Seams",
+        ],
+      };
+    }
+
+    if (weekNum === 17) {
+      return {
+        resourceName: "Martin Fowler: Repository Pattern & Relational Data Modeling",
+        resourceCategory: "architecture",
+        resourceLabel: "Martin Fowler: Repository Pattern",
+        referenceUrl: "https://martinfowler.com/eaaCatalog/repository.html",
+        topicBadge: "Repository Interface",
+        taskConcepts: [
+          "Repository Interface",
+          "Domain to Relational Mapping",
+          "Foreign Key Integrity",
+          "Query Contracts",
+        ],
+      };
+    }
+
+    if (weekNum === 18) {
+      return {
+        resourceName: "Designing Data-Intensive Applications (Martin Kleppmann) — Chapter 7: Transactions",
+        resourceCategory: "architecture",
+        resourceLabel: "DDIA (Ch. 7: Transactions)",
+        referenceUrl: "https://dataintensive.net/",
+        topicBadge: "Transactions & Unit of Work",
+        taskConcepts: [
+          "Unit of Work Pattern",
+          "Transaction Boundaries",
+          "ACID Guarantees",
+          "Lost Update Prevention & Isolation",
+        ],
+      };
+    }
+
+    if (weekNum === 19) {
+      return {
+        resourceName: "Drizzle ORM: Data Access Layer & Schema Boundaries",
+        resourceCategory: "architecture",
+        resourceLabel: "Drizzle ORM: Data Access Layer",
+        referenceUrl: "https://orm.drizzle.team/docs/overview",
+        topicBadge: "Data Access Layer (DAL)",
+        taskConcepts: [
+          "Data Access Layer (DAL)",
+          "ORM vs Raw SQL Trade-offs",
+          "Data Ownership",
+          "Schema Migration Isolation",
+        ],
+      };
+    }
+
+    if (weekNum >= 20 && weekNum <= 22) {
+      return {
+        resourceName: "NestJS Official Documentation: Dependency Injection & Provider Architecture",
         resourceCategory: "architecture",
         resourceLabel: "NestJS Architecture (Tom Ray)",
         referenceUrl: "https://docs.nestjs.com/fundamentals/dependency-injection",
-        topicBadge: "Framework Architecture",
-        taskConcepts: concepts,
-      };
-    } else if (weekNum <= 26) {
-      return {
-        resourceName: "System Architecture: Next.js DAL, Fault Boundaries, Reliability & Docker",
-        resourceCategory: "architecture",
-        resourceLabel: "Full-Stack System Architecture",
-        referenceUrl: "https://nextjs.org/learn",
-        topicBadge: "System Architecture",
-        taskConcepts: concepts,
-      };
-    } else if (weekNum <= 29) {
-      return {
-        resourceName: "Product Architecture: Telemetry Boundaries (PostHog) & Code Smells Refactoring",
-        resourceCategory: "architecture",
-        resourceLabel: "PostHog & Refactoring (Martin Fowler)",
-        referenceUrl: "https://posthog.com/product-engineer/what-is-a-product-engineer",
-        topicBadge: "Product Architecture",
-        taskConcepts: concepts,
-      };
-    } else {
-      return {
-        resourceName: "System Design Primer & GoF Patterns (Ultimate Design Patterns + Refactoring.Guru)",
-        resourceCategory: "architecture",
-        resourceLabel: "System Design Primer · GoF Patterns",
-        referenceUrl: "https://github.com/donnemartin/system-design-primer",
-        topicBadge: "System Design & GoF",
-        taskConcepts: concepts,
+        topicBadge: "NestJS Dependency Injection",
+        taskConcepts: [
+          "Dependency Injection (DI)",
+          "Inversion of Control (IoC)",
+          "NestJS Providers & Modules",
+          "Decorators & Guards Pipeline",
+        ],
       };
     }
+
+    if (weekNum === 23 || weekNum === 24) {
+      return {
+        resourceName: "Next.js Official Documentation: Server Components & Data Access Layer Architecture",
+        resourceCategory: "architecture",
+        resourceLabel: "Next.js Data Access Architecture",
+        referenceUrl: "https://nextjs.org/learn",
+        topicBadge: "Next.js Server DAL",
+        taskConcepts: [
+          "Server-Side Data Access Layer",
+          "Server Components Boundaries",
+          "Command/Query Separation (CQS)",
+          "Hydration Boundaries",
+        ],
+      };
+    }
+
+    if (weekNum === 25 || weekNum === 26) {
+      return {
+        resourceName: "The Twelve-Factor App: Disposability, Concurrency & Health Checks",
+        resourceCategory: "architecture",
+        resourceLabel: "The Twelve-Factor App",
+        referenceUrl: "https://12factor.net/disposability",
+        topicBadge: "Reliability & Fault Boundaries",
+        taskConcepts: [
+          "Fault Boundaries",
+          "Graceful Shutdown",
+          "Health Check Endpoints",
+          "Idempotency & Timeouts",
+        ],
+      };
+    }
+
+    if (weekNum >= 27 && weekNum <= 29) {
+      return {
+        resourceName: "Refactoring (Martin Fowler) — Catalog of Refactorings & PostHog Telemetry Architecture",
+        resourceCategory: "architecture",
+        resourceLabel: "Refactoring Catalog (Martin Fowler)",
+        referenceUrl: "https://refactoring.com/catalog/",
+        topicBadge: "Refactoring & Telemetry",
+        taskConcepts: [
+          "Code Smell Refactoring",
+          "Event Naming Taxonomy",
+          "Privacy by Design",
+          "No-PII Telemetry Boundaries",
+        ],
+      };
+    }
+
+    // Weeks 30–33 (GoF Design Patterns & System Design Primer)
+    return {
+      resourceName: "Refactoring.Guru: TypeScript Design Patterns & System Design Primer (Donne Martin)",
+      resourceCategory: "architecture",
+      resourceLabel: "Refactoring.Guru (TypeScript) · System Design Primer",
+      referenceUrl: "https://refactoring.guru/design-patterns/typescript",
+      topicBadge: "GoF Patterns & System Design",
+      taskConcepts: [
+        "SOLID Principles",
+        "Strategy / Factory / Adapter Patterns",
+        "System Design Primer",
+        "Scalable System Architecture",
+      ],
+    };
   }
 
+  // 3. Implementation Track
   if (cat === "implementation") {
     if (
       desc.includes("feedback") ||
@@ -214,6 +493,7 @@ export function getTaskResource(
       resourceName: "Independent Coding Lab & Unit Tests (Vitest)",
       resourceCategory: "implementation",
       resourceLabel: "Independent Code Lab",
+      referenceUrl: "https://vitest.dev/guide/",
       topicBadge: "Hands-on Lab",
       taskConcepts: [
         "Pure Function Implementation",
@@ -224,11 +504,13 @@ export function getTaskResource(
     };
   }
 
+  // 4. Quality Gate Track
   if (cat === "quality") {
     return {
       resourceName: "Engineering Quality Gate: Typecheck, Vitest, Git Commits & docs/retrospectives/",
       resourceCategory: "quality",
       resourceLabel: "Quality & Retrospective Gate",
+      referenceUrl: "https://vitest.dev/guide/",
       topicBadge: "Engineering Discipline",
       taskConcepts: [
         "Strict TypeScript Typecheck",
@@ -239,6 +521,7 @@ export function getTaskResource(
     };
   }
 
+  // 5. Checkpoint Track
   if (cat === "checkpoint") {
     return {
       resourceName: "Competency Gatekeeper: 5-Minute Independent Explanation & Zero-AI Exit Test",
@@ -254,30 +537,30 @@ export function getTaskResource(
     };
   }
 
-  // Course category
+  // 6. Primary Lecture Course Track
   const courseStr = week.primaryCourses || "Core Syllabus";
-  let refUrl: string | undefined;
+  let refUrl: string = "https://frontendmasters.com";
 
   if (courseStr.toLowerCase().includes("hard parts")) {
     refUrl = "https://frontendmasters.com/courses/javascript-hard-parts-v3/";
   } else if (courseStr.toLowerCase().includes("typescript")) {
-    refUrl = "https://totaltypescript.com";
+    refUrl = "https://www.totaltypescript.com/";
   } else if (courseStr.toLowerCase().includes("css for javascript")) {
-    refUrl = "https://css-for-js.dev";
+    refUrl = "https://css-for-js.dev/";
   } else if (courseStr.toLowerCase().includes("epic react")) {
-    refUrl = "https://epicreact.dev";
+    refUrl = "https://www.epicreact.dev/";
   } else if (courseStr.toLowerCase().includes("testing fundamentals")) {
-    refUrl = "https://frontendmasters.com/courses/testing-fundamentals/";
+    refUrl = "https://vitest.dev/guide/";
   } else if (courseStr.toLowerCase().includes("node.js")) {
     refUrl = "https://frontendmasters.com/courses/node-js-v3/";
   } else if (courseStr.toLowerCase().includes("api design")) {
     refUrl = "https://frontendmasters.com/courses/api-design-nodejs-v5/";
   } else if (courseStr.toLowerCase().includes("sql")) {
-    refUrl = "https://frontendmasters.com/courses/complete-intro-sql/";
+    refUrl = "https://www.postgresql.org/docs/current/";
   } else if (courseStr.toLowerCase().includes("nest")) {
     refUrl = "https://www.tomray.dev/nestjs-course";
   } else if (courseStr.toLowerCase().includes("next.js")) {
-    refUrl = "https://frontendmasters.com/courses/next-js-v4/";
+    refUrl = "https://nextjs.org/learn";
   } else if (courseStr.toLowerCase().includes("playwright")) {
     refUrl = "https://frontendmasters.com/courses/playwright/";
   } else if (courseStr.toLowerCase().includes("posthog")) {

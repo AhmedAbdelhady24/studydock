@@ -289,7 +289,7 @@ export function TaskDetailDrawer({
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                    Canonical Resource
+                    Primary Learning Resource
                   </span>
                   <p className="text-sm font-semibold text-white leading-snug">
                     {task.resourceName || task.resourceLabel || task.primaryCourses || "Core Syllabus"}
