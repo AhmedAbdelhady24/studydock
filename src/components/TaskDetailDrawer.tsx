@@ -188,7 +188,7 @@ export function TaskDetailDrawer({
                   : task.phaseTitle || "Curriculum"}
               </span>
               {task.topicBadge && (
-                <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full font-semibold">
                   {task.topicBadge}
                 </span>
               )}
@@ -196,21 +196,22 @@ export function TaskDetailDrawer({
 
             <button
               onClick={onClose}
-              className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-zinc-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
               title="Close (Esc)"
+              aria-label="Close details"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-white tracking-tight leading-snug">
+            <h2 className="text-xl font-bold text-white tracking-tight leading-snug">
               {task.title}
             </h2>
             <div className="flex items-center gap-2 mt-2">
               <span
                 className={cn(
-                  "inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-0.5 rounded border",
+                  "inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-0.5 rounded-full border",
                   meta.bg,
                   meta.text
                 )}
@@ -219,7 +220,7 @@ export function TaskDetailDrawer({
                 <span>{meta.label}</span>
               </span>
 
-              <span className="text-[10px] font-mono text-zinc-500">
+              <span className="text-[11px] font-mono text-zinc-400 font-semibold">
                 {task.weekNumber ? `W${task.weekNumber.toString().padStart(2, "0")} · Task ${task.sortOrder || 1}` : task.taskId}
               </span>
             </div>
@@ -285,13 +286,13 @@ export function TaskDetailDrawer({
             </div>
 
             {/* Dedicated Task Resource */}
-            <div className="p-3 rounded-md bg-[#090A0C] border border-white/[0.06] space-y-2">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
+            <div className="p-4 rounded-2xl bg-[#090A0C] border border-white/[0.08] space-y-2">
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block font-semibold">
                     Primary Learning Resource
                   </span>
-                  <p className="text-sm font-semibold text-white leading-snug">
+                  <p className="text-sm font-bold text-white leading-snug">
                     {task.resourceName || task.resourceLabel || task.primaryCourses || "Core Syllabus"}
                   </p>
                 </div>
@@ -300,10 +301,10 @@ export function TaskDetailDrawer({
                     href={task.referenceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 rounded text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 border border-blue-500/20 shrink-0 transition-colors"
-                    title="Open course reference in new tab"
+                    className="btn-circle-action group/btn hover:scale-105"
+                    title="Open official resource in new tab"
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-4 h-4 stroke-[2.2]" />
                   </a>
                 )}
               </div>

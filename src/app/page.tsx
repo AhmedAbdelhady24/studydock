@@ -13,6 +13,8 @@ import { KanbanBoard } from "@/components/KanbanBoard";
 import { TaskDetailDrawer } from "@/components/TaskDetailDrawer";
 import { StudyTimer } from "@/components/StudyTimer";
 import { CheckpointBanner } from "@/components/CheckpointBanner";
+import { BentoOverview } from "@/components/BentoOverview";
+import { ProgressTimeline } from "@/components/ProgressTimeline";
 import { cn } from "@/lib/utils";
 
 export default function TodayPage() {
@@ -108,91 +110,8 @@ export default function TodayPage() {
 
   return (
     <div className="space-y-8">
-      {/* Week in Flight Header */}
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-3 border-b border-white/[0.06]">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <span className="text-xs font-mono font-semibold text-emerald-400">
-              Week {activeWeek?.weekNumber}
-            </span>
-            <span className="text-zinc-600">•</span>
-            <h1 className="text-xl font-bold tracking-tight text-white">
-              {activeWeek?.title}
-            </h1>
-          </div>
-          <p className="text-xs text-zinc-400 mt-1">
-            {activeWeek?.phaseTitle} • {activeWeek?.targetHours}h target •{" "}
-            <span className="text-zinc-200 font-mono font-semibold">
-              {activeWeek?.primaryCourses || "General Syllabus"}
-            </span>
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href={`/weeks/${activeWeek?.weekId}`}
-            className="text-xs font-medium text-zinc-400 hover:text-white flex items-center gap-1 transition-colors font-mono"
-          >
-            <span>Full Week Syllabus</span>
-            <ArrowRight className="w-3.5 h-3.5 text-zinc-500" />
-          </Link>
-        </div>
-      </div>
-
-      {/* Integrated Stats Ribbon */}
-      <div className="grid grid-cols-2 md:grid-cols-4 rounded-lg border border-white/[0.08] bg-[#111317] divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
-        <div className="p-4">
-          <span className="text-xs text-zinc-400 font-medium block">
-            Overall Progress
-          </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
-              {metrics?.overallPercentage ?? 0}%
-            </span>
-            <span className="text-[11px] font-mono text-zinc-500">
-              {metrics?.completedTasksCount ?? 0}/{metrics?.totalTasksCount ?? 231} tasks
-            </span>
-          </div>
-        </div>
-
-        <div className="p-4">
-          <span className="text-xs text-zinc-400 font-medium block">
-            Weeks Completed
-          </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
-              {metrics?.completedWeeksCount ?? 0}
-            </span>
-            <span className="text-[11px] font-mono text-zinc-500">
-              of {metrics?.totalWeeksCount ?? 33} passed
-            </span>
-          </div>
-        </div>
-
-        <div className="p-4">
-          <span className="text-xs text-zinc-400 font-medium block">
-            Time Logged
-          </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
-              {metrics?.totalHoursStudied ?? 0}
-            </span>
-            <span className="text-[11px] font-mono text-zinc-500">hours total</span>
-          </div>
-        </div>
-
-        <div className="p-4">
-          <span className="text-xs text-zinc-400 font-medium block">
-            DSA Solved
-          </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
-              {metrics?.distinctDsaSolvedCount ?? 0}
-            </span>
-            <span className="text-[11px] font-mono text-zinc-500">unique problems</span>
-          </div>
-        </div>
-      </div>
+      {/* Bento Hero & Stats Overview (Inspired by mobile designs Image 1 & 2) */}
+      <BentoOverview activeWeek={activeWeek} metrics={metrics} />
 
       {/* Main Workbench Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -211,13 +130,13 @@ export default function TodayPage() {
 
             <div className="flex items-center gap-2.5">
               {/* Filter Pills */}
-              <div className="flex items-center gap-1 text-xs bg-[#101216] p-1 rounded-md border border-white/[0.08]">
+              <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setTaskFilter("all")}
                   className={cn(
-                    "px-2 py-0.5 rounded font-medium transition-colors",
-                    taskFilter === "all" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                    "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
+                    taskFilter === "all" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
                   )}
                 >
                   All
@@ -226,8 +145,8 @@ export default function TodayPage() {
                   type="button"
                   onClick={() => setTaskFilter("required")}
                   className={cn(
-                    "px-2 py-0.5 rounded font-medium transition-colors",
-                    taskFilter === "required" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                    "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
+                    taskFilter === "required" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
                   )}
                 >
                   Required
@@ -236,8 +155,8 @@ export default function TodayPage() {
                   type="button"
                   onClick={() => setTaskFilter("dsa")}
                   className={cn(
-                    "px-2 py-0.5 rounded font-medium transition-colors",
-                    taskFilter === "dsa" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                    "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
+                    taskFilter === "dsa" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
                   )}
                 >
                   DSA
@@ -245,15 +164,15 @@ export default function TodayPage() {
               </div>
 
               {/* View Switcher: Board (Kanban) vs List */}
-              <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-md border border-white/[0.08] text-xs">
+              <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs">
                 <button
                   type="button"
                   onClick={() => setViewMode("kanban")}
                   className={cn(
-                    "px-2.5 py-1 rounded font-medium flex items-center gap-1.5 transition-colors",
+                    "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                     viewMode === "kanban"
-                      ? "bg-white/[0.12] text-white shadow-sm"
-                      : "text-zinc-400 hover:text-zinc-200"
+                      ? "bg-white text-zinc-950 shadow-sm font-bold"
+                      : "text-zinc-400 hover:text-white"
                   )}
                   title="Switch to Kanban board view"
                 >
@@ -264,10 +183,10 @@ export default function TodayPage() {
                   type="button"
                   onClick={() => setViewMode("list")}
                   className={cn(
-                    "px-2.5 py-1 rounded font-medium flex items-center gap-1.5 transition-colors",
+                    "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                     viewMode === "list"
-                      ? "bg-white/[0.12] text-white shadow-sm"
-                      : "text-zinc-400 hover:text-zinc-200"
+                      ? "bg-white text-zinc-950 shadow-sm font-bold"
+                      : "text-zinc-400 hover:text-white"
                   )}
                   title="Switch to List view"
                 >
@@ -310,8 +229,14 @@ export default function TodayPage() {
           />
         </div>
 
-        {/* Right Column: Focus Timer & Course Targets */}
+        {/* Right Column: Progress Checklist Stepper & Focus Timer (Inspired by learnspring Image 3) */}
         <div className="space-y-6">
+          <ProgressTimeline
+            tasks={activeWeekTasks}
+            weekNumber={activeWeek?.weekNumber}
+            onSelectTask={handleOpenTask}
+          />
+
           <StudyTimer
             currentWeekId={activeWeek?.weekId}
             onSessionLogged={fetchPlanData}
