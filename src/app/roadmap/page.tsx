@@ -287,7 +287,7 @@ export default function RoadmapPage() {
                       </div>
 
                       {/* Week Title */}
-                      <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#E05353] dark:group-hover:text-[#FF8A8A] transition-colors line-clamp-1 leading-snug">
+                      <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#4F46E5] dark:group-hover:text-[#C8B6FF] transition-colors line-clamp-1 leading-snug">
                         {w.title}
                       </h3>
 
@@ -302,7 +302,7 @@ export default function RoadmapPage() {
                           {w.completedTasksCount}/{w.tasksCount} tasks done
                         </span>
                         <span className="flex items-center gap-1 font-semibold text-zinc-700 dark:text-zinc-300">
-                          <Clock className="w-3 h-3 text-[#E05353]" />
+                          <Clock className="w-3 h-3 text-[#4F46E5] dark:text-[#C8B6FF]" />
                           <span>{w.targetHours}h target</span>
                         </span>
                       </div>

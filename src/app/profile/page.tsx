@@ -10,7 +10,6 @@ import {
   Check,
   Moon,
   Sun,
-  Flame,
   ArrowRight,
   BookOpen,
 } from "lucide-react";
@@ -188,7 +187,7 @@ export default function ProfilePage() {
             {/* Weekly Target Hours */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                Weekly Target Study Hours: <span className="text-[#E05353] font-mono">{weeklyTargetHours}h</span>
+                Weekly Target Study Hours: <span className="text-[#4F46E5] dark:text-[#C8B6FF] font-mono">{weeklyTargetHours}h</span>
               </label>
               <div className="flex items-center gap-3">
                 <input
@@ -198,7 +197,7 @@ export default function ProfilePage() {
                   step="1"
                   value={weeklyTargetHours}
                   onChange={(e) => setWeeklyTargetHours(Number(e.target.value))}
-                  className="flex-1 accent-[#E05353] cursor-pointer"
+                  className="flex-1 accent-[#4F46E5] cursor-pointer"
                 />
                 <span className="text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 w-8 text-right">
                   {weeklyTargetHours}h

@@ -17,7 +17,7 @@ import {
   Sparkles,
   Menu,
   X,
-  Flame,
+  BookOpen,
   Sun,
   Moon,
   User,
@@ -162,8 +162,8 @@ export function AppShell({ children }: AppShellProps) {
                   )}
                   title="StudyDock Dashboard"
                 >
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#E05353] to-[#FF8A8A] flex items-center justify-center text-white font-bold shadow-lg shadow-[#E05353]/20 group-hover:scale-105 transition-transform duration-200 shrink-0">
-                    <Flame className="w-5 h-5 fill-white" />
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-200 shrink-0">
+                    <BookOpen className="w-5 h-5 stroke-[2.2]" />
                   </div>
                   {!isCollapsed && (
                     <div className="overflow-hidden">
@@ -171,7 +171,7 @@ export function AppShell({ children }: AppShellProps) {
                         <span className="text-base font-bold tracking-tight text-zinc-900 dark:text-white truncate">
                           StudyDock
                         </span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#E05353] shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] shrink-0" />
                       </div>
                       <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block tracking-wide truncate">
                         Product Engineer 33w
@@ -258,7 +258,7 @@ export function AppShell({ children }: AppShellProps) {
                 <div className="flex items-start justify-between gap-3 relative z-10">
                   <div className="space-y-1">
                     <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/10 dark:bg-[#FFE6A3]/20 text-zinc-800 dark:text-[#FFE6A3] text-[10px] font-bold uppercase tracking-wider">
-                      <Sparkles className="w-3 h-3 text-[#E05353]" />
+                      <Sparkles className="w-3 h-3 text-[#7C3AED] dark:text-[#FFE6A3]" />
                       <span>Focus Mode</span>
                     </div>
                     <h4 className="text-xs font-bold text-zinc-900 dark:text-white pt-1">
@@ -270,7 +270,7 @@ export function AppShell({ children }: AppShellProps) {
                   </div>
                   <Link
                     href="/sessions"
-                    className="w-8 h-8 rounded-full bg-[#E05353] text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-md shrink-0"
+                    className="w-8 h-8 rounded-full bg-[#4F46E5] hover:bg-[#4338CA] text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-md shrink-0"
                     title="Open Study Sessions"
                   >
                     <ArrowRight className="w-4 h-4" />
@@ -280,7 +280,7 @@ export function AppShell({ children }: AppShellProps) {
             ) : (
               <Link
                 href="/sessions"
-                className="w-10 h-10 rounded-2xl bg-[#FFE6A3]/30 dark:bg-[#FFE6A3]/15 text-[#E05353] flex items-center justify-center hover:scale-110 transition-transform shadow-sm mx-auto"
+                className="w-10 h-10 rounded-2xl bg-[#FFE6A3]/30 dark:bg-[#FFE6A3]/15 text-[#7C3AED] dark:text-[#FFE6A3] flex items-center justify-center hover:scale-110 transition-transform shadow-sm mx-auto"
                 title="Focus Study Timer"
               >
                 <Clock className="w-5 h-5 stroke-[2.2]" />
@@ -372,7 +372,7 @@ export function AppShell({ children }: AppShellProps) {
                   aria-label="Notifications"
                 >
                   <Bell className="w-4 h-4" />
-                  <span className="w-2 h-2 rounded-full bg-[#E05353] absolute top-2 right-2 ring-2 ring-white dark:ring-[#131418]" />
+                  <span className="w-2 h-2 rounded-full bg-[#4F46E5] absolute top-2 right-2 ring-2 ring-white dark:ring-[#131418]" />
                 </button>
 
                 {/* User Greeting & Round Avatar (Clickable to /profile) */}
@@ -390,7 +390,7 @@ export function AppShell({ children }: AppShellProps) {
                     <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium leading-none">
                       Good Day,
                     </span>
-                    <span className="text-xs font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-[#E05353] transition-colors">
+                    <span className="text-xs font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-[#4F46E5] transition-colors">
                       {profile.name || "Engineer"}
                     </span>
                   </div>

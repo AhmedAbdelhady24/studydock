@@ -35,7 +35,7 @@ export function ProgressTimeline({
           <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-800 dark:text-zinc-200">
             {completedCount}/{totalCount}
           </span>
-          <span className="text-[11px] font-bold text-[#E05353]">
+          <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 font-mono">
             {percent}%
           </span>
         </div>
@@ -58,7 +58,7 @@ export function ProgressTimeline({
                 className={cn(
                   "absolute -left-[24px] top-0.5 w-[18px] h-[18px] rounded-full flex items-center justify-center transition-all duration-200 z-10",
                   isDone
-                    ? "bg-[#E05353] text-white shadow-md shadow-[#E05353]/30"
+                    ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
                     : isInProgress
                     ? "bg-white dark:bg-[#18191E] ring-2 ring-amber-400 text-amber-500"
                     : "bg-white dark:bg-[#18191E] border-2 border-zinc-300 dark:border-zinc-600 text-transparent group-hover:border-zinc-500"

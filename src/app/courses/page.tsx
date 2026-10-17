@@ -262,7 +262,7 @@ export default function CoursesPage() {
                     max="100"
                     value={editPercent}
                     onChange={(e) => setEditPercent(Number(e.target.value))}
-                    className="w-full accent-[#E05353] cursor-pointer"
+                    className="w-full accent-[#4F46E5] cursor-pointer"
                   />
                   <div className="flex justify-end gap-2 pt-1">
                     <button
