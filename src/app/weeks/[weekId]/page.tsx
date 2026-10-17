@@ -29,9 +29,11 @@ export default function WeekDetailPage() {
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const loadData = async () => {
+  const loadData = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent && !data) {
+        setLoading(true);
+      }
       const res = await fetch("/api/plan");
       const json = await res.json();
       setData(json);
@@ -52,11 +54,15 @@ export default function WeekDetailPage() {
     }
   };
 
+  const handleSilentUpdate = () => {
+    loadData(true);
+  };
+
   useEffect(() => {
     loadData();
   }, [weekId]);
 
-  if (loading) {
+  if (loading && !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
         <div className="w-6 h-6 border-2 border-zinc-500 border-t-white rounded-full animate-spin" />
@@ -214,7 +220,7 @@ export default function WeekDetailPage() {
         isPassed={currentWeek.checkpointPassed || false}
         passedAt={currentWeek.checkpointPassedAt}
         evidenceNotes={currentWeek.checkpointEvidence}
-        onAttestationUpdated={loadData}
+        onAttestationUpdated={handleSilentUpdate}
       />
 
       {/* Action Items Header & Controls */}
@@ -294,7 +300,7 @@ export default function WeekDetailPage() {
         {viewMode === "kanban" ? (
           <KanbanBoard
             tasks={filteredTasks}
-            onUpdate={loadData}
+            onUpdate={handleSilentUpdate}
             onSelectTask={handleOpenTask}
           />
         ) : (
@@ -303,7 +309,7 @@ export default function WeekDetailPage() {
               <TaskItem
                 key={t.taskId}
                 task={t}
-                onUpdate={loadData}
+                onUpdate={handleSilentUpdate}
                 onSelectTask={handleOpenTask}
               />
             ))}
@@ -316,7 +322,7 @@ export default function WeekDetailPage() {
         task={selectedTask}
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        onUpdate={loadData}
+        onUpdate={handleSilentUpdate}
       />
     </div>
   );

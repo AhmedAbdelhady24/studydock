@@ -88,29 +88,35 @@ const COLUMNS: {
     title: "To Do",
     dotColor: "bg-zinc-400",
     borderColor: "border-zinc-700/60",
-    dropBorder: "border-zinc-500 bg-zinc-900/40",
+    dropBorder: "ring-2 ring-zinc-400/60 bg-zinc-200/50 dark:bg-zinc-800/30",
   },
   {
     id: "in_progress",
     title: "In Progress",
     dotColor: "bg-amber-400 animate-pulse",
     borderColor: "border-amber-500/40",
-    dropBorder: "border-amber-400 bg-amber-500/10",
+    dropBorder: "ring-2 ring-amber-400/70 bg-amber-500/10 dark:bg-amber-500/15",
   },
   {
     id: "done",
     title: "Done",
     dotColor: "bg-emerald-400",
     borderColor: "border-emerald-500/40",
-    dropBorder: "border-emerald-400 bg-emerald-500/10",
+    dropBorder: "ring-2 ring-emerald-400/70 bg-emerald-500/10 dark:bg-emerald-500/15",
   },
 ];
 
 export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps) {
+  const [localTasks, setLocalTasks] = useState<any[]>(tasks);
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [dragOverCol, setDragOverCol] = useState<TaskStatus | null>(null);
+
+  // Synchronize local tasks whenever parent tasks prop changes
+  React.useEffect(() => {
+    setLocalTasks(tasks);
+  }, [tasks]);
 
   const handleMoveStatus = async (
     e: React.MouseEvent | null,
@@ -118,32 +124,50 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
     targetStatus: TaskStatus
   ) => {
     if (e) e.stopPropagation();
+    if (task.status === targetStatus) return;
+
+    const previousStatus = task.status;
+
+    // 1. Immediately update local UI optimistically for seamless 60fps card movement
+    setLocalTasks((prev) =>
+      prev.map((t) => (t.taskId === task.taskId ? { ...t, status: targetStatus } : t))
+    );
+    setUpdatingTaskId(task.taskId);
+
     try {
-      setUpdatingTaskId(task.taskId);
       const res = await fetch(`/api/tasks/${task.taskId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: targetStatus }),
       });
-      if (res.ok && onUpdate) {
-        onUpdate();
+      if (res.ok) {
+        if (onUpdate) onUpdate();
+      } else {
+        // Revert on error
+        setLocalTasks((prev) =>
+          prev.map((t) => (t.taskId === task.taskId ? { ...t, status: previousStatus } : t))
+        );
       }
     } catch (err) {
       console.error("Failed to move task status", err);
+      // Revert on network exception
+      setLocalTasks((prev) =>
+        prev.map((t) => (t.taskId === task.taskId ? { ...t, status: previousStatus } : t))
+      );
     } finally {
       setUpdatingTaskId(null);
     }
   };
 
   const handleDropStatus = async (taskId: string, targetStatus: TaskStatus) => {
-    const task = tasks.find((t) => t.taskId === taskId);
+    const task = localTasks.find((t) => t.taskId === taskId);
     if (!task || task.status === targetStatus) return;
     await handleMoveStatus(null, task, targetStatus);
   };
 
-  const blockedTasks = tasks.filter((t) => t.status === "blocked");
+  const blockedTasks = localTasks.filter((t) => t.status === "blocked");
 
-  const filteredTasks = tasks.filter((t) => {
+  const filteredTasks = localTasks.filter((t) => {
     if (selectedFilter === "all") return true;
     if (selectedFilter === "dsa") return t.category === "dsa";
     if (selectedFilter === "architecture") return t.category === "design";
@@ -213,15 +237,24 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
               key={col.id}
               onDragOver={(e) => {
                 e.preventDefault();
-                setDragOverCol(col.id);
+                e.dataTransfer.dropEffect = "move";
+                if (dragOverCol !== col.id) {
+                  setDragOverCol(col.id);
+                }
               }}
-              onDragLeave={() => {
-                if (dragOverCol === col.id) setDragOverCol(null);
+              onDragLeave={(e) => {
+                // Prevent flicker when crossing child cards or tags inside the column
+                if (e.currentTarget.contains(e.relatedTarget as Node)) {
+                  return;
+                }
+                setDragOverCol(null);
               }}
               onDrop={(e) => {
                 e.preventDefault();
-                const taskId = e.dataTransfer.getData("text/plain");
-                if (taskId) handleDropStatus(taskId, col.id);
+                const taskId = e.dataTransfer.getData("text/plain") || draggedTaskId;
+                if (taskId) {
+                  handleDropStatus(taskId, col.id);
+                }
                 setDragOverCol(null);
                 setDraggedTaskId(null);
               }}
@@ -259,16 +292,20 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                     return (
                       <div
                         key={task.taskId}
-                        draggable={true}
+                        draggable={!isBusy}
                         onDragStart={(e) => {
                           e.dataTransfer.setData("text/plain", task.taskId);
+                          e.dataTransfer.effectAllowed = "move";
                           setDraggedTaskId(task.taskId);
                         }}
                         onDragEnd={() => {
                           setDraggedTaskId(null);
                           setDragOverCol(null);
                         }}
-                        onClick={() => onSelectTask(task)}
+                        onClick={() => {
+                          if (draggedTaskId) return;
+                          onSelectTask(task);
+                        }}
                         className={cn(
                           "group rounded-2xl border p-4 transition-all duration-200 cursor-grab active:cursor-grabbing relative space-y-3 select-none hover:shadow-lg",
                           isBeingDragged && "opacity-40 scale-[0.98]",

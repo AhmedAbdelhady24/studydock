@@ -25,9 +25,11 @@ export default function TodayPage() {
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const fetchPlanData = async () => {
+  const fetchPlanData = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent && !data) {
+        setLoading(true);
+      }
       const res = await fetch("/api/plan");
       if (!res.ok) throw new Error("Failed to load plan data");
       const json = await res.json();
@@ -50,11 +52,15 @@ export default function TodayPage() {
     }
   };
 
+  const handleSilentUpdate = () => {
+    fetchPlanData(true);
+  };
+
   useEffect(() => {
     fetchPlanData();
   }, []);
 
-  if (loading) {
+  if (loading && !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[40vh] space-y-3">
         <div className="w-6 h-6 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
@@ -201,7 +207,7 @@ export default function TodayPage() {
           {viewMode === "kanban" ? (
             <KanbanBoard
               tasks={filteredTasks}
-              onUpdate={fetchPlanData}
+              onUpdate={handleSilentUpdate}
               onSelectTask={handleOpenTask}
             />
           ) : (
@@ -210,7 +216,7 @@ export default function TodayPage() {
                 <TaskItem
                   key={task.taskId}
                   task={task}
-                  onUpdate={fetchPlanData}
+                  onUpdate={handleSilentUpdate}
                   onSelectTask={handleOpenTask}
                 />
               ))}
@@ -225,7 +231,7 @@ export default function TodayPage() {
             isPassed={activeWeek?.checkpointPassed || false}
             passedAt={activeWeek?.checkpointPassedAt}
             evidenceNotes={activeWeek?.checkpointEvidence}
-            onAttestationUpdated={fetchPlanData}
+            onAttestationUpdated={handleSilentUpdate}
           />
         </div>
 
@@ -239,7 +245,7 @@ export default function TodayPage() {
 
           <StudyTimer
             currentWeekId={activeWeek?.weekId}
-            onSessionLogged={fetchPlanData}
+            onSessionLogged={handleSilentUpdate}
           />
 
           {/* Compact Phase Progress List */}
@@ -281,7 +287,7 @@ export default function TodayPage() {
         task={selectedTask}
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        onUpdate={fetchPlanData}
+        onUpdate={handleSilentUpdate}
       />
     </div>
   );
