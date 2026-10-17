@@ -4,23 +4,24 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  TrendingUp,
-  Layers,
-  Clock,
-  Binary,
-  CheckCircle2,
-  ChevronRight,
   UploadCloud,
+  LayoutGrid,
+  List,
 } from "lucide-react";
-import { StatCard } from "@/components/StatCard";
 import { TaskItem } from "@/components/TaskItem";
+import { KanbanBoard } from "@/components/KanbanBoard";
+import { TaskDetailDrawer } from "@/components/TaskDetailDrawer";
 import { StudyTimer } from "@/components/StudyTimer";
 import { CheckpointBanner } from "@/components/CheckpointBanner";
+import { cn } from "@/lib/utils";
 
 export default function TodayPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [taskFilter, setTaskFilter] = useState<"all" | "required" | "dsa">("all");
+  const [viewMode, setViewMode] = useState<"kanban" | "list">("kanban");
+  const [selectedTask, setSelectedTask] = useState<any | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const fetchPlanData = async () => {
     try {
@@ -29,6 +30,17 @@ export default function TodayPage() {
       if (!res.ok) throw new Error("Failed to load plan data");
       const json = await res.json();
       setData(json);
+
+      // If a task is selected in drawer, update its reference from the fresh data
+      if (selectedTask) {
+        for (const w of json.weeks || []) {
+          const match = (w.tasks || []).find((t: any) => t.taskId === selectedTask.taskId);
+          if (match) {
+            setSelectedTask(match);
+            break;
+          }
+        }
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -89,6 +101,11 @@ export default function TodayPage() {
       ? activeWeekTasks.filter((t: any) => t.category === "dsa")
       : activeWeekTasks;
 
+  const handleOpenTask = (task: any) => {
+    setSelectedTask(task);
+    setIsDrawerOpen(true);
+  };
+
   return (
     <div className="space-y-8">
       {/* Week in Flight Header */}
@@ -104,22 +121,25 @@ export default function TodayPage() {
             </h1>
           </div>
           <p className="text-xs text-zinc-400 mt-1">
-            {activeWeek?.phaseTitle} • {activeWeek?.targetHours}h planned • {activeWeek?.primaryCourses}
+            {activeWeek?.phaseTitle} • {activeWeek?.targetHours}h target •{" "}
+            <span className="text-zinc-200 font-mono font-semibold">
+              {activeWeek?.primaryCourses || "General Syllabus"}
+            </span>
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             href={`/weeks/${activeWeek?.weekId}`}
-            className="text-xs font-medium text-zinc-400 hover:text-white flex items-center gap-1 transition-colors"
+            className="text-xs font-medium text-zinc-400 hover:text-white flex items-center gap-1 transition-colors font-mono"
           >
-            <span>Full Week View</span>
+            <span>Full Week Syllabus</span>
             <ArrowRight className="w-3.5 h-3.5 text-zinc-500" />
           </Link>
         </div>
       </div>
 
-      {/* Integrated Stats Ribbon (Replaces generic 4-card template) */}
+      {/* Integrated Stats Ribbon */}
       <div className="grid grid-cols-2 md:grid-cols-4 rounded-lg border border-white/[0.08] bg-[#111317] divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
         <div className="p-4">
           <span className="text-xs text-zinc-400 font-medium block">
@@ -178,59 +198,105 @@ export default function TodayPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left: Active Tasks & Verification (Span 2) */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Action Items List Header */}
-          <div className="flex items-center justify-between">
+          {/* Action Items List Header with Kanban / List Switcher */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-zinc-200">
                 Week {activeWeek?.weekNumber} Tasks
               </h2>
               <span className="text-xs font-mono text-zinc-500">
-                ({activeWeekTasks.filter((t: any) => t.status === "done").length}/{activeWeekTasks.length})
+                ({activeWeekTasks.filter((t: any) => t.status === "done").length}/{activeWeekTasks.length} done)
               </span>
             </div>
 
-            {/* Filter Pills */}
-            <div className="flex items-center gap-1 text-xs">
-              <button
-                type="button"
-                onClick={() => setTaskFilter("all")}
-                className={`px-2 py-0.5 rounded font-medium transition-colors ${
-                  taskFilter === "all" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                onClick={() => setTaskFilter("required")}
-                className={`px-2 py-0.5 rounded font-medium transition-colors ${
-                  taskFilter === "required" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                Required
-              </button>
-              <button
-                type="button"
-                onClick={() => setTaskFilter("dsa")}
-                className={`px-2 py-0.5 rounded font-medium transition-colors ${
-                  taskFilter === "dsa" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                DSA
-              </button>
+            <div className="flex items-center gap-2.5">
+              {/* Filter Pills */}
+              <div className="flex items-center gap-1 text-xs bg-[#101216] p-1 rounded-md border border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => setTaskFilter("all")}
+                  className={cn(
+                    "px-2 py-0.5 rounded font-medium transition-colors",
+                    taskFilter === "all" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTaskFilter("required")}
+                  className={cn(
+                    "px-2 py-0.5 rounded font-medium transition-colors",
+                    taskFilter === "required" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  Required
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTaskFilter("dsa")}
+                  className={cn(
+                    "px-2 py-0.5 rounded font-medium transition-colors",
+                    taskFilter === "dsa" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  DSA
+                </button>
+              </div>
+
+              {/* View Switcher: Board (Kanban) vs List */}
+              <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-md border border-white/[0.08] text-xs">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("kanban")}
+                  className={cn(
+                    "px-2.5 py-1 rounded font-medium flex items-center gap-1.5 transition-colors",
+                    viewMode === "kanban"
+                      ? "bg-white/[0.12] text-white shadow-sm"
+                      : "text-zinc-400 hover:text-zinc-200"
+                  )}
+                  title="Switch to Kanban board view"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                  <span>Board</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("list")}
+                  className={cn(
+                    "px-2.5 py-1 rounded font-medium flex items-center gap-1.5 transition-colors",
+                    viewMode === "list"
+                      ? "bg-white/[0.12] text-white shadow-sm"
+                      : "text-zinc-400 hover:text-zinc-200"
+                  )}
+                  title="Switch to List view"
+                >
+                  <List className="w-3.5 h-3.5" />
+                  <span>List</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* High-density task checklist */}
-          <div className="space-y-2">
-            {filteredTasks.map((task: any) => (
-              <TaskItem
-                key={task.taskId}
-                task={task}
-                onUpdate={fetchPlanData}
-              />
-            ))}
-          </div>
+          {/* Tasks Display: Kanban Board or List */}
+          {viewMode === "kanban" ? (
+            <KanbanBoard
+              tasks={filteredTasks}
+              onUpdate={fetchPlanData}
+              onSelectTask={handleOpenTask}
+            />
+          ) : (
+            <div className="space-y-2">
+              {filteredTasks.map((task: any) => (
+                <TaskItem
+                  key={task.taskId}
+                  task={task}
+                  onUpdate={fetchPlanData}
+                  onSelectTask={handleOpenTask}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Verification Milestone Seal */}
           <CheckpointBanner
@@ -284,6 +350,14 @@ export default function TodayPage() {
           </div>
         </div>
       </div>
+
+      {/* Slide-over Task Detail Drawer */}
+      <TaskDetailDrawer
+        task={selectedTask}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onUpdate={fetchPlanData}
+      />
     </div>
   );
 }

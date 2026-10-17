@@ -9,6 +9,8 @@ import {
   FileText,
   ChevronDown,
   ChevronUp,
+  BookOpen,
+  PanelRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskCategory, TaskStatus } from "@/lib/types";
@@ -18,7 +20,7 @@ interface TaskItemProps {
     id: number;
     taskId: string;
     weekId: string;
-    category: TaskCategory;
+    category: TaskCategory | string;
     title: string;
     description: string;
     required: boolean;
@@ -28,12 +30,19 @@ interface TaskItemProps {
     completedAt?: Date | string | null;
     confidence?: number | null;
     notes?: string | null;
+    primaryCourses?: string;
+    concepts?: string;
+    weekNumber?: number;
+    weekTitle?: string;
+    phaseTitle?: string;
+    exitCriteria?: string;
   };
   onUpdate?: () => void;
+  onSelectTask?: (task: any) => void;
 }
 
 const CATEGORY_META: Record<
-  TaskCategory,
+  string,
   { label: string; dot: string; text: string }
 > = {
   dsa: {
@@ -73,7 +82,7 @@ const CATEGORY_META: Record<
   },
 };
 
-export function TaskItem({ task, onUpdate }: TaskItemProps) {
+export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [confidence, setConfidence] = useState<number>(task.confidence || 0);
   const [notes, setNotes] = useState<string>(task.notes || "");
@@ -82,19 +91,22 @@ export function TaskItem({ task, onUpdate }: TaskItemProps) {
 
   const meta = CATEGORY_META[task.category] || CATEGORY_META.other;
 
-  const handleToggleDone = async () => {
+  const handleToggleDone = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     const nextStatus: TaskStatus = status === "done" ? "not_started" : "done";
     setStatus(nextStatus);
     await saveTaskUpdate({ status: nextStatus });
   };
 
-  const handleConfidenceClick = async (level: number) => {
+  const handleConfidenceClick = async (e: React.MouseEvent, level: number) => {
+    e.stopPropagation();
     const newConf = confidence === level ? 0 : level;
     setConfidence(newConf);
     await saveTaskUpdate({ confidence: newConf || null });
   };
 
-  const handleSaveNotes = async () => {
+  const handleSaveNotes = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     await saveTaskUpdate({ notes });
   };
 
@@ -164,12 +176,23 @@ export function TaskItem({ task, onUpdate }: TaskItemProps) {
 
         {/* Task Details */}
         <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1.5">
             {/* Category tag */}
             <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400">
               <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", meta.dot)} />
               <span>{meta.label}</span>
             </span>
+
+            {/* Course / Book / Resource Reference Pill */}
+            {task.primaryCourses && (
+              <span
+                className="inline-flex items-center gap-1 text-[10px] font-mono text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.08] truncate max-w-[220px]"
+                title={`Course / Resource: ${task.primaryCourses}`}
+              >
+                <BookOpen className="w-2.5 h-2.5 text-blue-400 shrink-0" />
+                <span className="truncate">{task.primaryCourses}</span>
+              </span>
+            )}
 
             {task.dsaTargetCount ? (
               <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-500/20">
@@ -189,10 +212,12 @@ export function TaskItem({ task, onUpdate }: TaskItemProps) {
           </div>
 
           <p
+            onClick={() => onSelectTask?.(task)}
             className={cn(
-              "font-medium leading-relaxed transition-all",
+              "font-medium leading-relaxed transition-all cursor-pointer hover:text-blue-400",
               isDone ? "text-zinc-500 line-through decoration-zinc-600" : "text-zinc-100"
             )}
+            title="Click to view full course and task details"
           >
             {task.title}
           </p>
@@ -214,7 +239,7 @@ export function TaskItem({ task, onUpdate }: TaskItemProps) {
                 <button
                   key={lvl}
                   type="button"
-                  onClick={() => handleConfidenceClick(lvl)}
+                  onClick={(e) => handleConfidenceClick(e, lvl)}
                   className="p-0.5 hover:scale-110 transition-transform"
                   title={`Rate confidence ${lvl}/5`}
                 >
@@ -230,20 +255,34 @@ export function TaskItem({ task, onUpdate }: TaskItemProps) {
               ))}
             </div>
 
-            {/* Notes Trigger */}
-            <button
-              type="button"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1.5 text-[11px] text-zinc-400 hover:text-zinc-200 transition-colors"
-            >
-              <FileText className="w-3 h-3 text-zinc-500" />
-              <span>{notes ? "Notes saved" : "Add notes / PR link"}</span>
-              {isExpanded ? (
-                <ChevronUp className="w-3 h-3 text-zinc-500" />
-              ) : (
-                <ChevronDown className="w-3 h-3 text-zinc-500" />
+            {/* Action buttons: Drawer Trigger & Notes Trigger */}
+            <div className="flex items-center gap-3">
+              {onSelectTask && (
+                <button
+                  type="button"
+                  onClick={() => onSelectTask(task)}
+                  className="flex items-center gap-1 text-[11px] text-zinc-400 hover:text-white transition-colors"
+                  title="Open details sidebar"
+                >
+                  <PanelRight className="w-3 h-3 text-zinc-500" />
+                  <span>Details</span>
+                </button>
               )}
-            </button>
+
+              <button
+                type="button"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="flex items-center gap-1.5 text-[11px] text-zinc-400 hover:text-zinc-200 transition-colors"
+              >
+                <FileText className="w-3 h-3 text-zinc-500" />
+                <span>{notes ? "Notes saved" : "Add notes / PR link"}</span>
+                {isExpanded ? (
+                  <ChevronUp className="w-3 h-3 text-zinc-500" />
+                ) : (
+                  <ChevronDown className="w-3 h-3 text-zinc-500" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Expandable Evidence & Notes Area */}

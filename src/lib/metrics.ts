@@ -13,6 +13,12 @@ export interface TaskWithProgress {
   completedAt: Date | null;
   confidence: number | null;
   notes: string | null;
+  primaryCourses?: string;
+  concepts?: string;
+  weekNumber?: number;
+  weekTitle?: string;
+  phaseTitle?: string;
+  exitCriteria?: string;
 }
 
 export interface WeekWithDetails {

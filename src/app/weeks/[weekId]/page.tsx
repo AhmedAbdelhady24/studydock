@@ -8,10 +8,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
-  Layers,
   ShieldCheck,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import { TaskItem } from "@/components/TaskItem";
+import { KanbanBoard } from "@/components/KanbanBoard";
+import { TaskDetailDrawer } from "@/components/TaskDetailDrawer";
 import { CheckpointBanner } from "@/components/CheckpointBanner";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +25,9 @@ export default function WeekDetailPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
+  const [selectedTask, setSelectedTask] = useState<any | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const loadData = async () => {
     try {
@@ -29,6 +35,16 @@ export default function WeekDetailPage() {
       const res = await fetch("/api/plan");
       const json = await res.json();
       setData(json);
+
+      if (selectedTask) {
+        for (const w of json.weeks || []) {
+          const match = (w.tasks || []).find((t: any) => t.taskId === selectedTask.taskId);
+          if (match) {
+            setSelectedTask(match);
+            break;
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -57,7 +73,7 @@ export default function WeekDetailPage() {
     return (
       <div className="p-8 text-center space-y-3">
         <p className="text-sm text-zinc-400">Week not found: {weekId}</p>
-        <Link href="/roadmap" className="text-xs text-blue-400 hover:underline">
+        <Link href="/roadmap" className="text-xs text-blue-400 hover:underline font-mono">
           Return to Roadmap
         </Link>
       </div>
@@ -81,13 +97,18 @@ export default function WeekDetailPage() {
 
   const categories = Array.from(new Set(tasksList.map((t: any) => t.category)));
 
+  const handleOpenTask = (task: any) => {
+    setSelectedTask(task);
+    setIsDrawerOpen(true);
+  };
+
   return (
     <div className="space-y-6">
       {/* Top Breadcrumb Navigation */}
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] text-xs">
         <Link
           href="/roadmap"
-          className="flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 transition-colors font-medium"
+          className="flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 transition-colors font-medium font-mono"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Curriculum Roadmap</span>
@@ -97,7 +118,7 @@ export default function WeekDetailPage() {
           {prevWeek && (
             <Link
               href={`/weeks/${prevWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors font-mono"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>W{prevWeek.weekNumber.toString().padStart(2, "0")}</span>
@@ -106,7 +127,7 @@ export default function WeekDetailPage() {
           {nextWeek && (
             <Link
               href={`/weeks/${nextWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors font-mono"
             >
               <span>W{nextWeek.weekNumber.toString().padStart(2, "0")}</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -160,7 +181,7 @@ export default function WeekDetailPage() {
             <span className="text-zinc-500 font-medium block mb-1">
               Primary Course References:
             </span>
-            <p className="text-zinc-300 font-mono text-[11px]">
+            <p className="text-zinc-200 font-mono text-xs font-semibold">
               {currentWeek.primaryCourses || "Standard Systems Engineering"}
             </p>
           </div>
@@ -196,49 +217,105 @@ export default function WeekDetailPage() {
         onAttestationUpdated={loadData}
       />
 
-      {/* Action Items Header & Filter Pills */}
+      {/* Action Items Header & Controls */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
           <h2 className="text-sm font-semibold text-zinc-200">
             Action Items & Deliverables ({filteredTasks.length})
           </h2>
 
-          <div className="flex flex-wrap items-center gap-1 text-xs">
-            <button
-              onClick={() => setCategoryFilter("all")}
-              className={cn(
-                "px-2.5 py-1 rounded font-medium transition-colors border",
-                categoryFilter === "all"
-                  ? "bg-white/[0.1] text-white border-white/[0.2]"
-                  : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
-              )}
-            >
-              All
-            </button>
-            {categories.map((cat: any) => (
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-1 text-xs">
               <button
-                key={cat}
-                onClick={() => setCategoryFilter(cat)}
+                onClick={() => setCategoryFilter("all")}
                 className={cn(
-                  "px-2.5 py-1 rounded font-medium transition-colors border capitalize",
-                  categoryFilter === cat
+                  "px-2 py-0.5 rounded font-medium transition-colors border",
+                  categoryFilter === "all"
                     ? "bg-white/[0.1] text-white border-white/[0.2]"
                     : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
                 )}
               >
-                {cat.replace(/_/g, " ")}
+                All
               </button>
-            ))}
+              {categories.map((cat: any) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={cn(
+                    "px-2 py-0.5 rounded font-medium transition-colors border capitalize",
+                    categoryFilter === cat
+                      ? "bg-white/[0.1] text-white border-white/[0.2]"
+                      : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
+                  )}
+                >
+                  {cat.replace(/_/g, " ")}
+                </button>
+              ))}
+            </div>
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-md border border-white/[0.08] text-xs">
+              <button
+                type="button"
+                onClick={() => setViewMode("list")}
+                className={cn(
+                  "px-2 py-0.5 rounded font-medium flex items-center gap-1 transition-colors",
+                  viewMode === "list"
+                    ? "bg-white/[0.12] text-white"
+                    : "text-zinc-400 hover:text-zinc-200"
+                )}
+                title="List view"
+              >
+                <List className="w-3 h-3" />
+                <span>List</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("kanban")}
+                className={cn(
+                  "px-2 py-0.5 rounded font-medium flex items-center gap-1 transition-colors",
+                  viewMode === "kanban"
+                    ? "bg-white/[0.12] text-white"
+                    : "text-zinc-400 hover:text-zinc-200"
+                )}
+                title="Board view"
+              >
+                <LayoutGrid className="w-3 h-3" />
+                <span>Board</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Tasks List */}
-        <div className="space-y-2">
-          {filteredTasks.map((t: any) => (
-            <TaskItem key={t.taskId} task={t} onUpdate={loadData} />
-          ))}
-        </div>
+        {/* Tasks Display */}
+        {viewMode === "kanban" ? (
+          <KanbanBoard
+            tasks={filteredTasks}
+            onUpdate={loadData}
+            onSelectTask={handleOpenTask}
+          />
+        ) : (
+          <div className="space-y-2">
+            {filteredTasks.map((t: any) => (
+              <TaskItem
+                key={t.taskId}
+                task={t}
+                onUpdate={loadData}
+                onSelectTask={handleOpenTask}
+              />
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Slide-over Task Detail Drawer */}
+      <TaskDetailDrawer
+        task={selectedTask}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onUpdate={loadData}
+      />
     </div>
   );
 }

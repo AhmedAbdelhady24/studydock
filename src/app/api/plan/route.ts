@@ -58,6 +58,12 @@ export async function GET() {
             completedAt: prog?.completedAt || null,
             confidence: prog?.confidence || null,
             notes: prog?.notes || null,
+            primaryCourses: w.primaryCourses || "",
+            concepts: w.concepts || "",
+            weekNumber: w.weekNumber,
+            weekTitle: w.title,
+            phaseTitle: w.phaseTitle,
+            exitCriteria: w.exitCriteria || "",
           };
         });
 
