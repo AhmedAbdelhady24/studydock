@@ -1,0 +1,17 @@
+plan_slug,course_id,course_title,planned_weeks,coverage_kind,target_min,target_max,target_unit,coverage_note,reference_url
+product-engineer-33-week,product-engineer-33-week-course-javascript-the-hard-parts-v3,JavaScript: The Hard Parts v3,1–2,percentage,80,100,%,,https://frontendmasters.com/
+product-engineer-33-week,product-engineer-33-week-course-total-typescript-pro-essentials,Total TypeScript Pro Essentials,3–5,percentage,40,65,%,,https://www.totaltypescript.com/workshops/typescript-pro-essentials
+product-engineer-33-week,product-engineer-33-week-course-css-for-javascript-developers,CSS for JavaScript Developers,6–10,percentage,50,70,%,,https://www.joshwcomeau.com/courses/css-for-js/
+product-engineer-33-week,product-engineer-33-week-course-epic-react-v2,Epic React v2,8–12,percentage,30,45,%,,
+product-engineer-33-week,product-engineer-33-week-course-complete-intro-to-react-v9,Complete Intro to React v9,8–12,percentage,15,30,%,,
+product-engineer-33-week,product-engineer-33-week-course-testing-fundamentals-steve-kinney,Testing Fundamentals — Steve Kinney,11–12,percentage,80,100,%,,
+product-engineer-33-week,product-engineer-33-week-course-introduction-to-node-js-v3-scott-moss,Introduction to Node.js v3 — Scott Moss,13–14,percentage,90,100,%,,
+product-engineer-33-week,product-engineer-33-week-course-api-design-in-node-js-v5-scott-moss,API Design in Node.js v5 — Scott Moss,14–19,percentage,75,95,%,,
+product-engineer-33-week,product-engineer-33-week-course-complete-intro-to-sql-postgresql-brian-holt,Complete Intro to SQL & PostgreSQL — Brian Holt,17–19,percentage,80,100,%,,
+product-engineer-33-week,product-engineer-33-week-course-tom-ray-master-nestjs-by-building-real-world-projects,Tom Ray: Master NestJS by Building Real-World Projects,20–22,percentage,35,60,%,,
+product-engineer-33-week,product-engineer-33-week-course-next-js-fundamentals-v4,Next.js Fundamentals v4,23–24,percentage,70,90,%,,
+product-engineer-33-week,product-engineer-33-week-course-playwright-automated-testing-ai-workflows,Playwright: Automated Testing & AI Workflows,25,percentage,60,80,%,,
+product-engineer-33-week,product-engineer-33-week-course-web-security-v2,Web Security v2,"16, 25",percentage,50,75,%,,https://frontendmasters.com/courses/web-security-v2/
+product-engineer-33-week,product-engineer-33-week-course-the-last-algorithms-course-youll-need-theprimeagen,The Last Algorithms Course You’ll Need — ThePrimeagen,1–19 + review,percentage,75,100,%,,
+product-engineer-33-week,product-engineer-33-week-course-neetcode-150-grind-75,NeetCode 150 / Grind 75,Every week,count,65,85,problems,,
+product-engineer-33-week,product-engineer-33-week-course-ultimate-design-patterns-refactoring-guru,Ultimate Design Patterns + Refactoring.Guru,15–33,percentage,20,40,%,,

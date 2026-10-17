@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "plan_slug": "product-engineer-33-week",
+  "plan_title": "Product Engineer 33-Week Learning Roadmap",
+  "weeks": 33,
+  "tasks": 231,
+  "courses": 16,
+  "files": {
+    "plan_import.csv": "Single-file task import with week metadata",
+    "weeks.csv": "Normalized week records",
+    "tasks.csv": "Normalized task records",
+    "course_targets.csv": "Course coverage goals (not actual progress)"
+  },
+  "id_contract": "Week ids stable by week number; task ids explicit or content hash; text edits without explicit task ids create new ids."
+}
