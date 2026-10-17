@@ -193,14 +193,22 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
           {/* Week & Notes tag */}
           <div className="w-full mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <div>
-              <label className="block text-[11px] text-muted-foreground mb-1">Week ID:</label>
-              <input
-                type="text"
+              <label className="block text-[11px] text-muted-foreground mb-1">Associate Week:</label>
+              <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                placeholder="e.g. w01"
-                className="w-full font-mono bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-              />
+                className="w-full font-mono bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:outline-none focus:ring-1 focus:ring-primary text-xs"
+              >
+                {Array.from({ length: 33 }, (_, i) => {
+                  const num = i + 1;
+                  const val = `product-engineer-33-week-w${num.toString().padStart(2, "0")}`;
+                  return (
+                    <option key={val} value={val}>
+                      Week {num.toString().padStart(2, "0")}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
             <div>
               <label className="block text-[11px] text-muted-foreground mb-1">Notes / Topic:</label>
@@ -249,13 +257,22 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
               <label className="block text-[11px] font-medium text-muted-foreground mb-1">
                 Week (optional):
               </label>
-              <input
-                type="text"
+              <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                placeholder="e.g. w01"
-                className="w-full font-mono bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-              />
+                className="w-full font-mono bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:outline-none focus:ring-1 focus:ring-primary text-xs"
+              >
+                <option value="">None / General Study</option>
+                {Array.from({ length: 33 }, (_, i) => {
+                  const num = i + 1;
+                  const val = `product-engineer-33-week-w${num.toString().padStart(2, "0")}`;
+                  return (
+                    <option key={val} value={val}>
+                      Week {num.toString().padStart(2, "0")}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
             <div>
               <label className="block text-[11px] font-medium text-muted-foreground mb-1">

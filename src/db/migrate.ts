@@ -8,7 +8,7 @@ dotenv.config();
 
 const connectionString =
   process.env.DATABASE_URL ||
-  "postgresql://studydock:studydock_password@localhost:5432/studydock";
+  "postgresql://studydock:studydock_password@localhost:5433/studydock";
 
 async function runMigrations() {
   console.log("Connecting to PostgreSQL for migrations...");

@@ -120,7 +120,7 @@ export default function RoadmapPage() {
               filter === "completed" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            Completed ({metrics?.completedWeeksCount})
+            Completed ({metrics?.completedWeeksCount ?? 0})
           </button>
           <button
             onClick={() => setFilter("remaining")}

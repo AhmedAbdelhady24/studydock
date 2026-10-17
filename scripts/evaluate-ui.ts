@@ -1,0 +1,64 @@
+import { chromium } from "@playwright/test";
+import fs from "fs";
+import path from "path";
+
+async function main() {
+  console.log("🚀 Starting Playwright UI/UX audit on http://127.0.0.1:3001 ...");
+
+  const screenshotDir = path.resolve(__dirname, "../screenshots");
+  if (!fs.existsSync(screenshotDir)) {
+    fs.mkdirSync(screenshotDir, { recursive: true });
+  }
+
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+  });
+  const page = await context.newPage();
+
+  const consoleErrors: string[] = [];
+  page.on("console", (msg) => {
+    if (msg.type() === "error") {
+      consoleErrors.push(msg.text());
+    }
+  });
+
+  page.on("pageerror", (err) => {
+    consoleErrors.push(err.message);
+  });
+
+  const routes = [
+    { url: "http://127.0.0.1:3001/", name: "01_today" },
+    { url: "http://127.0.0.1:3001/roadmap", name: "02_roadmap" },
+    { url: "http://127.0.0.1:3001/weeks/product-engineer-33-week-w01", name: "03_week_detail" },
+    { url: "http://127.0.0.1:3001/courses", name: "04_courses" },
+    { url: "http://127.0.0.1:3001/dsa", name: "05_dsa" },
+    { url: "http://127.0.0.1:3001/sessions", name: "06_sessions" },
+    { url: "http://127.0.0.1:3001/analytics", name: "07_analytics" },
+    { url: "http://127.0.0.1:3001/import", name: "08_import" },
+  ];
+
+  for (const r of routes) {
+    console.log(`Navigating to ${r.url} ...`);
+    await page.goto(r.url, { waitUntil: "networkidle" });
+    const shotPath = path.join(screenshotDir, `${r.name}.png`);
+    await page.screenshot({ path: shotPath, fullPage: true });
+    console.log(`📸 Saved screenshot: ${shotPath}`);
+  }
+
+  console.log("\n--- UI Audit Results ---");
+  if (consoleErrors.length > 0) {
+    console.log(`⚠️ Console errors captured (${consoleErrors.length}):`);
+    consoleErrors.forEach((e) => console.log(`   - ${e}`));
+  } else {
+    console.log("✅ Zero console errors across all tested pages!");
+  }
+
+  await browser.close();
+  console.log("🎉 UI evaluation completed!");
+}
+
+main().catch((err) => {
+  console.error("Evaluation script failed:", err);
+  process.exit(1);
+});

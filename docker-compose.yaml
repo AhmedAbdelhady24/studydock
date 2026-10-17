@@ -10,8 +10,8 @@ services:
       POSTGRES_PASSWORD: studydock_password
       POSTGRES_DB: studydock
     ports:
-      # Strictly bound to localhost (127.0.0.1) for privacy & security
-      - "127.0.0.1:5432:5432"
+      # Strictly bound to localhost (127.0.0.1:5433) for privacy & avoiding host port 5432 conflicts
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:

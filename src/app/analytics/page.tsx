@@ -111,20 +111,20 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Overall Completion"
-          value={`${metrics?.overallPercentage}%`}
-          subtitle={`${metrics?.completedTasksCount} of ${metrics?.totalTasksCount} tasks`}
+          value={`${metrics?.overallPercentage ?? metrics?.taskCompletionPercentage ?? 0}%`}
+          subtitle={`${metrics?.completedTasksCount ?? metrics?.doneRequiredTasks ?? 0} of ${metrics?.totalTasksCount ?? metrics?.totalActiveRequiredTasks ?? 0} tasks`}
           icon={TrendingUp}
-          progress={metrics?.overallPercentage}
+          progress={metrics?.overallPercentage ?? metrics?.taskCompletionPercentage ?? 0}
         />
         <StatCard
           title="Weeks Attested"
-          value={`${metrics?.completedWeeksCount} / ${metrics?.totalWeeksCount}`}
+          value={`${metrics?.completedWeeksCount ?? metrics?.fullyCompletedWeeks ?? 0} / ${metrics?.totalWeeksCount ?? metrics?.totalWeeks ?? 33}`}
           subtitle="Passed exit criteria"
           icon={Award}
         />
         <StatCard
           title="Actual Hours Studied"
-          value={`${metrics?.totalHoursStudied}h`}
+          value={`${metrics?.totalHoursStudied ?? metrics?.totalStudiedHours ?? 0}h`}
           subtitle="Real logged sessions"
           icon={Clock}
         />

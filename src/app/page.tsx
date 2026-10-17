@@ -135,7 +135,7 @@ export default function TodayPage() {
         <StatCard
           title="Weeks Completed"
           value={`${metrics?.completedWeeksCount ?? 0} / ${metrics?.totalWeeksCount ?? 33}`}
-          subtitle={`${metrics?.totalWeeksCount - metrics?.completedWeeksCount} weeks remaining`}
+          subtitle={`${(metrics?.totalWeeksCount ?? 33) - (metrics?.completedWeeksCount ?? 0)} weeks remaining`}
           icon={Layers}
         />
         <StatCard

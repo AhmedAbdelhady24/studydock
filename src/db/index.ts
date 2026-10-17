@@ -1,10 +1,13 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const connectionString =
   process.env.DATABASE_URL ||
-  "postgresql://studydock:studydock_password@localhost:5432/studydock";
+  "postgresql://studydock:studydock_password@localhost:5433/studydock";
 
 // For queries, disable prefetch and configure pool
 export const client = postgres(connectionString, {

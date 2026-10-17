@@ -129,8 +129,11 @@ export default function CoursesPage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-mono uppercase bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded font-semibold">
-                      {c.courseId}
+                    <span
+                      className="text-[10px] font-mono uppercase bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded font-semibold truncate max-w-[240px]"
+                      title={c.courseId}
+                    >
+                      {c.courseId.replace(/^product-engineer-33-week-course-/, "")}
                     </span>
                     <span className="text-[10px] font-mono uppercase bg-secondary text-muted-foreground px-2 py-0.5 rounded border border-border">
                       {c.coverageKind} coverage

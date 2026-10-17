@@ -87,8 +87,12 @@ export async function GET() {
         archivedAt: w.archivedAt,
         isCompleted,
         checkpointPassed,
+        checkpointPassedAt: checkpoint?.passedAt || null,
+        checkpointEvidence: checkpoint?.evidenceNotes || null,
         requiredTasksCount: reqTasks.length,
         doneTasksCount: doneReqTasks.length,
+        tasksCount: weekTasksList.length,
+        completedTasksCount: doneReqTasks.length,
         tasks: weekTasksList,
       };
     });
@@ -112,9 +116,24 @@ export async function GET() {
       attempts.length
     );
 
+    const enhancedMetrics = {
+      ...metrics,
+      overallPercentage: metrics.taskCompletionPercentage,
+      completedTasksCount: metrics.doneRequiredTasks,
+      totalTasksCount: metrics.totalActiveRequiredTasks,
+      completedWeeksCount: metrics.fullyCompletedWeeks,
+      totalWeeksCount: metrics.totalWeeks,
+      totalHoursStudied: metrics.totalStudiedHours,
+      distinctDsaSolvedCount: metrics.dsaDistinctSolved,
+      phases: metrics.phaseProgress.map((p) => ({
+        ...p,
+        percentage: p.taskCompletionPercent,
+      })),
+    };
+
     return NextResponse.json({
       plan,
-      metrics,
+      metrics: enhancedMetrics,
       weeks: weeksData,
     });
   } catch (error: any) {

@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    --background: 224 71% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 13%;
+    --card: 222 47% 7%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 13%;
+    --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 217 33% 20%;
+    --secondary: 217 33% 14%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 33% 17%;
+    --muted: 217 33% 12%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 33% 22%;
+    --accent: 142 71% 45%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
+    --border: 217 30% 18%;
+    --input: 217 30% 18%;
     --ring: 217 91% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
   }
 
   * {
@@ -41,7 +41,23 @@
 
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/30 selection:text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Interaction and accessibility rules from ui-ux-pro-max */
+  button, 
+  [role="button"], 
+  input[type="checkbox"], 
+  input[type="range"],
+  select,
+  a {
+    cursor: pointer;
+  }
+
+  /* Focus visible accessibility rings */
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
   }
 
   /* Optical alignment & Tabular numbers for engineering dashboards */
@@ -52,8 +68,8 @@
 
 /* Custom Scrollbar for Dev-Dashboard feel */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -62,9 +78,9 @@
 
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--muted));
-  border-radius: 4px;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent));
+  background: hsl(var(--border));
 }
