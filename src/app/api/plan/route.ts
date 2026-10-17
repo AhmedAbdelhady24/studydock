@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { plans, weeks, tasks, taskProgress, checkpointAttestations, studySessions, dsaAttempts } from "@/db/schema";
 import { eq, isNull, asc } from "drizzle-orm";
 import { calculateDashboardMetrics, WeekWithDetails, TaskWithProgress } from "@/lib/metrics";
+import { getTaskResource } from "@/lib/taskResources";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,10 @@ export async function GET() {
         .filter((t) => t.weekId === w.weekId)
         .map((t) => {
           const prog = progressMap.get(t.taskId);
+          const resource = getTaskResource(
+            { category: t.category, title: t.title, description: t.description },
+            { weekNumber: w.weekNumber, primaryCourses: w.primaryCourses || "", phaseTitle: w.phaseTitle }
+          );
           return {
             id: t.id,
             taskId: t.taskId,
@@ -64,6 +69,11 @@ export async function GET() {
             weekTitle: w.title,
             phaseTitle: w.phaseTitle,
             exitCriteria: w.exitCriteria || "",
+            resourceName: resource.resourceName,
+            resourceCategory: resource.resourceCategory,
+            resourceLabel: resource.resourceLabel,
+            referenceUrl: resource.referenceUrl,
+            topicBadge: resource.topicBadge,
           };
         });
 

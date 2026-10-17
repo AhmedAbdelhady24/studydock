@@ -11,6 +11,7 @@ import {
   BarChart3,
   ArrowUpDown,
   CheckCircle2,
+  Anchor,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,7 @@ export function Navbar() {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-7 h-7 rounded-md bg-white/[0.06] border border-white/[0.12] flex items-center justify-center text-white font-mono text-xs font-semibold shadow-inner group-hover:border-white/[0.25] transition-colors">
-              <span className="text-emerald-400 font-bold">⚓</span>
+              <Anchor className="w-4 h-4 text-emerald-400 stroke-[2.2]" />
             </div>
             <div className="flex items-center gap-2">
               <span className="font-semibold tracking-tight text-white text-sm">

@@ -10,7 +10,13 @@ import {
   ChevronDown,
   ChevronUp,
   BookOpen,
+  Binary,
+  Layers,
+  Terminal,
+  ShieldCheck,
+  Sparkles,
   PanelRight,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskCategory, TaskStatus } from "@/lib/types";
@@ -36,6 +42,11 @@ interface TaskItemProps {
     weekTitle?: string;
     phaseTitle?: string;
     exitCriteria?: string;
+    resourceName?: string;
+    resourceCategory?: "course" | "dsa" | "architecture" | "implementation" | "quality" | "checkpoint" | "general";
+    resourceLabel?: string;
+    referenceUrl?: string;
+    topicBadge?: string;
   };
   onUpdate?: () => void;
   onSelectTask?: (task: any) => void;
@@ -183,14 +194,26 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
               <span>{meta.label}</span>
             </span>
 
-            {/* Course / Book / Resource Reference Pill */}
-            {task.primaryCourses && (
+            {/* Authoritative Course / Book / Resource Reference Pill */}
+            {(task.resourceLabel || task.primaryCourses) && (
               <span
-                className="inline-flex items-center gap-1 text-[10px] font-mono text-zinc-300 bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.08] truncate max-w-[220px]"
-                title={`Course / Resource: ${task.primaryCourses}`}
+                className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-300 bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.08] truncate max-w-[260px] group-hover:border-white/[0.16] transition-colors"
+                title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
               >
-                <BookOpen className="w-2.5 h-2.5 text-blue-400 shrink-0" />
-                <span className="truncate">{task.primaryCourses}</span>
+                {task.resourceCategory === "dsa" || task.category === "dsa" ? (
+                  <Binary className="w-2.5 h-2.5 text-purple-400 shrink-0" />
+                ) : task.resourceCategory === "architecture" || task.category === "design" ? (
+                  <Layers className="w-2.5 h-2.5 text-blue-400 shrink-0" />
+                ) : task.resourceCategory === "implementation" || task.category === "implementation" ? (
+                  <Terminal className="w-2.5 h-2.5 text-amber-400 shrink-0" />
+                ) : task.resourceCategory === "quality" || task.category === "quality" ? (
+                  <ShieldCheck className="w-2.5 h-2.5 text-indigo-400 shrink-0" />
+                ) : task.resourceCategory === "checkpoint" || task.category === "checkpoint" ? (
+                  <Sparkles className="w-2.5 h-2.5 text-rose-400 shrink-0" />
+                ) : (
+                  <BookOpen className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                )}
+                <span className="truncate">{task.resourceLabel || task.primaryCourses}</span>
               </span>
             )}
 

@@ -19,6 +19,11 @@ export interface TaskWithProgress {
   weekTitle?: string;
   phaseTitle?: string;
   exitCriteria?: string;
+  resourceName?: string;
+  resourceCategory?: "course" | "dsa" | "architecture" | "implementation" | "quality" | "checkpoint" | "general";
+  resourceLabel?: string;
+  referenceUrl?: string;
+  topicBadge?: string;
 }
 
 export interface WeekWithDetails {
