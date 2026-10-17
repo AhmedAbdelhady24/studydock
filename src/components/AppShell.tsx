@@ -27,6 +27,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
 import { useProfile } from "@/context/ProfileContext";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -365,15 +366,8 @@ export function AppShell({ children }: AppShellProps) {
                   )}
                 </button>
 
-                {/* Notification Bell with Badge */}
-                <button
-                  type="button"
-                  className="w-9 h-9 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors relative"
-                  aria-label="Notifications"
-                >
-                  <Bell className="w-4 h-4" />
-                  <span className="w-2 h-2 rounded-full bg-[#4F46E5] absolute top-2 right-2 ring-2 ring-white dark:ring-[#131418]" />
-                </button>
+                {/* Notification Dropdown */}
+                <NotificationDropdown />
 
                 {/* User Greeting & Round Avatar (Clickable to /profile) */}
                 <Link
