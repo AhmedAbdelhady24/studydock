@@ -175,7 +175,17 @@ export function TaskDetailDrawer({
                 Week {task.weekNumber ? task.weekNumber.toString().padStart(2, "0") : "01"}
               </span>
               <span className="text-[10px] font-mono text-zinc-400 bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 rounded">
-                {task.phaseTitle || "Curriculum"}
+                {isDsa
+                  ? "Algorithms Track"
+                  : isArch
+                  ? "Architecture Track"
+                  : isCoding
+                  ? "Practical Lab"
+                  : isQuality
+                  ? "Quality Gate"
+                  : isCheckpoint
+                  ? "Milestone Gate"
+                  : task.phaseTitle || "Curriculum"}
               </span>
               {task.topicBadge && (
                 <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded">
@@ -210,7 +220,7 @@ export function TaskDetailDrawer({
               </span>
 
               <span className="text-[10px] font-mono text-zinc-500">
-                {task.taskId}
+                {task.weekNumber ? `W${task.weekNumber.toString().padStart(2, "0")} · Task ${task.sortOrder || 1}` : task.taskId}
               </span>
             </div>
           </div>
@@ -278,7 +288,7 @@ export function TaskDetailDrawer({
             <div className="p-3 rounded-md bg-[#090A0C] border border-white/[0.06] space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase block mb-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
                     Canonical Resource
                   </span>
                   <p className="text-sm font-semibold text-white leading-snug">
@@ -297,27 +307,19 @@ export function TaskDetailDrawer({
                   </a>
                 )}
               </div>
-
-              {/* Parallel Core Lecture Attribution Context */}
-              {task.primaryCourses && (isDsa || isArch || isCoding || isQuality || isCheckpoint) && (
-                <div className="pt-2 border-t border-white/[0.04] text-[11px] text-zinc-400 flex items-center gap-1.5">
-                  <span className="text-zinc-500 font-mono text-[10px]">Week Core Lecture:</span>
-                  <span className="text-zinc-300 font-mono text-[10px] truncate">{task.primaryCourses}</span>
-                </div>
-              )}
             </div>
 
-            {/* Concepts Tag List */}
-            {task.concepts && (
+            {/* Category-Specific Concepts Tag List */}
+            {((task.taskConcepts && task.taskConcepts.length > 0) || (task.category === "course" && task.concepts)) && (
               <div>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase block mb-1.5">
-                  Concepts & Curriculum Coverage
+                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1.5">
+                  Concepts & Topics Covered
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {task.concepts.split(",").map((c: string, idx: number) => (
+                  {(task.taskConcepts || (task.concepts ? task.concepts.split(",") : [])).map((c: string, idx: number) => (
                     <span
                       key={idx}
-                      className="font-mono text-[10px] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06] text-zinc-300"
+                      className="font-mono text-[10px] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.08] text-zinc-300"
                     >
                       {c.trim()}
                     </span>

@@ -4,6 +4,7 @@ export interface TaskResourceAttribution {
   resourceLabel: string;
   referenceUrl?: string;
   topicBadge: string;
+  taskConcepts: string[];
 }
 
 export function getTaskResource(
@@ -16,6 +17,7 @@ export function getTaskResource(
     weekNumber: number;
     primaryCourses?: string;
     phaseTitle?: string;
+    concepts?: string;
   }
 ): TaskResourceAttribution {
   const cat = task.category.toLowerCase().trim();
@@ -23,6 +25,35 @@ export function getTaskResource(
   const weekNum = week.weekNumber;
 
   if (cat === "dsa") {
+    const dsaConceptsMap: Record<number, string[]> = {
+      1: ["Big O Notation", "Time Complexity O(1)/O(n)", "Array Traversal", "Hash Map Lookup"],
+      2: ["Hash Maps & Sets", "Frequency Counters", "Lookup Invariants", "Collision Trade-offs"],
+      3: ["Two Pointers", "Left/Right Inward Scan", "Array Partitioning", "In-Place Updates"],
+      4: ["Sliding Window", "Dynamic Subarrays", "Linear Time O(n)", "Boundary Pointers"],
+      5: ["Stacks (LIFO)", "Parentheses Matching", "Monotonic Stack Intro", "LIFO Call Stack"],
+      6: ["Binary Search", "Logarithmic Time O(log n)", "Search Space Reduction", "Midpoint Invariants"],
+      7: ["Sorting Fundamentals", "Divide & Conquer", "Merge Sort / Quick Sort", "Recursion Depth"],
+      8: ["Recursion Foundations", "Base Cases", "Call Stack Tracing", "Recursive Tree Models"],
+      9: ["Linked Lists", "Node Pointers", "List Reversal", "Fast & Slow Pointers"],
+      10: ["Binary Trees", "Breadth-First Search (BFS)", "Depth-First Search (DFS)", "Tree Levels"],
+      11: ["Binary Search Trees (BST)", "Inorder Traversal", "BST Invariants", "Search / Insertion"],
+      12: ["Heaps & Priority Queues", "Min-Heap / Max-Heap", "Top-K Elements", "Complete Binary Tree"],
+      13: ["Hash Tables Mechanics", "Hash Functions & Collisions", "Chaining vs Open Addressing", "Timed Live Drills"],
+      14: ["Two Pointers & Sliding Window", "Mixed Review", "Edge Cases", "Two-Pass Optimizations"],
+      15: ["Intervals", "Interval Sorting", "Overlap Detection", "Interval Merging"],
+      16: ["Grid BFS / DFS", "Matrix Coordinates", "Visited Set Management", "Connected Components"],
+      17: ["Graph Theory", "Adjacency Lists & Matrices", "Graph BFS / DFS", "Cycle Detection"],
+      18: ["Backtracking", "State-Space Tree", "Choice / Constraint / Goal", "Pruning Branches"],
+      19: ["Dynamic Programming Intro", "Overlapping Subproblems", "Optimal Substructure", "1D Recurrence"],
+    };
+
+    const concepts = dsaConceptsMap[weekNum] || [
+      "NeetCode 150 Core Patterns",
+      "Timed Problem Solving",
+      "Complexity Trade-off Defense",
+      "Edge-Case Verification",
+    ];
+
     if (weekNum <= 19) {
       return {
         resourceName: "The Last Algorithms Course You'll Need (Frontend Masters — ThePrimeagen)",
@@ -30,6 +61,7 @@ export function getTaskResource(
         resourceLabel: "The Last Algorithms Course · NeetCode",
         referenceUrl: "https://frontendmasters.com/courses/algorithms/",
         topicBadge: `DSA Track (Week ${weekNum})`,
+        taskConcepts: concepts,
       };
     } else {
       return {
@@ -38,11 +70,55 @@ export function getTaskResource(
         resourceLabel: "NeetCode 150 · Grind 75",
         referenceUrl: "https://neetcode.io/roadmap",
         topicBadge: `Interview Drills (Week ${weekNum})`,
+        taskConcepts: concepts,
       };
     }
   }
 
   if (cat === "design") {
+    const archConceptsMap: Record<number, string[]> = {
+      1: ["Function Boundaries", "Pure vs Impure Functions", "Input/Output Contracts", "Side Effect Isolation"],
+      2: ["Separation of Concerns", "Transport vs Transformation", "Retry Policy", "Function Composition"],
+      3: ["Type-Driven Design", "Tagged / Discriminated Unions", "Illegal State Elimination", "Pattern Matching"],
+      4: ["Interface Segregation", "Reusable Abstractions", "Generic Constraints", "Minimal Surface Area"],
+      5: ["Single Responsibility Principle (SRP)", "Domain vs Transport Types", "State Modeling", "Validation Seams"],
+      6: ["Component Boundaries", "Semantic HTML Primitives", "Accessible Scoping", "Markup Hierarchy"],
+      7: ["Design Tokens", "Layout Primitives", "Spacing Conventions", "Mobile-First Design"],
+      8: ["Composition over Inheritance", "Props Contracts", "Unidirectional Data Flow", "Component Seams"],
+      9: ["Finite State Machines", "Action Boundaries", "Loading / Ready / Error States", "State Reducers"],
+      10: ["Adapter Pattern", "API Normalization Layer", "Presentation vs Data Fetching", "Contract Decoupling"],
+      11: ["Dependency Seams", "Test Doubles & Mocks", "Design for Testability", "Inversion of Control"],
+      12: ["Module Graph", "Frontend Architecture", "Component Contracts", "Bundle Boundaries"],
+      13: ["Module Boundaries", "Error Taxonomy", "Dependency Direction", "Node Architecture"],
+      14: ["Layered Architecture", "Controller / Service / Repository", "Thin Route Handlers", "DTOs"],
+      15: ["Strategy Pattern", "Interchangeable Validation Rules", "Business Logic Isolation", "Zod Pipelines"],
+      16: ["Middleware & Guard Pattern", "Authentication vs Authorization", "Least Privilege", "Security Seams"],
+      17: ["Repository Interface", "Domain to Relational Mapping", "Foreign Key Integrity", "Query Contracts"],
+      18: ["Unit of Work", "Transaction Boundaries", "ACID Guarantees", "Concurrency & Isolation"],
+      19: ["Data Access Layer (DAL)", "ORM vs Raw SQL Trade-offs", "Boundary Isolation", "Schema Migrations"],
+      20: ["Dependency Injection (DI)", "Inversion of Control (IoC)", "NestJS Providers", "Modular Decomposition"],
+      21: ["Guard & Decorator Pattern", "Interceptor Pipeline", "Exception Filters", "Cross-Cutting Concerns"],
+      22: ["Observer / Pub-Sub", "Event Emitters", "Background Task Queues", "Framework Trade-offs"],
+      23: ["Full-Stack Architecture", "Server Components DAL", "Command/Query Separation", "Hydration Boundaries"],
+      24: ["Server Action Safety", "Data Ownership", "Cache Invalidation", "CQS Primitives"],
+      25: ["Fault Boundaries", "Idempotency", "Graceful Shutdown", "Defensive Defaults"],
+      26: ["Reliability Engineering", "Health Check Architecture", "12-Factor App", "Container Isolation"],
+      27: ["Product Telemetry Architecture", "Event Taxonomy", "Privacy by Design", "No-PII Boundaries"],
+      28: ["Pub/Sub Analytics Model", "Funnel Tracking", "Feature Flag Seams", "Event Sampling"],
+      29: ["Code Smell Refactoring", "Refactoring to Patterns (Fowler)", "Safe Incremental Extraction", "Test Coverage"],
+      30: ["SOLID Principles", "Strategy / Factory / Adapter", "Low-Level Design (LLD)", "Object Modeling"],
+      31: ["System Design Primer", "Horizontal Scaling & Load Balancing", "Caching & Sharding", "CAP Theorem"],
+      32: ["Facade / State / Decorator", "Production Code Audits", "Extensibility vs Over-Engineering"],
+      33: ["High-Level Architecture", "Requirements Clarification", "System Trade-off Analysis", "Interview Mocks"],
+    };
+
+    const concepts = archConceptsMap[weekNum] || [
+      "Software Architecture Principles",
+      "Separation of Concerns",
+      "System Modularity",
+      "Trade-off Analysis",
+    ];
+
     if (weekNum <= 5) {
       return {
         resourceName: "Software Design: Function Boundaries, Tagged Unions & State Modeling",
@@ -50,6 +126,7 @@ export function getTaskResource(
         resourceLabel: "Clean Code & State Modeling",
         referenceUrl: "https://refactoring.guru/design-patterns/typescript",
         topicBadge: "Domain & State Design",
+        taskConcepts: concepts,
       };
     } else if (weekNum <= 12) {
       return {
@@ -58,6 +135,7 @@ export function getTaskResource(
         resourceLabel: "Component Architecture & Composition",
         referenceUrl: "https://refactoring.guru/design-patterns/typescript",
         topicBadge: "Component Architecture",
+        taskConcepts: concepts,
       };
     } else if (weekNum <= 19) {
       return {
@@ -66,6 +144,7 @@ export function getTaskResource(
         resourceLabel: "Enterprise Layered Architecture",
         referenceUrl: "https://refactoring.guru/design-patterns/structural-patterns",
         topicBadge: "Backend Architecture",
+        taskConcepts: concepts,
       };
     } else if (weekNum <= 22) {
       return {
@@ -74,6 +153,7 @@ export function getTaskResource(
         resourceLabel: "NestJS Architecture (Tom Ray)",
         referenceUrl: "https://docs.nestjs.com/fundamentals/dependency-injection",
         topicBadge: "Framework Architecture",
+        taskConcepts: concepts,
       };
     } else if (weekNum <= 26) {
       return {
@@ -82,6 +162,7 @@ export function getTaskResource(
         resourceLabel: "Full-Stack System Architecture",
         referenceUrl: "https://nextjs.org/learn",
         topicBadge: "System Architecture",
+        taskConcepts: concepts,
       };
     } else if (weekNum <= 29) {
       return {
@@ -90,6 +171,7 @@ export function getTaskResource(
         resourceLabel: "PostHog & Refactoring (Martin Fowler)",
         referenceUrl: "https://posthog.com/product-engineer/what-is-a-product-engineer",
         topicBadge: "Product Architecture",
+        taskConcepts: concepts,
       };
     } else {
       return {
@@ -98,6 +180,7 @@ export function getTaskResource(
         resourceLabel: "System Design Primer · GoF Patterns",
         referenceUrl: "https://github.com/donnemartin/system-design-primer",
         topicBadge: "System Design & GoF",
+        taskConcepts: concepts,
       };
     }
   }
@@ -119,6 +202,12 @@ export function getTaskResource(
         resourceLabel: "FeedbackHub Flagship Spec",
         referenceUrl: "file:///docs/architecture.md",
         topicBadge: "Flagship Portfolio",
+        taskConcepts: [
+          "FeedbackHub Specification",
+          "Multi-Tenant Isolation",
+          "Domain Schema & CRUD",
+          "End-to-End Testability",
+        ],
       };
     }
     return {
@@ -126,6 +215,12 @@ export function getTaskResource(
       resourceCategory: "implementation",
       resourceLabel: "Independent Code Lab",
       topicBadge: "Hands-on Lab",
+      taskConcepts: [
+        "Pure Function Implementation",
+        "Vitest Unit Test Suite",
+        "Input Validation & Edge Cases",
+        "Independent Debugging",
+      ],
     };
   }
 
@@ -135,6 +230,12 @@ export function getTaskResource(
       resourceCategory: "quality",
       resourceLabel: "Quality & Retrospective Gate",
       topicBadge: "Engineering Discipline",
+      taskConcepts: [
+        "Strict TypeScript Typecheck",
+        "Deterministic Test Suite",
+        "Atomic Git Commits & PRs",
+        "Honest Mistake Retrospective",
+      ],
     };
   }
 
@@ -144,6 +245,12 @@ export function getTaskResource(
       resourceCategory: "checkpoint",
       resourceLabel: "Exit Competency Checkpoint",
       topicBadge: "Gatekeeper Test",
+      taskConcepts: [
+        "Independent Live Coding",
+        "Zero-AI Verification",
+        "Complexity & Trade-off Explanation",
+        "Demonstrated Engineering Proof",
+      ],
     };
   }
 
@@ -179,11 +286,16 @@ export function getTaskResource(
     refUrl = "https://github.com/donnemartin/system-design-primer";
   }
 
+  const courseConcepts = week.concepts
+    ? week.concepts.split(",").map((c) => c.trim()).filter(Boolean)
+    : ["Core Course Concepts", "Video Lectures", "Lab Exercises"];
+
   return {
     resourceName: courseStr,
     resourceCategory: "course",
     resourceLabel: courseStr.split("+")[0].split("—")[0].trim(),
     referenceUrl: refUrl,
     topicBadge: "Primary Course",
+    taskConcepts: courseConcepts,
   };
 }

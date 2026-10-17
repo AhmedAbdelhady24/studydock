@@ -46,7 +46,12 @@ export async function GET() {
           const prog = progressMap.get(t.taskId);
           const resource = getTaskResource(
             { category: t.category, title: t.title, description: t.description },
-            { weekNumber: w.weekNumber, primaryCourses: w.primaryCourses || "", phaseTitle: w.phaseTitle }
+            {
+              weekNumber: w.weekNumber,
+              primaryCourses: w.primaryCourses || "",
+              phaseTitle: w.phaseTitle,
+              concepts: w.concepts || "",
+            }
           );
           return {
             id: t.id,
@@ -74,6 +79,7 @@ export async function GET() {
             resourceLabel: resource.resourceLabel,
             referenceUrl: resource.referenceUrl,
             topicBadge: resource.topicBadge,
+            taskConcepts: resource.taskConcepts,
           };
         });
 

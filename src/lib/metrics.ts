@@ -24,6 +24,7 @@ export interface TaskWithProgress {
   resourceLabel?: string;
   referenceUrl?: string;
   topicBadge?: string;
+  taskConcepts?: string[];
 }
 
 export interface WeekWithDetails {
