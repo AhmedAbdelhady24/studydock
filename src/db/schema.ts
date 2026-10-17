@@ -241,3 +241,15 @@ export const importBatches = pgTable("import_batches", {
   coursesCount: integer("courses_count").notNull(),
   summary: text("summary"),
 });
+
+export const userProfiles = pgTable("user_profiles", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().default("Engineer"),
+  title: text("title").notNull().default("Product Engineer"),
+  avatarInitials: text("avatar_initials").notNull().default("PE"),
+  weeklyTargetHours: integer("weekly_target_hours").notNull().default(16),
+  bio: text("bio").default("33-Week Product Engineer Journey"),
+  theme: text("theme").notNull().default("dark"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+

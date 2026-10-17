@@ -127,19 +127,22 @@ export default function AnalyticsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="pb-4 border-b border-white/[0.06]">
-        <h1 className="text-xl font-semibold tracking-tight text-white">
+      <div className="pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
+        <span className="text-xs font-mono text-zinc-400 font-semibold tracking-wider uppercase block mb-1">
+          Metrics & Velocity
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
           Learning Telemetry
         </h1>
-        <p className="text-xs text-zinc-400 mt-1">
+        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
           Completion velocity, phase milestones, and category balance across the 33-week syllabus.
         </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Curriculum Completion"
           value={`${metrics?.overallPercentage ?? metrics?.taskCompletionPercentage ?? 0}%`}
@@ -168,48 +171,48 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Visual Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Phase Breakdown Chart */}
-        <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-            <h3 className="text-xs font-semibold text-zinc-200">
+        <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 shadow-sm hover:shadow-md transition-all space-y-4">
+          <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               Phase Progression (Completed vs Remaining Weeks)
             </h3>
-            <span className="text-[10px] font-mono text-zinc-500">P01–P11</span>
+            <span className="text-[10px] font-mono text-zinc-400">P01–P11</span>
           </div>
 
-          <div className="h-60 w-full pt-2">
+          <div className="h-64 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={phaseData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="#52525b" fontSize={11} interval={0} textAnchor="middle" />
-                <YAxis stroke="#52525b" fontSize={10} />
+                <XAxis dataKey="name" stroke="#71717a" fontSize={11} interval={0} textAnchor="middle" />
+                <YAxis stroke="#71717a" fontSize={10} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                <Bar dataKey="Completed" fill="#10b981" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Bar dataKey="Remaining" fill="#27272a" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Completed" fill="#10b981" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Remaining" fill="#a1a1aa" radius={[4, 4, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Weekly Hours: Target vs Actual */}
-        <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-            <h3 className="text-xs font-semibold text-zinc-200">
+        <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 shadow-sm hover:shadow-md transition-all space-y-4">
+          <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               Study Pace: Target vs Verified Hours (W01–W12)
             </h3>
-            <span className="text-[10px] font-mono text-zinc-500">Target 20h/wk</span>
+            <span className="text-[10px] font-mono text-zinc-400">Target 20h/wk</span>
           </div>
 
-          <div className="h-60 w-full pt-2">
+          <div className="h-64 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weekHoursData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="#52525b" fontSize={10} />
-                <YAxis stroke="#52525b" fontSize={10} />
+                <XAxis dataKey="name" stroke="#71717a" fontSize={10} />
+                <YAxis stroke="#71717a" fontSize={10} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend wrapperStyle={{ fontSize: "11px" }} />
-                <Bar dataKey="Target" fill="#3f3f46" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Bar dataKey="Actual" fill="#3b82f6" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Target" fill="#cbd5e1" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Actual" fill="#C8B6FF" radius={[4, 4, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -217,16 +220,16 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Task Distribution & Architecture Invariants */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-            <h3 className="text-xs font-semibold text-zinc-200">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 shadow-sm hover:shadow-md transition-all space-y-4">
+          <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               Task Category Balance
             </h3>
-            <span className="text-[10px] font-mono text-zinc-500">231 Total</span>
+            <span className="text-[10px] font-mono text-zinc-400">231 Total</span>
           </div>
 
-          <div className="h-52 w-full flex items-center justify-center">
+          <div className="h-56 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -234,7 +237,7 @@ export default function AnalyticsPage() {
                   cx="50%"
                   cy="50%"
                   innerRadius={50}
-                  outerRadius={75}
+                  outerRadius={78}
                   paddingAngle={3}
                   dataKey="count"
                   isAnimationActive={false}
@@ -248,43 +251,43 @@ export default function AnalyticsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-400 pt-1 border-t border-white/[0.06]">
+          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-600 dark:text-zinc-400 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
             {categoryData.map((c, i) => (
               <div key={c.name} className="flex items-center gap-1.5">
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
                   style={{ backgroundColor: PALETTE[i % PALETTE.length] }}
                 />
-                <span className="truncate capitalize">{c.name}: {c.count}</span>
+                <span className="truncate capitalize font-semibold">{c.name}: {c.count}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-2 rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-            <h3 className="text-xs font-semibold text-zinc-200">
+        <div className="lg:col-span-2 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 shadow-sm hover:shadow-md transition-all space-y-4">
+          <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               System Architecture & Progress Invariants
             </h3>
-            <span className="text-[10px] font-mono text-zinc-500">Data Guarantees</span>
+            <span className="text-[10px] font-mono text-zinc-400">Data Guarantees</span>
           </div>
 
-          <div className="space-y-2.5 text-xs text-zinc-400">
-            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
-              <strong className="text-zinc-200 block mb-0.5 font-medium">
+          <div className="space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
+            <div className="p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50 dark:bg-white/[0.02]">
+              <strong className="text-zinc-900 dark:text-zinc-200 block mb-1 font-bold">
                 Stable Task Identifiers
               </strong>
-              Tasks are keyed by immutable, deterministic IDs (<code className="text-blue-400 font-mono text-[11px]">w01_t01</code> .. <code className="text-blue-400 font-mono text-[11px]">w33_t07</code>).
+              Tasks are keyed by immutable, deterministic IDs (<code className="text-blue-500 font-mono text-[11px] font-semibold">w01_t01</code> .. <code className="text-blue-500 font-mono text-[11px] font-semibold">w33_t07</code>).
               Re-importing CSV revisions preserves all checked items, confidence ratings, and notes without data loss.
             </div>
-            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
-              <strong className="text-zinc-200 block mb-0.5 font-medium">
+            <div className="p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50 dark:bg-white/[0.02]">
+              <strong className="text-zinc-900 dark:text-zinc-200 block mb-1 font-bold">
                 Gated Phase Milestones
               </strong>
-              A week is only marked as fully passed when 100% of required action items are done <span className="text-zinc-200 font-medium">and</span> the practical Exit Checkpoint has been attested.
+              A week is only marked as fully passed when 100% of required action items are done <span className="text-zinc-900 dark:text-zinc-200 font-bold">and</span> the practical Exit Checkpoint has been attested.
             </div>
-            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
-              <strong className="text-zinc-200 block mb-0.5 font-medium">
+            <div className="p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50 dark:bg-white/[0.02]">
+              <strong className="text-zinc-900 dark:text-zinc-200 block mb-1 font-bold">
                 Verified Time Accounting
               </strong>
               Study hours reflect actual recorded focus sessions, preventing artificial target-based velocity distortions.

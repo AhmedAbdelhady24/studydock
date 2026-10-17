@@ -22,38 +22,38 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "rounded-lg border border-white/[0.08] bg-[#101216] p-4 text-zinc-100 transition-colors hover:border-white/[0.15]",
+        "rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] p-5 text-zinc-900 dark:text-zinc-100 transition-all hover:shadow-md hover:border-black/20 dark:hover:border-white/[0.18]",
         className
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-zinc-400 font-medium">
+        <span className="text-xs text-zinc-600 dark:text-zinc-400 font-semibold tracking-tight">
           {title}
         </span>
         {badge && (
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.05] text-zinc-400 border border-white/[0.08]">
+          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08] font-medium">
             {badge}
           </span>
         )}
       </div>
 
       <div className="mt-2.5 flex items-baseline gap-2">
-        <span className="text-2xl font-semibold tracking-tight tabular-nums text-white">
+        <span className="text-2xl font-extrabold tracking-tight tabular-nums text-zinc-900 dark:text-white">
           {value}
         </span>
       </div>
 
       {subtitle && (
-        <p className="mt-1 text-xs text-zinc-500 leading-normal">
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 leading-normal">
           {subtitle}
         </p>
       )}
 
       {progress !== undefined && (
         <div className="mt-3">
-          <div className="w-full bg-white/[0.06] rounded-full h-1 overflow-hidden">
+          <div className="w-full bg-black/[0.06] dark:bg-white/[0.06] rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-emerald-500 h-1 rounded-full transition-all duration-500 ease-out"
+              className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
             />
           </div>

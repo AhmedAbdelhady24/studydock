@@ -150,29 +150,29 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
   return (
     <div
       className={cn(
-        "group rounded-lg border transition-all text-sm",
+        "group rounded-2xl border transition-all text-sm shadow-sm",
         isDone
-          ? "border-white/[0.04] bg-[#0E1014]/60 text-zinc-400"
+          ? "border-black/[0.04] dark:border-white/[0.04] bg-zinc-100/60 dark:bg-[#0E1014]/60 text-zinc-500 dark:text-zinc-400"
           : isBlocked
-          ? "border-rose-900/30 bg-rose-950/10 text-zinc-200"
-          : "border-white/[0.08] bg-[#111317] hover:border-white/[0.14] text-zinc-200"
+          ? "border-rose-500/30 bg-rose-50/50 dark:bg-rose-950/10 text-zinc-900 dark:text-zinc-200"
+          : "border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111317] hover:border-black/20 dark:hover:border-white/[0.14] text-zinc-900 dark:text-zinc-200"
       )}
     >
-      <div className="flex items-start gap-3 p-3.5 sm:px-4 sm:py-3">
+      <div className="flex items-start gap-3 p-4">
         {/* Sleek Tactile Checkbox */}
         <button
           type="button"
           onClick={handleToggleDone}
           disabled={isSaving}
           className={cn(
-            "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all",
+            "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-md border transition-all cursor-pointer",
             isDone
-              ? "bg-emerald-500 border-emerald-400 text-black"
+              ? "bg-emerald-500 border-emerald-400 text-white"
               : isInProgress
-              ? "border-amber-400/80 bg-amber-500/10 text-amber-400"
+              ? "border-amber-500/80 bg-amber-500/10 text-amber-500"
               : isBlocked
-              ? "border-rose-400 bg-rose-500/10 text-rose-400"
-              : "border-zinc-700 bg-zinc-900/60 hover:border-zinc-500 text-transparent"
+              ? "border-rose-400 bg-rose-500/10 text-rose-500"
+              : "border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/60 hover:border-zinc-500 text-transparent"
           )}
           title={`Status: ${status} (click to toggle completed)`}
         >
@@ -189,7 +189,7 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
             {/* Category tag */}
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-600 dark:text-zinc-400 font-semibold">
               <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", meta.dot)} />
               <span>{meta.label}</span>
             </span>
@@ -197,39 +197,39 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             {/* Authoritative Course / Book / Resource Reference Pill */}
             {(task.resourceLabel || task.primaryCourses) && (
               <span
-                className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-300 bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.08] truncate max-w-[260px] group-hover:border-white/[0.16] transition-colors"
+                className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] truncate max-w-[260px] group-hover:border-black/20 dark:group-hover:border-white/[0.16] transition-colors"
                 title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
               >
                 {task.resourceCategory === "dsa" || task.category === "dsa" ? (
-                  <Binary className="w-2.5 h-2.5 text-purple-400 shrink-0" />
+                  <Binary className="w-2.5 h-2.5 text-purple-500 dark:text-purple-400 shrink-0" />
                 ) : task.resourceCategory === "architecture" || task.category === "design" ? (
-                  <Layers className="w-2.5 h-2.5 text-blue-400 shrink-0" />
+                  <Layers className="w-2.5 h-2.5 text-blue-500 dark:text-blue-400 shrink-0" />
                 ) : task.resourceCategory === "implementation" || task.category === "implementation" ? (
-                  <Terminal className="w-2.5 h-2.5 text-amber-400 shrink-0" />
+                  <Terminal className="w-2.5 h-2.5 text-amber-500 dark:text-amber-400 shrink-0" />
                 ) : task.resourceCategory === "quality" || task.category === "quality" ? (
-                  <ShieldCheck className="w-2.5 h-2.5 text-indigo-400 shrink-0" />
+                  <ShieldCheck className="w-2.5 h-2.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
                 ) : task.resourceCategory === "checkpoint" || task.category === "checkpoint" ? (
-                  <Sparkles className="w-2.5 h-2.5 text-rose-400 shrink-0" />
+                  <Sparkles className="w-2.5 h-2.5 text-rose-500 dark:text-rose-400 shrink-0" />
                 ) : (
-                  <BookOpen className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                  <BookOpen className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
                 )}
                 <span className="truncate">{task.resourceLabel || task.primaryCourses}</span>
               </span>
             )}
 
             {task.dsaTargetCount ? (
-              <span className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-500/20">
+              <span className="text-[10px] font-mono text-purple-700 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20 font-semibold">
                 {task.dsaTargetCount} problems
               </span>
             ) : null}
 
             {!task.required && (
-              <span className="text-[10px] text-zinc-500 italic">
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">
                 optional
               </span>
             )}
 
-            <span className="text-[10px] font-mono text-zinc-600 ml-auto hidden sm:inline">
+            <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-600 ml-auto hidden sm:inline">
               {task.taskId.replace(/^product-engineer-33-week-/, "")}
             </span>
           </div>
@@ -237,8 +237,8 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
           <p
             onClick={() => onSelectTask?.(task)}
             className={cn(
-              "font-medium leading-relaxed transition-all cursor-pointer hover:text-blue-400",
-              isDone ? "text-zinc-500 line-through decoration-zinc-600" : "text-zinc-100"
+              "font-bold leading-relaxed transition-all cursor-pointer hover:text-blue-600 dark:hover:text-blue-400",
+              isDone ? "text-zinc-400 dark:text-zinc-500 line-through decoration-zinc-400 dark:decoration-zinc-600" : "text-zinc-900 dark:text-zinc-100"
             )}
             title="Click to view full course and task details"
           >
@@ -246,13 +246,13 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
           </p>
 
           {task.description && (
-            <p className="mt-1 text-xs text-zinc-400/90 leading-relaxed">
+            <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400/90 leading-relaxed font-normal">
               {task.description}
             </p>
           )}
 
           {/* Footer Controls: Confidence & Notes Drawer */}
-          <div className="mt-2.5 pt-2 border-t border-white/[0.04] flex items-center justify-between text-xs text-zinc-400">
+          <div className="mt-2.5 pt-2 border-t border-black/[0.06] dark:border-white/[0.04] flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
             {/* Confidence Rating */}
             <div className="flex items-center gap-1">
               <span className="text-[10px] text-zinc-500 mr-1 hidden sm:inline">

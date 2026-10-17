@@ -118,25 +118,25 @@ export default function TodayPage() {
         {/* Left: Active Tasks & Verification (Span 2) */}
         <div className="lg:col-span-2 space-y-6">
           {/* Action Items List Header with Kanban / List Switcher */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-zinc-200">
+              <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
                 Week {activeWeek?.weekNumber} Tasks
               </h2>
-              <span className="text-xs font-mono text-zinc-500">
+              <span className="text-xs font-mono text-zinc-500 font-semibold">
                 ({activeWeekTasks.filter((t: any) => t.status === "done").length}/{activeWeekTasks.length} done)
               </span>
             </div>
 
             <div className="flex items-center gap-2.5">
               {/* Filter Pills */}
-              <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+              <div className="flex items-center gap-1.5 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setTaskFilter("all")}
                   className={cn(
                     "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
-                    taskFilter === "all" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
+                    taskFilter === "all" ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold" : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                 >
                   All
@@ -146,7 +146,7 @@ export default function TodayPage() {
                   onClick={() => setTaskFilter("required")}
                   className={cn(
                     "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
-                    taskFilter === "required" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
+                    taskFilter === "required" ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold" : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                 >
                   Required
@@ -156,7 +156,7 @@ export default function TodayPage() {
                   onClick={() => setTaskFilter("dsa")}
                   className={cn(
                     "px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200",
-                    taskFilter === "dsa" ? "bg-white text-zinc-950 shadow-sm font-bold" : "text-zinc-400 hover:text-white"
+                    taskFilter === "dsa" ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold" : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                 >
                   DSA
@@ -164,15 +164,15 @@ export default function TodayPage() {
               </div>
 
               {/* View Switcher: Board (Kanban) vs List */}
-              <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs">
+              <div className="flex items-center gap-1 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs">
                 <button
                   type="button"
                   onClick={() => setViewMode("kanban")}
                   className={cn(
                     "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                     viewMode === "kanban"
-                      ? "bg-white text-zinc-950 shadow-sm font-bold"
-                      : "text-zinc-400 hover:text-white"
+                      ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                   title="Switch to Kanban board view"
                 >
@@ -185,8 +185,8 @@ export default function TodayPage() {
                   className={cn(
                     "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                     viewMode === "list"
-                      ? "bg-white text-zinc-950 shadow-sm font-bold"
-                      : "text-zinc-400 hover:text-white"
+                      ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                   title="Switch to List view"
                 >
@@ -205,7 +205,7 @@ export default function TodayPage() {
               onSelectTask={handleOpenTask}
             />
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {filteredTasks.map((task: any) => (
                 <TaskItem
                   key={task.taskId}
@@ -229,7 +229,7 @@ export default function TodayPage() {
           />
         </div>
 
-        {/* Right Column: Progress Checklist Stepper & Focus Timer (Inspired by learnspring Image 3) */}
+        {/* Right Column: Progress Checklist Stepper & Focus Timer */}
         <div className="space-y-6">
           <ProgressTimeline
             tasks={activeWeekTasks}
@@ -243,14 +243,14 @@ export default function TodayPage() {
           />
 
           {/* Compact Phase Progress List */}
-          <div className="rounded-lg border border-white/[0.08] bg-[#111317] p-4 text-xs space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-              <span className="font-semibold text-zinc-300">
+          <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] p-5 text-xs space-y-3 shadow-sm">
+            <div className="flex items-center justify-between pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
+              <span className="font-bold text-zinc-900 dark:text-zinc-200">
                 Phase Progress
               </span>
               <Link
                 href="/roadmap"
-                className="text-[11px] text-zinc-400 hover:text-white transition-colors"
+                className="text-[11px] font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
               >
                 All 33 Weeks →
               </Link>
@@ -260,12 +260,12 @@ export default function TodayPage() {
               {(metrics?.phases || []).slice(0, 5).map((p: any) => (
                 <div key={p.code} className="space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-zinc-300 truncate max-w-[180px]">{p.title}</span>
-                    <span className="font-mono text-zinc-500">{p.percentage}%</span>
+                    <span className="text-zinc-700 dark:text-zinc-300 truncate max-w-[180px] font-medium">{p.title}</span>
+                    <span className="font-mono text-zinc-500 font-semibold">{p.percentage}%</span>
                   </div>
-                  <div className="w-full bg-white/[0.06] rounded-full h-1 overflow-hidden">
+                  <div className="w-full bg-black/[0.06] dark:bg-white/[0.06] rounded-full h-1.5 overflow-hidden">
                     <div
-                      className="bg-emerald-500/80 h-1 rounded-full transition-all"
+                      className="bg-emerald-500 h-1.5 rounded-full transition-all"
                       style={{ width: `${p.percentage}%` }}
                     />
                   </div>

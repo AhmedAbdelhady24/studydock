@@ -114,14 +114,17 @@ export default function DsaPage() {
   const independentRate = totalSolved > 0 ? Math.round((independentCount / totalSolved) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-white">
+          <span className="text-xs font-mono text-zinc-400 font-semibold tracking-wider uppercase block mb-1">
+            Data Structures & Algorithms
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
             Algorithm Practice
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
             Problem tracking, pattern distribution, and editorial-free solve velocity.
           </p>
         </div>
@@ -129,15 +132,15 @@ export default function DsaPage() {
         <button
           type="button"
           onClick={() => setShowAddForm(!showAddForm)}
-          className="px-3.5 py-1.5 rounded-md bg-white text-black hover:bg-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-bold flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all self-start sm:self-auto cursor-pointer"
         >
-          {showAddForm ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+          {showAddForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
           <span>{showAddForm ? "Cancel" : "Log Problem Attempt"}</span>
         </button>
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
           title="Distinct Solved"
           value={distinctSolved}
@@ -162,16 +165,16 @@ export default function DsaPage() {
       {showAddForm && (
         <form
           onSubmit={handleCreateAttempt}
-          className="rounded-lg border border-white/[0.14] bg-[#101216] p-5 space-y-4 shadow-xl"
+          className="rounded-3xl border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#111215] p-6 sm:p-7 space-y-5 shadow-xl"
         >
-          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-            <h3 className="text-sm font-semibold text-white">Record Problem Attempt</h3>
-            <span className="text-[11px] font-mono text-zinc-500">Live entry</span>
+          <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-white">Record Problem Attempt</h3>
+            <span className="text-[11px] font-mono text-zinc-400">Live entry</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 Problem Title:
               </label>
               <input
@@ -179,19 +182,19 @@ export default function DsaPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. 3Sum, LRU Cache, Trapping Rain Water"
-                className="w-full bg-[#090A0C] border border-white/[0.08] rounded px-3 py-1.5 text-zinc-200 focus:outline-none focus:border-blue-500 font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] font-medium"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 Pattern / Category:
               </label>
               <select
                 value={pattern}
                 onChange={(e) => setPattern(e.target.value)}
-                className="w-full bg-[#090A0C] border border-white/[0.08] rounded px-3 py-1.5 text-zinc-200 focus:outline-none focus:border-blue-500"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
               >
                 {DSA_PATTERNS.map((p) => (
                   <option key={p} value={p}>
@@ -203,14 +206,14 @@ export default function DsaPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 Difficulty:
               </label>
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value as any)}
-                className="w-full bg-[#090A0C] border border-white/[0.08] rounded px-3 py-1.5 text-zinc-200 focus:outline-none focus:border-blue-500 capitalize"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] capitalize"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -218,25 +221,25 @@ export default function DsaPage() {
               </select>
             </div>
 
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 Minutes Spent:
               </label>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
                   min="0"
                   value={minutesSpent}
                   onChange={(e) => setMinutesSpent(e.target.value)}
-                  className="w-20 font-mono bg-[#090A0C] border border-white/[0.08] rounded px-2.5 py-1.5 text-zinc-200 focus:outline-none focus:border-blue-500"
+                  className="w-20 font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
                 />
-                <div className="flex gap-1">
+                <div className="flex gap-1.5">
                   {["20", "35", "50"].map((mins) => (
                     <button
                       key={mins}
                       type="button"
                       onClick={() => setMinutesSpent(mins)}
-                      className="px-2 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-[10px] font-mono text-zinc-400 hover:text-zinc-200 border border-white/[0.06]"
+                      className="px-2.5 py-1 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] text-[10px] font-mono text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.06] font-semibold"
                     >
                       {mins}m
                     </button>
@@ -245,8 +248,8 @@ export default function DsaPage() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 URL (LeetCode/NeetCode):
               </label>
               <input
@@ -254,35 +257,35 @@ export default function DsaPage() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://leetcode.com/problems/..."
-                className="w-full bg-[#090A0C] border border-white/[0.08] rounded px-3 py-1.5 text-zinc-200 focus:outline-none focus:border-blue-500 text-xs"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] text-xs"
               />
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 pt-1 text-xs">
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div className="flex flex-wrap items-center gap-6 pt-1 text-xs font-medium">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={solved}
                 onChange={(e) => setSolved(e.target.checked)}
-                className="rounded accent-emerald-500 cursor-pointer"
+                className="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
               />
-              <span className="text-zinc-300">Solved Successfully</span>
+              <span className="text-zinc-800 dark:text-zinc-200">Solved Successfully</span>
             </label>
 
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={solvedIndependently}
                 onChange={(e) => setSolvedIndependently(e.target.checked)}
-                className="rounded accent-emerald-500 cursor-pointer"
+                className="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
               />
-              <span className="text-zinc-300">Solved Independently (Zero editorial peeking)</span>
+              <span className="text-zinc-800 dark:text-zinc-200">Solved Independently (Zero editorial peeking)</span>
             </label>
           </div>
 
-          <div>
-            <label className="block text-[11px] font-medium text-zinc-400 mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
               Complexity & Key Pattern Insights:
             </label>
             <textarea
@@ -290,22 +293,22 @@ export default function DsaPage() {
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. O(N) time with HashMap, two-pointer trick to avoid extra memory..."
               rows={2}
-              className="w-full text-xs font-mono bg-[#090A0C] border border-white/[0.08] rounded p-2.5 text-zinc-200 focus:outline-none focus:border-blue-500"
+              className="w-full text-xs font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-3 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-white/[0.06]">
+          <div className="flex justify-end gap-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
             <button
               type="button"
               onClick={() => setShowAddForm(false)}
-              className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
+              className="px-4 py-2 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-1.5 text-xs font-semibold rounded bg-white text-black hover:bg-zinc-200 transition-colors"
+              className="px-5 py-2 text-xs font-bold rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:opacity-90 transition-opacity shadow-sm"
             >
               Save Problem Log
             </button>
@@ -314,17 +317,17 @@ export default function DsaPage() {
       )}
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06] text-xs">
-        <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-lg border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-black/[0.06] dark:border-white/[0.06] text-xs">
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08]">
           {(["all", "easy", "medium", "hard"] as const).map((d) => (
             <button
               key={d}
               onClick={() => setDifficultyFilter(d)}
               className={cn(
-                "px-2.5 py-1 rounded font-medium transition-colors capitalize",
+                "px-3.5 py-1 rounded-full font-semibold transition-all duration-200 capitalize",
                 difficultyFilter === d
-                  ? "bg-white/[0.1] text-white"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
               )}
             >
               {d === "all" ? `All (${attempts.length})` : d}
@@ -336,7 +339,7 @@ export default function DsaPage() {
           <select
             value={patternFilter}
             onChange={(e) => setPatternFilter(e.target.value)}
-            className="bg-[#101216] border border-white/[0.08] rounded px-2.5 py-1 text-xs text-zinc-300 focus:outline-none focus:border-white/[0.2]"
+            className="bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.08] rounded-full px-4 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] shadow-sm"
           >
             <option value="all">All Patterns</option>
             {DSA_PATTERNS.map((p) => (
@@ -349,48 +352,48 @@ export default function DsaPage() {
       </div>
 
       {/* Attempts List */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {filteredAttempts.length === 0 ? (
-          <div className="p-8 text-center rounded-lg border border-white/[0.06] bg-[#0E1014]/60 text-xs text-zinc-500">
+          <div className="p-8 text-center rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50 dark:bg-[#0E1014]/60 text-xs text-zinc-500">
             No DSA attempts found matching your filter criteria.
           </div>
         ) : (
           filteredAttempts.map((a) => {
             const diffStyle =
               a.difficulty === "easy"
-                ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
                 : a.difficulty === "hard"
-                ? "text-rose-400 bg-rose-500/10 border-rose-500/20"
-                : "text-amber-400 bg-amber-500/10 border-amber-500/20";
+                ? "text-rose-700 dark:text-rose-400 bg-rose-500/10 border-rose-500/20"
+                : "text-amber-700 dark:text-amber-400 bg-amber-500/10 border-amber-500/20";
 
             return (
               <div
                 key={a.id}
-                className="rounded-lg border border-white/[0.08] bg-[#101216] p-3.5 text-zinc-200 hover:border-white/[0.14] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-5 text-zinc-900 dark:text-zinc-200 hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs"
               >
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
                     <span
                       className={cn(
-                        "text-[10px] font-mono uppercase px-2 py-0.5 rounded border font-semibold",
+                        "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border font-semibold",
                         diffStyle
                       )}
                     >
                       {a.difficulty}
                     </span>
-                    <span className="text-[10px] font-mono bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06] text-zinc-400">
+                    <span className="text-[10px] font-mono bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.06] text-zinc-600 dark:text-zinc-400 font-medium">
                       {a.pattern}
                     </span>
                     {a.solvedIndependently && (
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
-                        <ShieldCheck className="w-3 h-3" />
+                      <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5" />
                         <span>Independent</span>
                       </span>
                     )}
                   </div>
 
                   <div className="flex items-center gap-2 pt-0.5">
-                    <h4 className="text-sm font-semibold text-zinc-100">
+                    <h4 className="text-sm font-bold text-zinc-900 dark:text-white">
                       {a.problemTitle}
                     </h4>
                     {a.url && (
@@ -398,7 +401,7 @@ export default function DsaPage() {
                         href={a.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-zinc-500 hover:text-blue-400 transition-colors"
+                        className="text-zinc-400 hover:text-blue-500 transition-colors"
                         title="Problem Link"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -407,7 +410,7 @@ export default function DsaPage() {
                   </div>
 
                   {a.notes && (
-                    <p className="text-[11px] font-mono text-zinc-400/90 leading-relaxed pt-1">
+                    <p className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400/90 leading-relaxed pt-1">
                       {a.notes}
                     </p>
                   )}
@@ -415,8 +418,8 @@ export default function DsaPage() {
 
                 <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500 shrink-0 self-end sm:self-center">
                   {a.minutesSpent > 0 && (
-                    <span className="flex items-center gap-1 text-zinc-400">
-                      <Clock className="w-3 h-3 text-zinc-500" />
+                    <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-zinc-400" />
                       <span>{a.minutesSpent}m</span>
                     </span>
                   )}

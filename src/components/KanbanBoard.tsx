@@ -173,28 +173,28 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
               className={cn(
                 "px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 shrink-0 cursor-pointer",
                 selectedFilter === f.id
-                  ? "bg-white text-zinc-950 shadow-md font-bold scale-[1.02]"
-                  : "bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
+                  ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-md font-bold scale-[1.02]"
+                  : "bg-black/[0.04] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-black/[0.08] dark:hover:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.06]"
               )}
             >
               <span>{f.label}</span>
-              <span className={cn("text-[10px]", selectedFilter === f.id ? "text-zinc-600" : "text-zinc-400")}>
+              <span className={cn("text-[10px]", selectedFilter === f.id ? "text-zinc-300 dark:text-zinc-600 font-bold" : "text-zinc-500 dark:text-zinc-400")}>
                 ({f.count})
               </span>
             </button>
           ))}
         </div>
 
-        <div className="text-[11px] font-mono text-zinc-400 hidden sm:block">
+        <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 hidden sm:block">
           Drag cards to advance status
         </div>
       </div>
 
       {/* Blocked tasks banner if any exist */}
       {blockedTasks.length > 0 && (
-        <div className="p-3.5 rounded-2xl border border-rose-500/30 bg-rose-950/20 text-rose-300 text-xs flex items-center justify-between">
+        <div className="p-4 rounded-2xl border border-rose-500/30 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
             <span>
               <strong>{blockedTasks.length} task(s) currently blocked.</strong> Click any card to inspect or resolve.
             </span>
@@ -203,7 +203,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
       )}
 
       {/* 3-Column Responsive Kanban Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {COLUMNS.map((col) => {
           const colTasks = filteredTasks.filter((t) => t.status === col.id);
           const isDropTarget = dragOverCol === col.id;
@@ -229,26 +229,26 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                 "flex flex-col rounded-3xl border transition-all p-4 min-h-[460px]",
                 isDropTarget
                   ? col.dropBorder
-                  : "border-white/[0.08] bg-[#111215]/80"
+                  : "border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215]/80"
               )}
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.06] text-xs">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-black/[0.06] dark:border-white/[0.06] text-xs">
                 <div className="flex items-center gap-2">
                   <span className={cn("w-2 h-2 rounded-full", col.dotColor)} />
-                  <span className="font-semibold text-zinc-100">{col.title}</span>
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100">{col.title}</span>
                 </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/[0.06] text-zinc-400 border border-white/[0.08]">
+                <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.08] font-semibold">
                   {colTasks.length}
                 </span>
               </div>
 
               {/* Tasks List in Column */}
-              <div className="flex-1 space-y-2.5 overflow-y-auto">
+              <div className="flex-1 space-y-3 overflow-y-auto">
                 {colTasks.length === 0 ? (
-                  <div className="h-32 flex flex-col items-center justify-center border border-dashed border-white/[0.06] rounded-lg text-zinc-600 text-xs font-mono p-4 text-center">
+                  <div className="h-32 flex flex-col items-center justify-center border border-dashed border-black/[0.08] dark:border-white/[0.06] rounded-2xl text-zinc-500 dark:text-zinc-600 text-xs font-mono p-4 text-center">
                     <span>No {col.title.toLowerCase()} tasks</span>
-                    <span className="text-[10px] text-zinc-700 mt-1">Drop a card here to transition</span>
+                    <span className="text-[10px] text-zinc-400 dark:text-zinc-700 mt-1">Drop a card here to transition</span>
                   </div>
                 ) : (
                   colTasks.map((task) => {
@@ -273,10 +273,10 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                           "group rounded-2xl border p-4 transition-all duration-200 cursor-grab active:cursor-grabbing relative space-y-3 select-none hover:shadow-lg",
                           isBeingDragged && "opacity-40 scale-[0.98]",
                           task.status === "done"
-                            ? "bg-[#101216]/50 border-white/[0.04] text-zinc-400 hover:border-emerald-500/30"
+                            ? "bg-zinc-100/60 dark:bg-[#101216]/50 border-black/[0.04] dark:border-white/[0.04] text-zinc-500 dark:text-zinc-400 hover:border-emerald-500/30"
                             : task.status === "in_progress"
-                            ? "bg-[#15171D] border-amber-500/30 hover:border-amber-500/60 shadow-sm"
-                            : "bg-[#131418] border-white/[0.08] hover:border-white/[0.2]"
+                            ? "bg-amber-500/[0.07] dark:bg-[#15171D] border-amber-500/30 hover:border-amber-500/60 shadow-sm"
+                            : "bg-white dark:bg-[#131418] border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/[0.2] shadow-sm"
                         )}
                       >
                         {/* Top Metadata Row: Category & Authoritative Resource Pill & Circular Action Icon */}
@@ -284,7 +284,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                           <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
                             <span
                               className={cn(
-                                "inline-flex items-center gap-1 px-2 py-0.5 rounded-full border",
+                                "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border",
                                 meta.bg,
                                 meta.text
                               )}
@@ -296,30 +296,30 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                             {/* Authoritative Resource Attribution */}
                             {(task.resourceLabel || task.primaryCourses) && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-zinc-300 truncate max-w-[170px] hover:border-white/[0.16] transition-colors"
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] text-zinc-700 dark:text-zinc-300 truncate max-w-[170px] hover:border-black/20 dark:hover:border-white/[0.16] transition-colors"
                                 title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
                               >
                                 {task.resourceCategory === "dsa" || task.category === "dsa" ? (
-                                  <Binary className="w-2.5 h-2.5 text-purple-400 shrink-0" />
+                                  <Binary className="w-2.5 h-2.5 text-purple-500 dark:text-purple-400 shrink-0" />
                                 ) : task.resourceCategory === "architecture" || task.category === "design" ? (
-                                  <Layers className="w-2.5 h-2.5 text-blue-400 shrink-0" />
+                                  <Layers className="w-2.5 h-2.5 text-blue-500 dark:text-blue-400 shrink-0" />
                                 ) : task.resourceCategory === "implementation" || task.category === "implementation" ? (
-                                  <Terminal className="w-2.5 h-2.5 text-amber-400 shrink-0" />
+                                  <Terminal className="w-2.5 h-2.5 text-amber-500 dark:text-amber-400 shrink-0" />
                                 ) : task.resourceCategory === "quality" || task.category === "quality" ? (
-                                  <ShieldCheck className="w-2.5 h-2.5 text-indigo-400 shrink-0" />
+                                  <ShieldCheck className="w-2.5 h-2.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
                                 ) : task.resourceCategory === "checkpoint" || task.category === "checkpoint" ? (
-                                  <Sparkles className="w-2.5 h-2.5 text-rose-400 shrink-0" />
+                                  <Sparkles className="w-2.5 h-2.5 text-rose-500 dark:text-rose-400 shrink-0" />
                                 ) : (
-                                  <BookOpen className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                                  <BookOpen className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
                                 )}
                                 <span className="truncate">{task.resourceLabel || task.primaryCourses}</span>
                               </span>
                             )}
                           </div>
 
-                          {/* Circular Action Button (Inspired by mobile design ↗ button) */}
+                          {/* Circular Action Button */}
                           <div
-                            className="w-6 h-6 rounded-full bg-white/[0.06] group-hover:bg-white text-zinc-400 group-hover:text-zinc-950 flex items-center justify-center transition-all duration-200 shrink-0 shadow-sm"
+                            className="w-6 h-6 rounded-full bg-black/[0.06] dark:bg-white/[0.06] group-hover:bg-zinc-900 dark:group-hover:bg-white text-zinc-600 dark:text-zinc-400 group-hover:text-white dark:group-hover:text-zinc-950 flex items-center justify-center transition-all duration-200 shrink-0 shadow-sm"
                             title="Inspect details"
                           >
                             <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.2]" />
@@ -329,8 +329,8 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                         {/* Title */}
                         <h4
                           className={cn(
-                            "text-xs sm:text-sm font-bold leading-snug transition-colors group-hover:text-white",
-                            task.status === "done" ? "line-through text-zinc-500" : "text-zinc-100"
+                            "text-xs sm:text-sm font-bold leading-snug transition-colors group-hover:text-black dark:group-hover:text-white",
+                            task.status === "done" ? "line-through text-zinc-400 dark:text-zinc-500" : "text-zinc-900 dark:text-zinc-100"
                           )}
                         >
                           {task.title}
@@ -338,26 +338,26 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
 
                         {/* Description Preview */}
                         {task.description && (
-                          <p className="text-[11px] text-zinc-400/90 line-clamp-2 leading-relaxed font-normal">
+                          <p className="text-[11px] text-zinc-600 dark:text-zinc-400/90 line-clamp-2 leading-relaxed font-normal">
                             {task.description}
                           </p>
                         )}
 
                         {/* Card Footer: Quick Actions & Status Advance */}
-                        <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between text-xs">
+                        <div className="pt-2 border-t border-black/[0.06] dark:border-white/[0.04] flex items-center justify-between text-xs">
                           {/* Confidence or DSA Tag */}
                           <div className="flex items-center gap-1 font-mono text-[10px] text-zinc-500">
                             {task.confidence ? (
-                              <div className="flex items-center gap-0.5 text-amber-400">
+                              <div className="flex items-center gap-0.5 text-amber-500 dark:text-amber-400">
                                 <Star className="w-2.5 h-2.5 fill-amber-400" />
                                 <span>{task.confidence}/5</span>
                               </div>
                             ) : task.dsaTargetCount ? (
-                              <span className="text-purple-400 font-semibold">
+                              <span className="text-purple-600 dark:text-purple-400 font-semibold">
                                 {task.dsaTargetCount} problems
                               </span>
                             ) : (
-                              <span className="text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                              <span className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors">
                                 Details
                               </span>
                             )}

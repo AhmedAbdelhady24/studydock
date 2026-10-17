@@ -8,7 +8,9 @@ import {
   Layers,
   ChevronRight,
   ShieldCheck,
-  ArrowRight,
+  ArrowUpRight,
+  Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,16 +36,31 @@ export default function RoadmapPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
-        <div className="w-6 h-6 border-2 border-zinc-500 border-t-white rounded-full animate-spin" />
-        <p className="text-xs font-mono text-zinc-500">Loading syllabus...</p>
+        <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Loading curriculum roadmap...</p>
       </div>
     );
   }
 
   if (!data?.plan) {
     return (
-      <div className="p-8 text-center text-sm text-zinc-500">
-        No active curriculum found. Please import a learning plan first.
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111317] text-center space-y-4">
+        <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+          <Layers className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-zinc-900 dark:text-white">
+          No Active Curriculum Loaded
+        </h2>
+        <p className="text-xs text-zinc-500 leading-relaxed">
+          Import your 33-week Product Engineer roadmap CSV to explore the full curriculum.
+        </p>
+        <Link
+          href="/import"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-bold shadow-md hover:scale-105 transition-all"
+        >
+          <span>Go to Import</span>
+          <ArrowUpRight className="w-4 h-4" />
+        </Link>
       </div>
     );
   }
@@ -87,68 +104,48 @@ export default function RoadmapPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+      {/* Header & Filter Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-white">
+          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-semibold tracking-wider uppercase block mb-1">
+            Curriculum Structure • 33 Sprints
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
             Curriculum Roadmap
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
-            33-week syllabus across 4 progressive engineering phases. Each week requires 100% task completion and verified exit attestation.
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 max-w-2xl leading-relaxed">
+            33 structured engineering weeks divided across 4 deep phases. Every week requires 100% core task execution and verified exit attestation.
           </p>
         </div>
 
-        {/* Filter Segmented Control */}
-        <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-lg border border-white/[0.08] text-xs self-start sm:self-auto">
-          <button
-            onClick={() => setFilter("all")}
-            className={cn(
-              "px-3 py-1 rounded font-medium transition-colors",
-              filter === "all"
-                ? "bg-white/[0.1] text-white shadow-sm"
-                : "text-zinc-400 hover:text-zinc-200"
-            )}
-          >
-            All (33)
-          </button>
-          <button
-            onClick={() => setFilter("in_progress")}
-            className={cn(
-              "px-3 py-1 rounded font-medium transition-colors",
-              filter === "in_progress"
-                ? "bg-white/[0.1] text-white shadow-sm"
-                : "text-zinc-400 hover:text-zinc-200"
-            )}
-          >
-            In Flight ({inProgressWeeksTotal})
-          </button>
-          <button
-            onClick={() => setFilter("completed")}
-            className={cn(
-              "px-3 py-1 rounded font-medium transition-colors",
-              filter === "completed"
-                ? "bg-white/[0.1] text-white shadow-sm"
-                : "text-zinc-400 hover:text-zinc-200"
-            )}
-          >
-            Passed ({completedWeeksTotal})
-          </button>
-          <button
-            onClick={() => setFilter("remaining")}
-            className={cn(
-              "px-3 py-1 rounded font-medium transition-colors",
-              filter === "remaining"
-                ? "bg-white/[0.1] text-white shadow-sm"
-                : "text-zinc-400 hover:text-zinc-200"
-            )}
-          >
-            Remaining ({remainingWeeksTotal})
-          </button>
+        {/* Filter Pills (Matching Image 1 & 2 design) */}
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs self-start sm:self-auto overflow-x-auto">
+          {[
+            { id: "all", label: "All Weeks", count: 33 },
+            { id: "in_progress", label: "In Flight", count: inProgressWeeksTotal },
+            { id: "completed", label: "Passed", count: completedWeeksTotal },
+            { id: "remaining", label: "Remaining", count: remainingWeeksTotal },
+          ].map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFilter(f.id as any)}
+              className={cn(
+                "px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer shrink-0",
+                filter === f.id
+                  ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-sm font-bold scale-[1.02]"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+              )}
+            >
+              <span>{f.label}</span>
+              <span className="text-[10px] opacity-70 ml-1">({f.count})</span>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Phase Progression Ribbon */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Phase Progression Bento Ribbon */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {phaseList.map((p, idx) => {
           const passed = p.weeks.filter((w) => w.isCompleted).length;
           const total = p.weeks.length;
@@ -160,36 +157,43 @@ export default function RoadmapPage() {
             <div
               key={p.code}
               className={cn(
-                "p-3.5 rounded-lg border text-xs transition-colors",
+                "p-4 rounded-3xl border transition-all duration-200 flex flex-col justify-between min-h-[120px]",
                 isComplete
-                  ? "border-emerald-500/20 bg-emerald-950/10 text-emerald-200"
+                  ? "bg-[#D2E4D6] text-[#132317] border-[#BED7C3]"
                   : isStarted
-                  ? "border-white/[0.12] bg-[#111317] text-zinc-200"
-                  : "border-white/[0.06] bg-[#0E1014]/60 text-zinc-400"
+                  ? "bg-white dark:bg-[#18191E] border-black/[0.08] dark:border-white/[0.12] text-zinc-900 dark:text-white shadow-sm"
+                  : "bg-zinc-50 dark:bg-[#111215]/60 border-black/[0.05] dark:border-white/[0.06] text-zinc-500 dark:text-zinc-400"
               )}
             >
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 mb-1.5">
-                <span>PHASE 0{idx + 1}</span>
-                <span className="tabular-nums font-semibold text-zinc-300">
-                  {passed}/{total} wks
+              <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider mb-2">
+                <span className="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10">
+                  PHASE 0{idx + 1}
+                </span>
+                <span className="tabular-nums">
+                  {passed}/{total} passed
                 </span>
               </div>
-              <h3 className="font-semibold text-zinc-100 truncate text-sm">
-                {p.title}
-              </h3>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="flex-1 bg-white/[0.06] rounded-full h-1 overflow-hidden">
+
+              <div>
+                <h3 className="font-bold text-sm tracking-tight truncate">
+                  {p.title}
+                </h3>
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                  <span>Phase Progress</span>
+                  <span>{pct}%</span>
+                </div>
+                <div className="w-full bg-black/10 dark:bg-white/10 rounded-full h-2 overflow-hidden p-0.5">
                   <div
                     className={cn(
-                      "h-1 rounded-full transition-all duration-500",
-                      isComplete ? "bg-emerald-400" : "bg-blue-500"
+                      "h-full rounded-full transition-all duration-500",
+                      isComplete ? "bg-[#132317]" : "bg-[#C8B6FF] dark:bg-[#C8B6FF]"
                     )}
-                    style={{ width: `${pct}%` }}
+                    style={{ width: `${Math.max(pct, isStarted ? 6 : 0)}%` }}
                   />
                 </div>
-                <span className="text-[10px] font-mono tabular-nums text-zinc-400">
-                  {pct}%
-                </span>
               </div>
             </div>
           );
@@ -208,28 +212,26 @@ export default function RoadmapPage() {
           return (
             <div key={phaseData.code} className="space-y-4">
               {/* Phase Header Strip */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/[0.06]">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[11px] font-mono font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full uppercase">
                     PHASE 0{pIdx + 1}
                   </span>
-                  <h2 className="text-sm font-semibold text-zinc-100">
+                  <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                     {phaseData.title}
                   </h2>
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs font-mono text-zinc-500">
                     ({phaseData.weeks.length} Weeks)
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
-                  <span>
-                    {phaseCompletedWeeks} of {phaseData.weeks.length} passed ({phasePercent}%)
-                  </span>
+                <div className="text-xs font-mono font-semibold text-zinc-500">
+                  {phaseCompletedWeeks} of {phaseData.weeks.length} passed ({phasePercent}%)
                 </div>
               </div>
 
-              {/* Weeks Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              {/* Weeks Cards Grid (Bento style) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {visibleWeeks.map((w: any) => {
                   const isDone = w.isCompleted;
                   const isStarted = w.completedTasksCount > 0;
@@ -243,65 +245,74 @@ export default function RoadmapPage() {
                       key={w.weekId}
                       href={`/weeks/${w.weekId}`}
                       className={cn(
-                        "group block rounded-lg border p-4 transition-all duration-150 relative overflow-hidden",
+                        "group block rounded-3xl border p-5 transition-all duration-200 relative overflow-hidden shadow-sm hover:shadow-md cursor-pointer",
                         isDone
-                          ? "bg-[#0E1014]/60 border-white/[0.04] hover:border-emerald-500/30"
+                          ? "bg-zinc-50 dark:bg-[#101216]/60 border-black/[0.06] dark:border-white/[0.06] hover:border-emerald-500/30"
                           : isStarted
-                          ? "bg-[#111317] border-white/[0.12] hover:border-white/[0.2]"
-                          : "bg-[#0E1014]/40 border-white/[0.06] hover:border-white/[0.12]"
+                          ? "bg-white dark:bg-[#14151B] border-black/[0.1] dark:border-white/[0.15] hover:border-black/[0.25] dark:hover:border-white/[0.3]"
+                          : "bg-white dark:bg-[#111215]/80 border-black/[0.06] dark:border-white/[0.08] hover:border-black/[0.18] dark:hover:border-white/[0.18]"
                       )}
                     >
-                      {/* Top status & week tag */}
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-mono font-bold text-zinc-300">
-                          WEEK {w.weekNumber.toString().padStart(2, "0")}
-                        </span>
+                      {/* Top status & week tag & circular button */}
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-extrabold text-zinc-900 dark:text-zinc-200">
+                            WEEK {w.weekNumber.toString().padStart(2, "0")}
+                          </span>
 
-                        {isDone ? (
-                          <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                            <Check className="w-2.5 h-2.5 stroke-[3]" />
-                            <span>Passed</span>
-                          </span>
-                        ) : w.checkpointPassed ? (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                            Check signed (tasks open)
-                          </span>
-                        ) : isStarted ? (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                            {taskPercent}% done
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-zinc-500 border border-white/[0.06]">
-                            Pending
-                          </span>
-                        )}
+                          {isDone ? (
+                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              <span>Passed</span>
+                            </span>
+                          ) : w.checkpointPassed ? (
+                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                              Attested
+                            </span>
+                          ) : isStarted ? (
+                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
+                              {taskPercent}% done
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-white/[0.04] text-zinc-500 border border-black/[0.06] dark:border-white/[0.06]">
+                              Pending
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Circular Action Button (Matching mobile design ↗) */}
+                        <div className="btn-circle-action w-7 h-7 group-hover:scale-110" title="Inspect Week">
+                          <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                        </div>
                       </div>
 
-                      <h3 className="text-sm font-semibold text-zinc-100 group-hover:text-blue-400 transition-colors line-clamp-1">
+                      {/* Week Title */}
+                      <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#E05353] dark:group-hover:text-[#FF8A8A] transition-colors line-clamp-1 leading-snug">
                         {w.title}
                       </h3>
 
-                      <p className="mt-1 text-xs text-zinc-400/90 line-clamp-1 leading-relaxed">
-                        {w.primaryCourses ? w.primaryCourses : w.concepts || "Standard curriculum exercises"}
+                      {/* Primary Course & Focus */}
+                      <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1 leading-relaxed">
+                        {w.primaryCourses ? w.primaryCourses : w.concepts || "Core curriculum exercises"}
                       </p>
 
                       {/* Footer: tasks count & target hours */}
-                      <div className="mt-4 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                        <span>
-                          {w.completedTasksCount}/{w.tasksCount} tasks
+                      <div className="mt-4 pt-3 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                        <span className="font-semibold">
+                          {w.completedTasksCount}/{w.tasksCount} tasks done
                         </span>
-                        <span className="flex items-center gap-1 text-zinc-400">
-                          <Clock className="w-3 h-3 text-zinc-500" />
-                          <span>{w.targetHours}h</span>
+                        <span className="flex items-center gap-1 font-semibold text-zinc-700 dark:text-zinc-300">
+                          <Clock className="w-3 h-3 text-[#E05353]" />
+                          <span>{w.targetHours}h target</span>
                         </span>
                       </div>
 
                       {/* Hairline Progress Indicator at Card Bottom */}
-                      <div className="mt-2 w-full bg-white/[0.04] rounded-full h-1 overflow-hidden">
+                      <div className="mt-2.5 w-full bg-black/5 dark:bg-white/[0.06] rounded-full h-1.5 overflow-hidden p-0.5">
                         <div
                           className={cn(
-                            "h-1 rounded-full transition-all duration-300",
-                            isDone ? "bg-emerald-500" : isStarted ? "bg-blue-500" : "bg-transparent"
+                            "h-full rounded-full transition-all duration-300",
+                            isDone ? "bg-emerald-500" : isStarted ? "bg-[#C8B6FF]" : "bg-transparent"
                           )}
                           style={{ width: `${taskPercent}%` }}
                         />

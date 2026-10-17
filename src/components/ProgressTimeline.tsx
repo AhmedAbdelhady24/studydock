@@ -20,29 +20,29 @@ export function ProgressTimeline({
   const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
-    <div className="rounded-3xl border border-white/[0.08] bg-[#111215] p-5 space-y-4">
+    <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] p-5 space-y-4 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.06]">
         <div>
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
+          <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block font-semibold">
             Curriculum Checklist
           </span>
-          <h3 className="text-sm font-bold text-white tracking-tight">
+          <h3 className="text-sm font-bold text-zinc-900 dark:text-white tracking-tight">
             Your Progress
           </h3>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] text-zinc-200">
+          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-800 dark:text-zinc-200">
             {completedCount}/{totalCount}
           </span>
-          <span className="text-[11px] font-bold text-[#FF8A8A]">
+          <span className="text-[11px] font-bold text-[#E05353]">
             {percent}%
           </span>
         </div>
       </div>
 
-      {/* Vertical Connected Stepper List (Directly modeled on learnspring Image 3) */}
-      <div className="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-3 before:w-[2px] before:bg-white/[0.08]">
+      {/* Vertical Connected Stepper List */}
+      <div className="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-3 before:w-[2px] before:bg-black/[0.08] dark:before:bg-white/[0.08]">
         {tasks.map((task) => {
           const isDone = task.status === "done";
           const isInProgress = task.status === "in_progress";
@@ -60,8 +60,8 @@ export function ProgressTimeline({
                   isDone
                     ? "bg-[#E05353] text-white shadow-md shadow-[#E05353]/30"
                     : isInProgress
-                    ? "bg-[#18191E] ring-2 ring-amber-400 text-amber-400"
-                    : "bg-[#18191E] border-2 border-zinc-600 text-transparent group-hover:border-zinc-400"
+                    ? "bg-white dark:bg-[#18191E] ring-2 ring-amber-400 text-amber-500"
+                    : "bg-white dark:bg-[#18191E] border-2 border-zinc-300 dark:border-zinc-600 text-transparent group-hover:border-zinc-500"
                 )}
               >
                 {isDone ? (
@@ -74,7 +74,7 @@ export function ProgressTimeline({
               </div>
 
               {/* Task Row Content */}
-              <div className="p-2 -mr-2 rounded-xl transition-colors group-hover:bg-white/[0.04]">
+              <div className="p-2 -mr-2 rounded-xl transition-colors group-hover:bg-black/[0.04] dark:group-hover:bg-white/[0.04]">
                 <div className="flex items-start justify-between gap-2">
                   <h4
                     className={cn(
@@ -82,13 +82,13 @@ export function ProgressTimeline({
                       isDone
                         ? "font-medium text-zinc-400 line-through"
                         : isInProgress
-                        ? "font-bold text-amber-300"
-                        : "font-medium text-zinc-200 group-hover:text-white"
+                        ? "font-bold text-amber-600 dark:text-amber-300"
+                        : "font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-black dark:group-hover:text-white"
                     )}
                   >
                     {task.title}
                   </h4>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                 </div>
 
                 <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-zinc-500">
@@ -96,7 +96,7 @@ export function ProgressTimeline({
                   {task.resourceLabel && (
                     <>
                       <span>•</span>
-                      <span className="truncate max-w-[150px] text-zinc-400">
+                      <span className="truncate max-w-[150px] text-zinc-600 dark:text-zinc-400">
                         {task.resourceLabel}
                       </span>
                     </>

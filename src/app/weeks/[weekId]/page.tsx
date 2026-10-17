@@ -108,17 +108,17 @@ export default function WeekDetailPage() {
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] text-xs">
         <Link
           href="/roadmap"
-          className="flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 transition-colors font-medium font-mono"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-all text-xs font-semibold"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Curriculum Roadmap</span>
         </Link>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {prevWeek && (
             <Link
               href={`/weeks/${prevWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors font-mono"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/[0.2] text-zinc-700 dark:text-zinc-300 transition-colors font-mono text-xs font-semibold"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>W{prevWeek.weekNumber.toString().padStart(2, "0")}</span>
@@ -127,7 +127,7 @@ export default function WeekDetailPage() {
           {nextWeek && (
             <Link
               href={`/weeks/${nextWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors font-mono"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/[0.2] text-zinc-700 dark:text-zinc-300 transition-colors font-mono text-xs font-semibold"
             >
               <span>W{nextWeek.weekNumber.toString().padStart(2, "0")}</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -137,38 +137,38 @@ export default function WeekDetailPage() {
       </div>
 
       {/* Week Header Banner */}
-      <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-5 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded">
+      <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] p-6 sm:p-8 space-y-5 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-0.5 rounded-full">
                 WEEK {currentWeek.weekNumber.toString().padStart(2, "0")}
               </span>
-              <span className="text-[11px] font-mono text-zinc-400 bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06]">
+              <span className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04] px-3 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.06] font-medium">
                 {currentWeek.phaseTitle}
               </span>
               {currentWeek.isCompleted && (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" />
+                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1 font-semibold">
+                  <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Passed</span>
                 </span>
               )}
             </div>
 
-            <h1 className="text-xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
               {currentWeek.title}
             </h1>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="rounded border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-right font-mono text-xs">
-              <span className="text-[10px] text-zinc-500 block uppercase">Target Pace</span>
-              <span className="font-semibold text-zinc-200">{currentWeek.targetHours}h / week</span>
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.02] px-4 py-2 text-right font-mono text-xs shadow-sm">
+              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block uppercase font-semibold">Target Pace</span>
+              <span className="font-extrabold text-zinc-900 dark:text-zinc-100">{currentWeek.targetHours}h / week</span>
             </div>
 
-            <div className="rounded border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-right font-mono text-xs">
-              <span className="text-[10px] text-zinc-500 block uppercase">Progress</span>
-              <span className="font-semibold text-zinc-200 tabular-nums">
+            <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-white/[0.02] px-4 py-2 text-right font-mono text-xs shadow-sm">
+              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block uppercase font-semibold">Progress</span>
+              <span className="font-extrabold text-zinc-900 dark:text-zinc-100 tabular-nums">
                 {currentWeek.completedTasksCount} / {currentWeek.tasksCount} done
               </span>
             </div>
@@ -176,26 +176,26 @@ export default function WeekDetailPage() {
         </div>
 
         {/* Primary Courses & Concepts */}
-        <div className="pt-3 border-t border-white/[0.06] grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06] grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div>
-            <span className="text-zinc-500 font-medium block mb-1">
+            <span className="text-zinc-500 dark:text-zinc-400 font-semibold block mb-1">
               Primary Course References:
             </span>
-            <p className="text-zinc-200 font-mono text-xs font-semibold">
+            <p className="text-zinc-900 dark:text-zinc-200 font-mono text-xs font-bold">
               {currentWeek.primaryCourses || "Standard Systems Engineering"}
             </p>
           </div>
 
           {currentWeek.concepts && (
             <div>
-              <span className="text-zinc-500 font-medium block mb-1">
+              <span className="text-zinc-500 dark:text-zinc-400 font-semibold block mb-1">
                 Core Engineering Concepts:
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {currentWeek.concepts.split(",").map((c: string, idx: number) => (
                   <span
                     key={idx}
-                    className="font-mono text-[10px] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06] text-zinc-300"
+                    className="font-mono text-[10px] bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.06] text-zinc-700 dark:text-zinc-300 font-medium"
                   >
                     {c.trim()}
                   </span>
@@ -218,22 +218,23 @@ export default function WeekDetailPage() {
       />
 
       {/* Action Items Header & Controls */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
-          <h2 className="text-sm font-semibold text-zinc-200">
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
+          <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
             Action Items & Deliverables ({filteredTasks.length})
           </h2>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3">
             {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1 text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs">
               <button
+                type="button"
                 onClick={() => setCategoryFilter("all")}
                 className={cn(
-                  "px-2 py-0.5 rounded font-medium transition-colors border",
+                  "px-3 py-0.5 rounded-full font-semibold transition-all duration-200",
                   categoryFilter === "all"
-                    ? "bg-white/[0.1] text-white border-white/[0.2]"
-                    : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
+                    ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                 )}
               >
                 All
@@ -241,12 +242,13 @@ export default function WeekDetailPage() {
               {categories.map((cat: any) => (
                 <button
                   key={cat}
+                  type="button"
                   onClick={() => setCategoryFilter(cat)}
                   className={cn(
-                    "px-2 py-0.5 rounded font-medium transition-colors border capitalize",
+                    "px-3 py-0.5 rounded-full font-semibold transition-all duration-200 capitalize",
                     categoryFilter === cat
-                      ? "bg-white/[0.1] text-white border-white/[0.2]"
-                      : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
+                      ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                   )}
                 >
                   {cat.replace(/_/g, " ")}
@@ -255,33 +257,33 @@ export default function WeekDetailPage() {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-md border border-white/[0.08] text-xs">
+            <div className="flex items-center gap-1 bg-zinc-100 dark:bg-white/[0.04] p-1 rounded-full border border-black/[0.08] dark:border-white/[0.08] text-xs">
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
                 className={cn(
-                  "px-2 py-0.5 rounded font-medium flex items-center gap-1 transition-colors",
+                  "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                   viewMode === "list"
-                    ? "bg-white/[0.12] text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
+                    ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                 )}
                 title="List view"
               >
-                <List className="w-3 h-3" />
+                <List className="w-3.5 h-3.5" />
                 <span>List</span>
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode("kanban")}
                 className={cn(
-                  "px-2 py-0.5 rounded font-medium flex items-center gap-1 transition-colors",
+                  "px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 transition-all duration-200",
                   viewMode === "kanban"
-                    ? "bg-white/[0.12] text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
+                    ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                 )}
                 title="Board view"
               >
-                <LayoutGrid className="w-3 h-3" />
+                <LayoutGrid className="w-3.5 h-3.5" />
                 <span>Board</span>
               </button>
             </div>
@@ -296,7 +298,7 @@ export default function WeekDetailPage() {
             onSelectTask={handleOpenTask}
           />
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {filteredTasks.map((t: any) => (
               <TaskItem
                 key={t.taskId}
