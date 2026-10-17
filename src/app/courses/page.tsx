@@ -2,14 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  GraduationCap,
   ExternalLink,
-  Clock,
   CheckCircle,
   Sliders,
-  Bookmark,
-  ChevronDown,
-  ChevronUp,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +40,12 @@ export default function CoursesPage() {
     setEditPercent(course.actualPercent ?? 0);
   };
 
-  const handleSavePercent = async (courseId: string) => {
+  const handleQuickStep = async (courseId: string, currentVal: number, delta: number) => {
+    const nextVal = Math.min(100, Math.max(0, currentVal + delta));
+    await saveCoursePercent(courseId, nextVal);
+  };
+
+  const saveCoursePercent = async (courseId: string, percent: number) => {
     try {
       setIsSaving(true);
       const res = await fetch("/api/courses", {
@@ -51,13 +53,13 @@ export default function CoursesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           courseId,
-          actualPercent: editPercent,
+          actualPercent: percent,
         }),
       });
 
       if (res.ok) {
         setEditingCourseId(null);
-        fetchCourses();
+        await fetchCourses();
       }
     } catch (err) {
       console.error("Failed to update course progress", err);
@@ -73,40 +75,75 @@ export default function CoursesPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-mono text-muted-foreground">Loading course targets...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
+        <div className="w-6 h-6 border-2 border-zinc-500 border-t-white rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Loading course curriculum...</p>
       </div>
     );
   }
 
+  const targetsMetCount = courses.filter((c) => (c.actualPercent ?? 0) >= (c.targetMin ?? 100)).length;
+  const fullCoverageCount = courses.filter((c) => c.coverageKind === "full").length;
+  const targetedCount = courses.filter((c) => c.coverageKind === "targeted").length;
+  const selectiveCount = courses.filter((c) => c.coverageKind === "selective").length;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Course Curriculum & Expected Coverage
+          <h1 className="text-xl font-semibold tracking-tight text-white">
+            Course Curriculum
           </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Track planned study targets vs actual progress across all 16 foundational courses.
+          <p className="text-xs text-zinc-400 mt-1">
+            16 foundational engineering courses mapped to study phases with target coverage thresholds.
           </p>
         </div>
 
         {/* Filter */}
-        <div className="flex items-center gap-1.5 bg-secondary/60 p-1 rounded-lg border border-border text-xs">
+        <div className="flex items-center gap-1 bg-[#101216] p-1 rounded-lg border border-white/[0.08] text-xs self-start sm:self-auto">
           {["all", "full", "targeted", "selective"].map((k) => (
             <button
               key={k}
               onClick={() => setFilter(k)}
               className={cn(
-                "px-2.5 py-1 rounded font-medium transition-colors capitalize",
-                filter === k ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                "px-3 py-1 rounded font-medium transition-colors capitalize",
+                filter === k
+                  ? "bg-white/[0.1] text-white shadow-sm"
+                  : "text-zinc-400 hover:text-zinc-200"
               )}
             >
               {k === "all" ? `All (${courses.length})` : k}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Curriculum Summary Ribbon */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#101216]">
+          <span className="text-[11px] font-mono text-zinc-400 block mb-1">Targets Met</span>
+          <span className="text-xl font-bold font-mono text-white tabular-nums">
+            {targetsMetCount} / {courses.length}
+          </span>
+        </div>
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#101216]">
+          <span className="text-[11px] font-mono text-zinc-400 block mb-1">Full Coverage (100%)</span>
+          <span className="text-xl font-bold font-mono text-emerald-400 tabular-nums">
+            {fullCoverageCount} courses
+          </span>
+        </div>
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#101216]">
+          <span className="text-[11px] font-mono text-zinc-400 block mb-1">Targeted Coverage</span>
+          <span className="text-xl font-bold font-mono text-blue-400 tabular-nums">
+            {targetedCount} courses
+          </span>
+        </div>
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#101216]">
+          <span className="text-[11px] font-mono text-zinc-400 block mb-1">Selective Coverage</span>
+          <span className="text-xl font-bold font-mono text-purple-400 tabular-nums">
+            {selectiveCount} courses
+          </span>
         </div>
       </div>
 
@@ -122,25 +159,31 @@ export default function CoursesPage() {
             <div
               key={c.courseId}
               className={cn(
-                "rounded-xl border p-5 bg-card text-card-foreground shadow-sm transition-all space-y-4",
-                isTargetMet ? "border-emerald-800/40" : "border-border"
+                "rounded-lg border p-4 bg-[#101216] transition-all duration-150 space-y-3.5",
+                isTargetMet ? "border-emerald-500/20 hover:border-emerald-500/40" : "border-white/[0.08] hover:border-white/[0.14]"
               )}
             >
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className="text-[10px] font-mono uppercase bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded font-semibold truncate max-w-[240px]"
-                      title={c.courseId}
-                    >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono uppercase bg-white/[0.04] text-zinc-300 border border-white/[0.08] px-2 py-0.5 rounded font-semibold truncate max-w-[200px]">
                       {c.courseId.replace(/^product-engineer-33-week-course-/, "")}
                     </span>
-                    <span className="text-[10px] font-mono uppercase bg-secondary text-muted-foreground px-2 py-0.5 rounded border border-border">
-                      {c.coverageKind} coverage
+                    <span
+                      className={cn(
+                        "text-[10px] font-mono uppercase px-2 py-0.5 rounded border font-medium",
+                        c.coverageKind === "full"
+                          ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                          : c.coverageKind === "targeted"
+                          ? "bg-blue-500/10 text-blue-300 border-blue-500/20"
+                          : "bg-purple-500/10 text-purple-300 border-purple-500/20"
+                      )}
+                    >
+                      {c.coverageKind}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-foreground leading-snug">
+                  <h3 className="text-sm font-semibold text-zinc-100 leading-snug">
                     {c.title}
                   </h3>
                 </div>
@@ -150,8 +193,8 @@ export default function CoursesPage() {
                     href={c.referenceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                    title="Course Reference Link"
+                    className="p-1.5 rounded border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] transition-colors shrink-0"
+                    title="Course Syllabus Link"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -159,30 +202,39 @@ export default function CoursesPage() {
               </div>
 
               {/* Planned Weeks & Target Range */}
-              <div className="flex items-center justify-between text-xs font-mono text-muted-foreground pt-1">
+              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
                 <span>Weeks: {c.plannedWeeks || "Throughout roadmap"}</span>
                 <span>
-                  Target: {c.targetMin}%{c.targetMax ? `-${c.targetMax}%` : ""}
+                  Target: {c.targetMin}%{c.targetMax ? `–${c.targetMax}%` : ""}
                 </span>
               </div>
 
-              {/* Visual Progress Bar (Target Marker vs Actual) */}
-              <div className="space-y-1.5">
+              {/* Progress Dual Bar */}
+              <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground font-medium">Actual Progress:</span>
-                  <span className="font-mono font-bold text-foreground">{actual}%</span>
+                  <span className="text-zinc-400 font-mono text-[11px]">
+                    Progress: <span className="text-zinc-200 font-semibold">{actual}%</span>
+                  </span>
+                  {isTargetMet ? (
+                    <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" />
+                      <span>Target Met</span>
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-mono text-zinc-500">
+                      Goal: {target}%
+                    </span>
+                  )}
                 </div>
 
-                <div className="relative w-full bg-secondary rounded-full h-2 overflow-hidden">
-                  {/* Actual Progress Fill */}
+                <div className="relative w-full bg-white/[0.06] rounded-full h-1.5 overflow-hidden">
                   <div
                     className={cn(
-                      "h-2 rounded-full transition-all duration-300",
-                      isTargetMet ? "bg-emerald-500" : "bg-primary"
+                      "h-1.5 rounded-full transition-all duration-300",
+                      isTargetMet ? "bg-emerald-400" : "bg-blue-500"
                     )}
                     style={{ width: `${Math.min(100, Math.max(0, actual))}%` }}
                   />
-                  {/* Target Goal Tick */}
                   <div
                     className="absolute top-0 bottom-0 w-0.5 bg-amber-400 z-10"
                     style={{ left: `${Math.min(100, Math.max(0, target))}%` }}
@@ -191,12 +243,12 @@ export default function CoursesPage() {
                 </div>
               </div>
 
-              {/* Progress Update Slider / Controls */}
+              {/* Progress Controls */}
               {isEditing ? (
-                <div className="p-3 rounded-lg bg-secondary/50 border border-border/80 space-y-2">
+                <div className="p-3 rounded border border-white/[0.1] bg-[#090A0C] space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Adjust Progress:</span>
-                    <span className="font-mono font-bold text-primary">{editPercent}%</span>
+                    <span className="text-zinc-400">Adjust Progress:</span>
+                    <span className="font-mono font-bold text-white">{editPercent}%</span>
                   </div>
                   <input
                     type="range"
@@ -204,50 +256,65 @@ export default function CoursesPage() {
                     max="100"
                     value={editPercent}
                     onChange={(e) => setEditPercent(Number(e.target.value))}
-                    className="w-full accent-primary cursor-pointer"
+                    className="w-full accent-blue-500 cursor-pointer"
                   />
                   <div className="flex justify-end gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => setEditingCourseId(null)}
-                      className="px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground"
+                      className="px-2.5 py-1 text-xs text-zinc-400 hover:text-white"
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleSavePercent(c.courseId)}
+                      onClick={() => saveCoursePercent(c.courseId, editPercent)}
                       disabled={isSaving}
-                      className="px-3 py-1 text-xs font-semibold rounded bg-primary text-primary-foreground hover:bg-primary/90"
+                      className="px-3 py-1 text-xs font-semibold rounded bg-white text-black hover:bg-zinc-200 transition-colors"
                     >
                       Save
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center justify-between pt-1 text-xs">
                   <button
                     type="button"
                     onClick={() => handleStartEdit(c)}
-                    className="text-xs text-primary hover:underline flex items-center gap-1 font-medium"
+                    className="text-zinc-400 hover:text-zinc-200 flex items-center gap-1 font-mono text-[11px]"
                   >
-                    <Sliders className="w-3.5 h-3.5" />
-                    <span>Update Progress</span>
+                    <Sliders className="w-3 h-3 text-zinc-500" />
+                    <span>Set percentage</span>
                   </button>
 
-                  {isTargetMet && (
-                    <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      <span>Target Met</span>
-                    </span>
-                  )}
+                  <div className="flex items-center gap-1 font-mono">
+                    <button
+                      type="button"
+                      onClick={() => handleQuickStep(c.courseId, actual, -5)}
+                      disabled={isSaving || actual <= 0}
+                      className="p-1 rounded hover:bg-white/[0.08] text-zinc-400 hover:text-white transition-colors disabled:opacity-30"
+                      title="Minus 5%"
+                    >
+                      <Minus className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickStep(c.courseId, actual, 5)}
+                      disabled={isSaving || actual >= 100}
+                      className="p-1 rounded hover:bg-white/[0.08] text-zinc-400 hover:text-white transition-colors disabled:opacity-30"
+                      title="Plus 5%"
+                    >
+                      <Plus className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* Coverage Notes */}
+              {/* Coverage Strategy Notes */}
               {c.coverageNote && (
-                <p className="text-xs text-muted-foreground leading-relaxed pt-2 border-t border-border/40">
-                  <span className="font-medium text-foreground/80">Strategy:</span> {c.coverageNote}
+                <p className="text-[11px] font-mono text-zinc-500 leading-relaxed pt-2 border-t border-white/[0.04]">
+                  <span className="text-zinc-400 font-semibold">Scope: </span>
+                  {c.coverageNote}
                 </p>
               )}
             </div>

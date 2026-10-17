@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Compass,
-  CheckSquare,
+  Layers,
   GraduationCap,
   Binary,
   Clock,
   BarChart3,
   ArrowUpDown,
-  Layers,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,8 +18,8 @@ const NAV_ITEMS = [
   { href: "/", label: "Today", icon: Compass },
   { href: "/roadmap", label: "Roadmap", icon: Layers },
   { href: "/courses", label: "Courses", icon: GraduationCap },
-  { href: "/dsa", label: "DSA Tracker", icon: Binary },
-  { href: "/sessions", label: "Sessions", icon: Clock },
+  { href: "/dsa", label: "DSA", icon: Binary },
+  { href: "/sessions", label: "Time Log", icon: Clock },
   { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/import", label: "Import & Export", icon: ArrowUpDown },
 ];
@@ -28,31 +28,26 @@ export function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#090A0C]/90 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-bold shadow-sm group-hover:border-primary/60 transition-all">
-              <CheckSquare className="w-5 h-5 text-primary" />
+            <div className="w-7 h-7 rounded-md bg-white/[0.06] border border-white/[0.12] flex items-center justify-center text-white font-mono text-xs font-semibold shadow-inner group-hover:border-white/[0.25] transition-colors">
+              <span className="text-emerald-400 font-bold">⚓</span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold tracking-tight text-foreground text-base">
-                  StudyDock
-                </span>
-                <span className="text-[10px] font-mono uppercase bg-primary/20 text-primary px-1.5 py-0.5 rounded border border-primary/30">
-                  Local-First
-                </span>
-              </div>
-              <p className="text-[11px] text-muted-foreground hidden sm:block">
-                33-Week Product Engineer Roadmap
-              </p>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold tracking-tight text-white text-sm">
+                StudyDock
+              </span>
+              <span className="text-[10px] font-mono text-zinc-500 border-l border-white/[0.1] pl-2 hidden sm:inline">
+                33w Roadmap
+              </span>
             </div>
           </Link>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 ml-4">
+          {/* Navigation Items (Segmented Control style) */}
+          <nav className="hidden md:flex items-center gap-1 bg-white/[0.03] p-1 rounded-lg border border-white/[0.06]">
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -65,13 +60,13 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
+                    "flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md transition-all",
                     isActive
-                      ? "bg-secondary text-foreground shadow-sm border border-border"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      ? "bg-white/[0.08] text-white shadow-sm font-semibold"
+                      : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
                   )}
                 >
-                  <Icon className={cn("w-4 h-4", isActive ? "text-primary" : "text-muted-foreground")} />
+                  <Icon className={cn("w-3.5 h-3.5", isActive ? "text-emerald-400" : "text-zinc-500")} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -79,14 +74,14 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* Quick Actions & Status */}
-        <div className="flex items-center gap-3">
+        {/* Quick Actions */}
+        <div className="flex items-center gap-2.5">
           <Link
             href="/sessions"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium rounded-md bg-secondary/80 hover:bg-secondary border border-border text-foreground transition-all hover:border-primary/40"
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-mono font-medium rounded-md bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 hover:text-white transition-all hover:border-white/[0.15]"
           >
-            <Clock className="w-3.5 h-3.5 text-primary" />
-            <span>Log Study</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Focus Timer</span>
           </Link>
         </div>
       </div>

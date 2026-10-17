@@ -2,18 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Clock,
-  BookOpen,
-  Award,
-  Binary,
   Layers,
-  CheckCircle2,
-  Filter,
+  ShieldCheck,
 } from "lucide-react";
 import { TaskItem } from "@/components/TaskItem";
 import { CheckpointBanner } from "@/components/CheckpointBanner";
@@ -22,7 +18,6 @@ import { cn } from "@/lib/utils";
 export default function WeekDetailPage() {
   const params = useParams();
   const weekId = params.weekId as string;
-  const router = useRouter();
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -47,9 +42,9 @@ export default function WeekDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-mono text-muted-foreground">Loading week details...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
+        <div className="w-6 h-6 border-2 border-zinc-500 border-t-white rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Loading week details...</p>
       </div>
     );
   }
@@ -60,9 +55,9 @@ export default function WeekDetailPage() {
 
   if (!currentWeek) {
     return (
-      <div className="p-8 text-center space-y-4">
-        <p className="text-muted-foreground">Week not found: {weekId}</p>
-        <Link href="/roadmap" className="text-xs text-primary hover:underline">
+      <div className="p-8 text-center space-y-3">
+        <p className="text-sm text-zinc-400">Week not found: {weekId}</p>
+        <Link href="/roadmap" className="text-xs text-blue-400 hover:underline">
           Return to Roadmap
         </Link>
       </div>
@@ -87,33 +82,33 @@ export default function WeekDetailPage() {
   const categories = Array.from(new Set(tasksList.map((t: any) => t.category)));
 
   return (
-    <div className="space-y-8">
-      {/* Top Navigation */}
-      <div className="flex items-center justify-between pb-2 border-b border-border/60 text-xs">
+    <div className="space-y-6">
+      {/* Top Breadcrumb Navigation */}
+      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] text-xs">
         <Link
           href="/roadmap"
-          className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-1.5 text-zinc-400 hover:text-zinc-200 transition-colors font-medium"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to 33-Week Roadmap</span>
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Curriculum Roadmap</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {prevWeek && (
             <Link
               href={`/weeks/${prevWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Week {prevWeek.weekNumber}</span>
+              <span>W{prevWeek.weekNumber.toString().padStart(2, "0")}</span>
             </Link>
           )}
           {nextWeek && (
             <Link
               href={`/weeks/${nextWeek.weekId}`}
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#101216] border border-white/[0.08] hover:border-white/[0.16] text-zinc-300 transition-colors"
             >
-              <span>Week {nextWeek.weekNumber}</span>
+              <span>W{nextWeek.weekNumber.toString().padStart(2, "0")}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           )}
@@ -121,66 +116,65 @@ export default function WeekDetailPage() {
       </div>
 
       {/* Week Header Banner */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
+      <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-5 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-primary uppercase bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-                Week {currentWeek.weekNumber.toString().padStart(2, "0")} • {currentWeek.weekId.toUpperCase()}
+              <span className="text-[11px] font-mono font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded">
+                WEEK {currentWeek.weekNumber.toString().padStart(2, "0")}
               </span>
-              <span className="text-xs font-mono text-muted-foreground uppercase bg-secondary px-2 py-0.5 rounded border border-border">
+              <span className="text-[11px] font-mono text-zinc-400 bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06]">
                 {currentWeek.phaseTitle}
               </span>
+              {currentWeek.isCompleted && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>Passed</span>
+                </span>
+              )}
             </div>
 
-            <h1 className="text-2xl font-bold tracking-tight text-foreground mt-2">
+            <h1 className="text-xl font-bold tracking-tight text-white">
               {currentWeek.title}
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-secondary/80 border border-border px-3.5 py-2 text-right">
-              <span className="text-[10px] text-muted-foreground block uppercase font-mono">
-                Target Hours
-              </span>
-              <span className="text-sm font-bold font-mono text-foreground flex items-center justify-end gap-1">
-                <Clock className="w-3.5 h-3.5 text-primary" />
-                <span>{currentWeek.targetHours}h / week</span>
-              </span>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="rounded border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-right font-mono text-xs">
+              <span className="text-[10px] text-zinc-500 block uppercase">Target Pace</span>
+              <span className="font-semibold text-zinc-200">{currentWeek.targetHours}h / week</span>
             </div>
 
-            <div className="rounded-lg bg-secondary/80 border border-border px-3.5 py-2 text-right">
-              <span className="text-[10px] text-muted-foreground block uppercase font-mono">
-                Tasks Completed
-              </span>
-              <span className="text-sm font-bold font-mono text-foreground">
-                {currentWeek.completedTasksCount} / {currentWeek.tasksCount}
+            <div className="rounded border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-right font-mono text-xs">
+              <span className="text-[10px] text-zinc-500 block uppercase">Progress</span>
+              <span className="font-semibold text-zinc-200 tabular-nums">
+                {currentWeek.completedTasksCount} / {currentWeek.tasksCount} done
               </span>
             </div>
           </div>
         </div>
 
         {/* Primary Courses & Concepts */}
-        <div className="pt-3 border-t border-border/60 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div className="pt-3 border-t border-white/[0.06] grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div>
-            <span className="text-muted-foreground font-medium block mb-1">
-              Primary Courses:
+            <span className="text-zinc-500 font-medium block mb-1">
+              Primary Course References:
             </span>
-            <p className="text-foreground leading-relaxed">
+            <p className="text-zinc-300 font-mono text-[11px]">
               {currentWeek.primaryCourses || "Standard Systems Engineering"}
             </p>
           </div>
 
           {currentWeek.concepts && (
             <div>
-              <span className="text-muted-foreground font-medium block mb-1">
-                Key Concepts:
+              <span className="text-zinc-500 font-medium block mb-1">
+                Core Engineering Concepts:
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {currentWeek.concepts.split(",").map((c: string, idx: number) => (
                   <span
                     key={idx}
-                    className="font-mono text-[10px] bg-secondary px-2 py-0.5 rounded border border-border/70 text-foreground"
+                    className="font-mono text-[10px] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06] text-zinc-300"
                   >
                     {c.trim()}
                   </span>
@@ -202,27 +196,24 @@ export default function WeekDetailPage() {
         onAttestationUpdated={loadData}
       />
 
-      {/* Task List Header & Category Filters */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-foreground">
-              Week Action Items & Exercises ({filteredTasks.length})
-            </h2>
-          </div>
+      {/* Action Items Header & Filter Pills */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
+          <h2 className="text-sm font-semibold text-zinc-200">
+            Action Items & Deliverables ({filteredTasks.length})
+          </h2>
 
-          {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+          <div className="flex flex-wrap items-center gap-1 text-xs">
             <button
               onClick={() => setCategoryFilter("all")}
               className={cn(
                 "px-2.5 py-1 rounded font-medium transition-colors border",
                 categoryFilter === "all"
-                  ? "bg-secondary text-foreground border-primary/40 shadow-sm"
-                  : "border-border text-muted-foreground hover:text-foreground"
+                  ? "bg-white/[0.1] text-white border-white/[0.2]"
+                  : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
               )}
             >
-              All Categories
+              All
             </button>
             {categories.map((cat: any) => (
               <button
@@ -231,8 +222,8 @@ export default function WeekDetailPage() {
                 className={cn(
                   "px-2.5 py-1 rounded font-medium transition-colors border capitalize",
                   categoryFilter === cat
-                    ? "bg-secondary text-foreground border-primary/40 shadow-sm"
-                    : "border-border text-muted-foreground hover:text-foreground"
+                    ? "bg-white/[0.1] text-white border-white/[0.2]"
+                    : "border-white/[0.06] text-zinc-400 hover:text-zinc-200 bg-[#101216]"
                 )}
               >
                 {cat.replace(/_/g, " ")}
@@ -242,7 +233,7 @@ export default function WeekDetailPage() {
         </div>
 
         {/* Tasks List */}
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {filteredTasks.map((t: any) => (
             <TaskItem key={t.taskId} task={t} onUpdate={loadData} />
           ))}

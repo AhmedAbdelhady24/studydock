@@ -13,10 +13,39 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { BarChart3, TrendingUp, Clock, Binary, Award, AlertCircle } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
 
-const COLORS = ["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ec4899", "#ef4444"];
+const PALETTE = [
+  "#3b82f6", // Blue
+  "#10b981", // Emerald
+  "#f59e0b", // Amber
+  "#a855f7", // Purple
+  "#6366f1", // Indigo
+  "#f43f5e", // Rose
+];
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const item = payload[0]?.payload;
+    const headerTitle = item?.fullName || label;
+    return (
+      <div className="rounded-lg border border-white/[0.12] bg-[#0E1014] p-2.5 text-xs shadow-xl space-y-1">
+        <p className="font-mono font-semibold text-white">{headerTitle}</p>
+        {payload.map((entry: any, index: number) => (
+          <div key={`item-${index}`} className="flex items-center gap-2 font-mono text-[11px]">
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: entry.color || entry.fill }}
+            />
+            <span className="text-zinc-400 capitalize">{entry.name}:</span>
+            <span className="font-semibold text-zinc-200">{entry.value}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<any>(null);
@@ -44,16 +73,16 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-mono text-muted-foreground">Generating learning analytics...</p>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
+        <div className="w-6 h-6 border-2 border-zinc-500 border-t-white rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Compiling telemetry...</p>
       </div>
     );
   }
 
   if (!data?.plan) {
     return (
-      <div className="p-8 text-center text-muted-foreground">
+      <div className="p-8 text-center text-sm text-zinc-500">
         No active plan loaded. Import a learning plan to view analytics.
       </div>
     );
@@ -62,8 +91,9 @@ export default function AnalyticsPage() {
   const { metrics, weeks } = data;
 
   // Chart 1: Phase Completion
-  const phaseData = (metrics?.phases || []).map((p: any) => ({
-    name: p.title,
+  const phaseData = (metrics?.phases || []).map((p: any, idx: number) => ({
+    name: `P${(idx + 1).toString().padStart(2, "0")}`,
+    fullName: `Phase 0${idx + 1}: ${p.title.replace(/^Phase \d+: /, "")}`,
     Completed: p.completedWeeks,
     Remaining: p.totalWeeks - p.completedWeeks,
     percentage: p.percentage,
@@ -82,124 +112,121 @@ export default function AnalyticsPage() {
     count,
   }));
 
-  // Chart 3: First 8 Weeks Hours vs Actual (or all weeks)
+  // Chart 3: First 12 Weeks Hours vs Actual
   const weekHoursData = weeks.slice(0, 12).map((w: any) => {
     const weekSessions = (sessionsData?.sessions || []).filter(
       (s: any) => s.weekId === w.weekId
     );
     const actualMins = weekSessions.reduce((acc: number, s: any) => acc + s.durationMinutes, 0);
     return {
-      name: `W${w.weekNumber}`,
+      name: `W${w.weekNumber.toString().padStart(2, "0")}`,
+      fullName: `Week ${w.weekNumber.toString().padStart(2, "0")}: ${w.title}`,
       Target: Number(w.targetHours) || 20,
       Actual: Math.round((actualMins / 60) * 10) / 10,
     };
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="pb-2 border-b border-border/60">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Analytics & Performance Velocity
+      <div className="pb-4 border-b border-white/[0.06]">
+        <h1 className="text-xl font-semibold tracking-tight text-white">
+          Learning Telemetry
         </h1>
-        <p className="text-xs text-muted-foreground mt-1">
-          Detailed telemetry on phase completion, weekly study pace, and algorithm distribution.
+        <p className="text-xs text-zinc-400 mt-1">
+          Completion velocity, phase milestones, and category balance across the 33-week syllabus.
         </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
-          title="Overall Completion"
+          title="Curriculum Completion"
           value={`${metrics?.overallPercentage ?? metrics?.taskCompletionPercentage ?? 0}%`}
           subtitle={`${metrics?.completedTasksCount ?? metrics?.doneRequiredTasks ?? 0} of ${metrics?.totalTasksCount ?? metrics?.totalActiveRequiredTasks ?? 0} tasks`}
-          icon={TrendingUp}
           progress={metrics?.overallPercentage ?? metrics?.taskCompletionPercentage ?? 0}
+          badge="Global"
         />
         <StatCard
           title="Weeks Attested"
           value={`${metrics?.completedWeeksCount ?? metrics?.fullyCompletedWeeks ?? 0} / ${metrics?.totalWeeksCount ?? metrics?.totalWeeks ?? 33}`}
-          subtitle="Passed exit criteria"
-          icon={Award}
+          subtitle="Signed exit milestones"
+          badge="Exit Seal"
         />
         <StatCard
-          title="Actual Hours Studied"
+          title="Verified Study Hours"
           value={`${metrics?.totalHoursStudied ?? metrics?.totalStudiedHours ?? 0}h`}
-          subtitle="Real logged sessions"
-          icon={Clock}
+          subtitle="Logged stopwatch & sessions"
+          badge="Time"
         />
         <StatCard
           title="Unique DSA Solved"
           value={metrics?.distinctDsaSolvedCount ?? 0}
           subtitle={`${dsaData?.totalAttemptsCount ?? 0} total attempts`}
-          icon={Binary}
+          badge="Algorithms"
         />
       </div>
 
       {/* Visual Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Phase Breakdown Chart */}
-        <div className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-foreground">
-            Phase Completion (Weeks Completed vs Remaining)
-          </h3>
-          <div className="h-64 w-full">
+        <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+            <h3 className="text-xs font-semibold text-zinc-200">
+              Phase Progression (Completed vs Remaining Weeks)
+            </h3>
+            <span className="text-[10px] font-mono text-zinc-500">P01–P11</span>
+          </div>
+
+          <div className="h-60 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={phaseData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} interval={0} angle={-15} textAnchor="end" />
-                <YAxis stroke="#94a3b8" fontSize={11} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    color: "hsl(var(--foreground))",
-                    borderRadius: "0.5rem",
-                    fontSize: "12px",
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />
-                <Bar dataKey="Completed" fill="#10b981" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Remaining" fill="#334155" radius={[4, 4, 0, 0]} />
+              <BarChart data={phaseData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                <XAxis dataKey="name" stroke="#52525b" fontSize={11} interval={0} textAnchor="middle" />
+                <YAxis stroke="#52525b" fontSize={10} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
+                <Bar dataKey="Completed" fill="#10b981" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Remaining" fill="#27272a" radius={[3, 3, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Weekly Hours: Target vs Actual */}
-        <div className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-foreground">
-            Weekly Study Pace: Planned vs Actual Hours
-          </h3>
-          <div className="h-64 w-full">
+        <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+            <h3 className="text-xs font-semibold text-zinc-200">
+              Study Pace: Target vs Verified Hours (W01–W12)
+            </h3>
+            <span className="text-[10px] font-mono text-zinc-500">Target 20h/wk</span>
+          </div>
+
+          <div className="h-60 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={weekHoursData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
-                <YAxis stroke="#94a3b8" fontSize={11} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    color: "hsl(var(--foreground))",
-                    borderRadius: "0.5rem",
-                    fontSize: "12px",
-                  }}
-                />
+              <BarChart data={weekHoursData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                <XAxis dataKey="name" stroke="#52525b" fontSize={10} />
+                <YAxis stroke="#52525b" fontSize={10} />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend wrapperStyle={{ fontSize: "11px" }} />
-                <Bar dataKey="Target" fill="#64748b" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Actual" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Target" fill="#3f3f46" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Actual" fill="#3b82f6" radius={[3, 3, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Category Breakdown & Roadmap Integrity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-foreground">
-            Task Categories
-          </h3>
-          <div className="h-56 w-full">
+      {/* Task Distribution & Architecture Invariants */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1 rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+            <h3 className="text-xs font-semibold text-zinc-200">
+              Task Category Balance
+            </h3>
+            <span className="text-[10px] font-mono text-zinc-500">231 Total</span>
+          </div>
+
+          <div className="h-52 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -210,59 +237,57 @@ export default function AnalyticsPage() {
                   outerRadius={75}
                   paddingAngle={3}
                   dataKey="count"
+                  isAnimationActive={false}
                 >
                   {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={PALETTE[index % PALETTE.length]} />
                   ))}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    borderRadius: "0.5rem",
-                    fontSize: "11px",
-                  }}
-                />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-muted-foreground pt-1">
+
+          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-400 pt-1 border-t border-white/[0.06]">
             {categoryData.map((c, i) => (
               <div key={c.name} className="flex items-center gap-1.5">
                 <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: COLORS[i % COLORS.length] }}
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: PALETTE[i % PALETTE.length] }}
                 />
-                <span className="truncate">{c.name}: {c.count}</span>
+                <span className="truncate capitalize">{c.name}: {c.count}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-2 rounded-xl border border-border bg-card p-5 shadow-sm space-y-3">
-          <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-primary" />
-            <span>Integrity Guard & Invariant Status</span>
-          </h3>
-          <div className="space-y-2.5 text-xs text-muted-foreground leading-relaxed">
-            <div className="p-3 rounded-lg bg-secondary/40 border border-border">
-              <strong className="text-foreground block mb-0.5">
-                Deterministic Progress Preservation
+        <div className="lg:col-span-2 rounded-lg border border-white/[0.08] bg-[#101216] p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+            <h3 className="text-xs font-semibold text-zinc-200">
+              System Architecture & Progress Invariants
+            </h3>
+            <span className="text-[10px] font-mono text-zinc-500">Data Guarantees</span>
+          </div>
+
+          <div className="space-y-2.5 text-xs text-zinc-400">
+            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
+              <strong className="text-zinc-200 block mb-0.5 font-medium">
+                Stable Task Identifiers
               </strong>
-              Tasks are permanently indexed by immutable IDs (<code className="text-primary font-mono">w01_t01</code> to <code className="text-primary font-mono">w33_t07</code>).
-              Re-importing CSV revisions preserves all completed checkboxes, confidence ratings, and notes. Missing tasks are archived without data loss.
+              Tasks are keyed by immutable, deterministic IDs (<code className="text-blue-400 font-mono text-[11px]">w01_t01</code> .. <code className="text-blue-400 font-mono text-[11px]">w33_t07</code>).
+              Re-importing CSV revisions preserves all checked items, confidence ratings, and notes without data loss.
             </div>
-            <div className="p-3 rounded-lg bg-secondary/40 border border-border">
-              <strong className="text-foreground block mb-0.5">
-                Strict Gatekeeping Metric
+            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
+              <strong className="text-zinc-200 block mb-0.5 font-medium">
+                Gated Phase Milestones
               </strong>
-              A week is only counted as completed when all active required tasks are finished <span className="text-foreground font-semibold">AND</span> the Exit Checkpoint has been formally attested.
+              A week is only marked as fully passed when 100% of required action items are done <span className="text-zinc-200 font-medium">and</span> the practical Exit Checkpoint has been attested.
             </div>
-            <div className="p-3 rounded-lg bg-secondary/40 border border-border">
-              <strong className="text-foreground block mb-0.5">
-                Auditable Time Accounting
+            <div className="p-3 rounded border border-white/[0.06] bg-white/[0.02]">
+              <strong className="text-zinc-200 block mb-0.5 font-medium">
+                Verified Time Accounting
               </strong>
-              Total hours studied are derived purely from individual study sessions logged by the learner, preventing misleading target-based gamification.
+              Study hours reflect actual recorded focus sessions, preventing artificial target-based velocity distortions.
             </div>
           </div>
         </div>

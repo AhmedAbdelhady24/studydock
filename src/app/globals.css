@@ -4,47 +4,51 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    /* Graphite / Obsidian developer palette (Linear & Raycast inspired) */
+    --background: 220 14% 4%;       /* #090A0C */
+    --foreground: 0 0% 93%;          /* #EDEDED */
 
-    --card: 222 47% 7%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 12% 7%;              /* #101216 */
+    --card-foreground: 0 0% 93%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 12% 8%;           /* #13151A */
+    --popover-foreground: 0 0% 93%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 6%;
+    --primary: 217 91% 60%;          /* #388BFD */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 33% 14%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 10% 12%;        /* #1A1D23 */
+    --secondary-foreground: 0 0% 93%;
 
-    --muted: 217 33% 12%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 10% 11%;            /* #16181E */
+    --muted-foreground: 220 7% 56%;  /* #868B96 */
 
-    --accent: 142 71% 45%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 152 69% 45%;           /* #10B981 emerald */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 30% 18%;
-    --input: 217 30% 18%;
+    --border: 220 8% 16%;            /* rgba(255,255,255,0.08) */
+    --input: 220 8% 18%;
     --ring: 217 91% 60%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
   }
 
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/30 selection:text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1, "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Interaction and accessibility rules from ui-ux-pro-max */
+  /* Natural interactive cursors */
   button, 
   [role="button"], 
   input[type="checkbox"], 
@@ -54,33 +58,33 @@
     cursor: pointer;
   }
 
-  /* Focus visible accessibility rings */
+  /* Clear accessible focus rings */
   :focus-visible {
     outline: 2px solid hsl(var(--primary));
     outline-offset: 2px;
   }
 
-  /* Optical alignment & Tabular numbers for engineering dashboards */
+  /* Tabular numbers for clean stats and timers */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* Custom Scrollbar for Dev-Dashboard feel */
+/* Minimalist precision scrollbars */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--border));
+  background: rgba(255, 255, 255, 0.2);
 }

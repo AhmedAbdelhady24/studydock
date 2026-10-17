@@ -3,17 +3,14 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Compass,
-  CheckCircle2,
-  Clock,
-  Binary,
-  Layers,
   ArrowRight,
   TrendingUp,
-  Award,
-  Sparkles,
-  UploadCloud,
+  Layers,
+  Clock,
+  Binary,
+  CheckCircle2,
   ChevronRight,
+  UploadCloud,
 } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
 import { TaskItem } from "@/components/TaskItem";
@@ -23,7 +20,7 @@ import { CheckpointBanner } from "@/components/CheckpointBanner";
 export default function TodayPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [taskFilter, setTaskFilter] = useState<"all" | "required" | "dsa">("all");
 
   const fetchPlanData = async () => {
     try {
@@ -33,7 +30,7 @@ export default function TodayPage() {
       const json = await res.json();
       setData(json);
     } catch (err: any) {
-      setError(err.message);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -45,195 +42,197 @@ export default function TodayPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-mono text-muted-foreground">Loading StudyDock workspace...</p>
+      <div className="flex flex-col items-center justify-center min-h-[40vh] space-y-3">
+        <div className="w-6 h-6 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Loading workspace...</p>
       </div>
     );
   }
 
-  // If no plan is imported in the database yet
   if (!data?.plan) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl border border-border bg-card text-center space-y-6 shadow-sm">
-        <div className="w-14 h-14 mx-auto rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-          <UploadCloud className="w-7 h-7" />
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-lg border border-white/[0.08] bg-[#111317] text-center space-y-5">
+        <div className="w-10 h-10 mx-auto rounded-md bg-white/[0.04] border border-white/[0.1] flex items-center justify-center text-zinc-300">
+          <UploadCloud className="w-5 h-5 text-emerald-400" />
         </div>
-        <div className="space-y-2">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Welcome to StudyDock
+        <div className="space-y-1.5">
+          <h2 className="text-lg font-semibold text-white">
+            No Active Plan Loaded
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Your PostgreSQL database is connected, but no learning plan has been imported yet.
-            You can import your 33-week Product Engineer roadmap with one click.
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Import your 33-week Product Engineer roadmap CSV to start tracking your daily progress.
           </p>
         </div>
-
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            href="/import"
-            className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
-          >
-            <UploadCloud className="w-4 h-4" />
-            <span>Go to Import & Export</span>
-          </Link>
-        </div>
+        <Link
+          href="/import"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white/[0.08] hover:bg-white/[0.12] text-xs font-semibold text-white border border-white/[0.1] transition-all"
+        >
+          <span>Go to Import</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
     );
   }
 
   const { metrics, weeks } = data;
-
-  // Identify active week (first week that is not yet completed, or w01)
-  const activeWeek =
-    weeks.find((w: any) => !w.isCompleted) || weeks[0];
-
+  const activeWeek = weeks.find((w: any) => !w.isCompleted) || weeks[0];
   const activeWeekTasks = activeWeek?.tasks || [];
   const requiredTasks = activeWeekTasks.filter((t: any) => t.required);
   const allRequiredDone =
     requiredTasks.length > 0 &&
     requiredTasks.every((t: any) => t.status === "done");
 
+  const filteredTasks =
+    taskFilter === "required"
+      ? activeWeekTasks.filter((t: any) => t.required)
+      : taskFilter === "dsa"
+      ? activeWeekTasks.filter((t: any) => t.category === "dsa")
+      : activeWeekTasks;
+
   return (
     <div className="space-y-8">
-      {/* Top Banner / Plan Summary */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+      {/* Week in Flight Header */}
+      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-3 border-b border-white/[0.06]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Today's Overview
-            </h1>
-            <span className="text-xs font-mono uppercase bg-secondary text-primary px-2 py-0.5 rounded border border-border">
-              {activeWeek?.phaseTitle || "Phase 1"}
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs font-mono font-semibold text-emerald-400">
+              Week {activeWeek?.weekNumber}
             </span>
+            <span className="text-zinc-600">•</span>
+            <h1 className="text-xl font-bold tracking-tight text-white">
+              {activeWeek?.title}
+            </h1>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Focus week: <span className="font-semibold text-foreground">{activeWeek?.title}</span> • Target: {activeWeek?.targetHours}h study
+          <p className="text-xs text-zinc-400 mt-1">
+            {activeWeek?.phaseTitle} • {activeWeek?.targetHours}h planned • {activeWeek?.primaryCourses}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             href={`/weeks/${activeWeek?.weekId}`}
-            className="px-3.5 py-1.5 text-xs font-medium rounded-lg bg-secondary hover:bg-secondary/80 border border-border text-foreground flex items-center gap-1.5 transition-all"
+            className="text-xs font-medium text-zinc-400 hover:text-white flex items-center gap-1 transition-colors"
           >
-            <span>Open Week {activeWeek?.weekNumber} Detail</span>
-            <ArrowRight className="w-3.5 h-3.5 text-primary" />
+            <span>Full Week View</span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-500" />
           </Link>
         </div>
       </div>
 
-      {/* Primary Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Overall Progress"
-          value={`${metrics?.overallPercentage ?? 0}%`}
-          subtitle={`${metrics?.completedTasksCount ?? 0} of ${metrics?.totalTasksCount ?? 0} tasks done`}
-          icon={TrendingUp}
-          progress={metrics?.overallPercentage ?? 0}
-        />
-        <StatCard
-          title="Weeks Completed"
-          value={`${metrics?.completedWeeksCount ?? 0} / ${metrics?.totalWeeksCount ?? 33}`}
-          subtitle={`${(metrics?.totalWeeksCount ?? 33) - (metrics?.completedWeeksCount ?? 0)} weeks remaining`}
-          icon={Layers}
-        />
-        <StatCard
-          title="Hours Studied"
-          value={`${metrics?.totalHoursStudied ?? 0} hrs`}
-          subtitle="Honest logged sessions"
-          icon={Clock}
-        />
-        <StatCard
-          title="DSA Solved"
-          value={metrics?.distinctDsaSolvedCount ?? 0}
-          subtitle="Unique problem solutions"
-          icon={Binary}
-        />
+      {/* Integrated Stats Ribbon (Replaces generic 4-card template) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 rounded-lg border border-white/[0.08] bg-[#111317] divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
+        <div className="p-4">
+          <span className="text-xs text-zinc-400 font-medium block">
+            Overall Progress
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
+              {metrics?.overallPercentage ?? 0}%
+            </span>
+            <span className="text-[11px] font-mono text-zinc-500">
+              {metrics?.completedTasksCount ?? 0}/{metrics?.totalTasksCount ?? 231} tasks
+            </span>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <span className="text-xs text-zinc-400 font-medium block">
+            Weeks Completed
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
+              {metrics?.completedWeeksCount ?? 0}
+            </span>
+            <span className="text-[11px] font-mono text-zinc-500">
+              of {metrics?.totalWeeksCount ?? 33} passed
+            </span>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <span className="text-xs text-zinc-400 font-medium block">
+            Time Logged
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
+              {metrics?.totalHoursStudied ?? 0}
+            </span>
+            <span className="text-[11px] font-mono text-zinc-500">hours total</span>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <span className="text-xs text-zinc-400 font-medium block">
+            DSA Solved
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-2xl font-semibold tracking-tight text-white tabular-nums">
+              {metrics?.distinctDsaSolvedCount ?? 0}
+            </span>
+            <span className="text-[11px] font-mono text-zinc-500">unique problems</span>
+          </div>
+        </div>
       </div>
 
-      {/* Main Two-Column Layout */}
+      {/* Main Workbench Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Active Week Tasks & Checkpoint (Span 2) */}
+        {/* Left: Active Tasks & Verification (Span 2) */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Active Week Banner */}
-          <div className="rounded-xl border border-border bg-card/60 p-5 shadow-sm space-y-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <span className="text-[11px] font-mono text-primary uppercase tracking-wider font-semibold">
-                  Active Week • {activeWeek?.weekId?.toUpperCase()}
-                </span>
-                <h2 className="text-lg font-bold text-foreground mt-0.5">
-                  Week {activeWeek?.weekNumber}: {activeWeek?.title}
-                </h2>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Primary Courses: <span className="text-foreground/90">{activeWeek?.primaryCourses || "General Systems"}</span>
-                </p>
-              </div>
-
-              <div className="text-right">
-                <span className="text-xs font-mono font-medium text-muted-foreground">
-                  {activeWeekTasks.filter((t: any) => t.status === "done").length} / {activeWeekTasks.length} tasks
-                </span>
-                <div className="w-24 bg-secondary rounded-full h-1.5 mt-1 overflow-hidden">
-                  <div
-                    className="bg-primary h-1.5 rounded-full transition-all"
-                    style={{
-                      width: `${
-                        activeWeekTasks.length > 0
-                          ? Math.round(
-                              (activeWeekTasks.filter((t: any) => t.status === "done").length /
-                                activeWeekTasks.length) *
-                                100
-                            )
-                          : 0
-                      }%`,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Concepts Tag List */}
-            {activeWeek?.concepts && (
-              <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border/40">
-                <span className="text-[11px] font-medium text-muted-foreground mr-1">Concepts:</span>
-                {activeWeek.concepts.split(",").map((c: string, idx: number) => (
-                  <span
-                    key={idx}
-                    className="text-[10px] font-mono bg-secondary/80 text-foreground/80 px-2 py-0.5 rounded border border-border/60"
-                  >
-                    {c.trim()}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Task Checklist */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span>Active Tasks ({activeWeekTasks.length})</span>
-              </h3>
-              <span className="text-xs text-muted-foreground font-mono">
-                Sort: Default Roadmap Order
+          {/* Action Items List Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-zinc-200">
+                Week {activeWeek?.weekNumber} Tasks
+              </h2>
+              <span className="text-xs font-mono text-zinc-500">
+                ({activeWeekTasks.filter((t: any) => t.status === "done").length}/{activeWeekTasks.length})
               </span>
             </div>
 
-            <div className="space-y-2.5">
-              {activeWeekTasks.map((task: any) => (
-                <TaskItem
-                  key={task.taskId}
-                  task={task}
-                  onUpdate={fetchPlanData}
-                />
-              ))}
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setTaskFilter("all")}
+                className={`px-2 py-0.5 rounded font-medium transition-colors ${
+                  taskFilter === "all" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setTaskFilter("required")}
+                className={`px-2 py-0.5 rounded font-medium transition-colors ${
+                  taskFilter === "required" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                Required
+              </button>
+              <button
+                type="button"
+                onClick={() => setTaskFilter("dsa")}
+                className={`px-2 py-0.5 rounded font-medium transition-colors ${
+                  taskFilter === "dsa" ? "bg-white/[0.1] text-white" : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                DSA
+              </button>
             </div>
           </div>
 
-          {/* Exit Checkpoint Gatekeeper */}
+          {/* High-density task checklist */}
+          <div className="space-y-2">
+            {filteredTasks.map((task: any) => (
+              <TaskItem
+                key={task.taskId}
+                task={task}
+                onUpdate={fetchPlanData}
+              />
+            ))}
+          </div>
+
+          {/* Verification Milestone Seal */}
           <CheckpointBanner
             weekId={activeWeek?.weekId}
             exitCriteria={activeWeek?.exitCriteria}
@@ -245,79 +244,42 @@ export default function TodayPage() {
           />
         </div>
 
-        {/* Right Column: Study Timer & Quick Links (Span 1) */}
+        {/* Right Column: Focus Timer & Course Targets */}
         <div className="space-y-6">
           <StudyTimer
             currentWeekId={activeWeek?.weekId}
             onSessionLogged={fetchPlanData}
           />
 
-          {/* Phase Roadmap Snapshot */}
-          <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-border/60">
-              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider">
-                Phase Velocity
-              </h3>
+          {/* Compact Phase Progress List */}
+          <div className="rounded-lg border border-white/[0.08] bg-[#111317] p-4 text-xs space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+              <span className="font-semibold text-zinc-300">
+                Phase Progress
+              </span>
               <Link
                 href="/roadmap"
-                className="text-[11px] text-primary hover:underline flex items-center gap-0.5"
+                className="text-[11px] text-zinc-400 hover:text-white transition-colors"
               >
-                <span>All 33 Weeks</span>
-                <ChevronRight className="w-3 h-3" />
+                All 33 Weeks →
               </Link>
             </div>
 
-            <div className="space-y-3">
-              {metrics?.phases?.map((p: any) => (
+            <div className="space-y-2.5">
+              {(metrics?.phases || []).slice(0, 5).map((p: any) => (
                 <div key={p.code} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-foreground">{p.title}</span>
-                    <span className="font-mono text-muted-foreground">{p.percentage}%</span>
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-zinc-300 truncate max-w-[180px]">{p.title}</span>
+                    <span className="font-mono text-zinc-500">{p.percentage}%</span>
                   </div>
-                  <div className="w-full bg-secondary rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full bg-white/[0.06] rounded-full h-1 overflow-hidden">
                     <div
-                      className="bg-primary h-1.5 rounded-full transition-all duration-300"
+                      className="bg-emerald-500/80 h-1 rounded-full transition-all"
                       style={{ width: `${p.percentage}%` }}
                     />
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Quick Action Cards */}
-          <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm space-y-3">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider pb-1 border-b border-border/60">
-              Navigation Shortcuts
-            </h3>
-            <div className="grid grid-cols-1 gap-2 pt-1">
-              <Link
-                href="/dsa"
-                className="p-3 rounded-lg border border-border hover:border-primary/40 bg-secondary/30 hover:bg-secondary/60 flex items-center justify-between text-xs transition-all"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Binary className="w-4 h-4 text-purple-400" />
-                  <div>
-                    <div className="font-medium text-foreground">DSA Tracker</div>
-                    <div className="text-[11px] text-muted-foreground">Log problem attempts & patterns</div>
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              </Link>
-
-              <Link
-                href="/courses"
-                className="p-3 rounded-lg border border-border hover:border-primary/40 bg-secondary/30 hover:bg-secondary/60 flex items-center justify-between text-xs transition-all"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Award className="w-4 h-4 text-emerald-400" />
-                  <div>
-                    <div className="font-medium text-foreground">Course Coverage</div>
-                    <div className="text-[11px] text-muted-foreground">16 targets vs actual progress</div>
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              </Link>
             </div>
           </div>
         </div>

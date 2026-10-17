@@ -8,9 +8,8 @@ import {
   CheckCircle2,
   FileSpreadsheet,
   FileJson,
-  Layers,
-  Sparkles,
   ArrowRight,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -93,20 +92,20 @@ export default function ImportExportPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="pb-2 border-b border-border/60">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Learning Plan Import & Backup Export
+      <div className="pb-4 border-b border-white/[0.06]">
+        <h1 className="text-xl font-semibold tracking-tight text-white">
+          Data Portability & Plan Management
         </h1>
-        <p className="text-xs text-muted-foreground mt-1">
-          Import revised roadmaps with 100% progress preservation. Export your data anytime in CSV or JSON.
+        <p className="text-xs text-zinc-400 mt-1">
+          Import revised syllabus CSVs with stable task IDs or export full progress backups.
         </p>
       </div>
 
       {resultMessage && (
-        <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-3">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <div>
             <strong className="block font-semibold">Import Complete</strong>
             <span>{resultMessage}</span>
@@ -115,10 +114,10 @@ export default function ImportExportPage() {
       )}
 
       {errors.length > 0 && (
-        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800/60 text-rose-300 text-xs space-y-2">
+        <div className="p-3.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs space-y-2">
           <div className="flex items-center gap-2 font-semibold">
             <AlertTriangle className="w-4 h-4 text-rose-400" />
-            <span>Validation Errors Found:</span>
+            <span>Validation Errors:</span>
           </div>
           <ul className="list-disc pl-5 space-y-1 font-mono text-[11px]">
             {errors.map((e, idx) => (
@@ -132,62 +131,64 @@ export default function ImportExportPage() {
       )}
 
       {/* Import Section */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-2">
-          <UploadCloud className="w-5 h-5 text-primary" />
-          <h2 className="text-base font-bold text-foreground">
-            Import Learning Plan CSV
-          </h2>
+      <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-5 space-y-4">
+        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+          <div className="flex items-center gap-2">
+            <UploadCloud className="w-4 h-4 text-blue-400" />
+            <h2 className="text-sm font-semibold text-white">
+              Import Learning Plan CSV
+            </h2>
+          </div>
+          <span className="text-[11px] font-mono text-zinc-500">Schema v1.0 • Idempotent</span>
         </div>
 
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          Upload your <code className="font-mono text-primary">plan_import.csv</code> and optional <code className="font-mono text-primary">course_targets.csv</code>.
-          Existing completed tasks, notes, DSA logs, and study sessions are strictly preserved.
+        <p className="text-xs text-zinc-400 leading-relaxed">
+          Upload your <code className="font-mono text-blue-400 text-[11px]">plan_import.csv</code> and optional <code className="font-mono text-blue-400 text-[11px]">course_targets.csv</code>.
+          Existing completed tasks, notes, DSA logs, and focus sessions are strictly preserved.
         </p>
 
         <form onSubmit={handlePreviewUpload} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="rounded-lg border border-border/80 p-4 bg-background/50 space-y-2">
-              <label className="block text-xs font-semibold text-foreground">
+            <div className="rounded border border-white/[0.08] p-3.5 bg-[#090A0C] space-y-2">
+              <label className="block text-xs font-semibold text-zinc-200">
                 Plan Tasks CSV (Required):
               </label>
               <input
                 type="file"
                 accept=".csv"
                 onChange={(e) => setPlanFile(e.target.files?.[0] || null)}
-                className="w-full text-xs font-mono text-muted-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
+                className="w-full text-xs font-mono text-zinc-400 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer"
               />
-              <span className="text-[11px] text-muted-foreground block">
+              <span className="text-[10px] text-zinc-500 font-mono block">
                 33 weeks • 231 tasks format
               </span>
             </div>
 
-            <div className="rounded-lg border border-border/80 p-4 bg-background/50 space-y-2">
-              <label className="block text-xs font-semibold text-foreground">
+            <div className="rounded border border-white/[0.08] p-3.5 bg-[#090A0C] space-y-2">
+              <label className="block text-xs font-semibold text-zinc-200">
                 Course Targets CSV (Optional):
               </label>
               <input
                 type="file"
                 accept=".csv"
                 onChange={(e) => setCourseFile(e.target.files?.[0] || null)}
-                className="w-full text-xs font-mono text-muted-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-secondary file:text-foreground hover:file:bg-secondary/80 cursor-pointer"
+                className="w-full text-xs font-mono text-zinc-400 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-white/[0.08] file:text-zinc-200 hover:file:bg-white/[0.12] cursor-pointer"
               />
-              <span className="text-[11px] text-muted-foreground block">
+              <span className="text-[10px] text-zinc-500 font-mono block">
                 16 course targets inventory
               </span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-[11px] text-muted-foreground font-mono">
-              Schema: v1.0 • Stable Task IDs
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-[11px] text-zinc-500 font-mono">
+              Stable Task ID matching enabled
             </span>
             <button
               type="submit"
               disabled={loadingPreview || !planFile}
-              className="px-4 py-2 rounded-lg font-semibold text-xs bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 transition-all disabled:opacity-40 shadow-sm"
+              className="px-3.5 py-1.5 rounded-md font-semibold text-xs bg-white text-black hover:bg-zinc-200 flex items-center gap-1.5 transition-colors disabled:opacity-30"
             >
-              <Sparkles className="w-4 h-4" />
               <span>{loadingPreview ? "Validating..." : "Validate & Preview Diff"}</span>
             </button>
           </div>
@@ -195,43 +196,46 @@ export default function ImportExportPage() {
 
         {/* Diff Preview Modal / Box */}
         {preview && (
-          <div className="mt-6 pt-6 border-t border-border space-y-4">
-            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Preview Validation Summary</span>
-            </h3>
+          <div className="mt-4 pt-4 border-t border-white/[0.08] space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Validation Diff Summary</span>
+              </h3>
+              <span className="text-[10px] font-mono text-emerald-400">Ready to apply</span>
+            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                <span className="text-muted-foreground block">Total Weeks</span>
-                <span className="text-base font-bold font-mono text-foreground">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+              <div className="p-2.5 rounded border border-white/[0.08] bg-[#090A0C]">
+                <span className="text-zinc-500 text-[10px] font-mono block">Total Weeks</span>
+                <span className="text-base font-semibold font-mono text-white">
                   {preview.preview.totalWeeks}
                 </span>
               </div>
-              <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                <span className="text-muted-foreground block">Total Tasks</span>
-                <span className="text-base font-bold font-mono text-foreground">
+              <div className="p-2.5 rounded border border-white/[0.08] bg-[#090A0C]">
+                <span className="text-zinc-500 text-[10px] font-mono block">Total Tasks</span>
+                <span className="text-base font-semibold font-mono text-white">
                   {preview.preview.totalTasks}
                 </span>
               </div>
-              <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                <span className="text-muted-foreground block">Preserved Existing</span>
-                <span className="text-base font-bold font-mono text-emerald-400">
+              <div className="p-2.5 rounded border border-white/[0.08] bg-[#090A0C]">
+                <span className="text-zinc-500 text-[10px] font-mono block">Preserved Existing</span>
+                <span className="text-base font-semibold font-mono text-emerald-400">
                   {preview.preview.existingTasksCount}
                 </span>
               </div>
-              <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                <span className="text-muted-foreground block">New Tasks Added</span>
-                <span className="text-base font-bold font-mono text-primary">
+              <div className="p-2.5 rounded border border-white/[0.08] bg-[#090A0C]">
+                <span className="text-zinc-500 text-[10px] font-mono block">New Tasks Added</span>
+                <span className="text-base font-semibold font-mono text-blue-400">
                   {preview.preview.newTasksCount}
                 </span>
               </div>
             </div>
 
             {preview.preview.warnings && preview.preview.warnings.length > 0 && (
-              <div className="p-3 rounded-lg bg-amber-950/30 border border-amber-800/40 text-amber-300 text-xs space-y-1">
-                <strong className="block">Plan Diff Warnings:</strong>
-                <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+              <div className="p-3 rounded border border-amber-500/20 bg-amber-500/10 text-amber-300 text-xs space-y-1">
+                <strong className="block text-[11px] font-semibold">Plan Diff Warnings:</strong>
+                <ul className="list-disc pl-4 space-y-0.5 text-[10px] font-mono">
                   {preview.preview.warnings.map((w: string, i: number) => (
                     <li key={i}>{w}</li>
                   ))}
@@ -239,11 +243,11 @@ export default function ImportExportPage() {
               </div>
             )}
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex justify-end gap-2 pt-2 border-t border-white/[0.06]">
               <button
                 type="button"
                 onClick={() => setPreview(null)}
-                className="px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+                className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
               >
                 Cancel
               </button>
@@ -251,10 +255,10 @@ export default function ImportExportPage() {
                 type="button"
                 onClick={handleExecuteImport}
                 disabled={isExecuting}
-                className="px-5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 shadow-sm transition-all"
+                className="px-4 py-1.5 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-400 text-black flex items-center gap-1.5 transition-colors"
               >
-                <span>{isExecuting ? "Importing to Database..." : "Confirm & Execute Import"}</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>{isExecuting ? "Importing..." : "Confirm & Execute Import"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -262,68 +266,71 @@ export default function ImportExportPage() {
       </div>
 
       {/* Export Section */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-4">
-        <div className="flex items-center gap-2">
-          <Download className="w-5 h-5 text-primary" />
-          <h2 className="text-base font-bold text-foreground">
-            Data Portability & Full Backups
-          </h2>
+      <div className="rounded-lg border border-white/[0.08] bg-[#101216] p-5 space-y-3">
+        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+          <div className="flex items-center gap-2">
+            <Download className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-sm font-semibold text-white">
+              Data Backups & Export
+            </h2>
+          </div>
+          <span className="text-[11px] font-mono text-zinc-500">Sanitized CSV & JSON</span>
         </div>
 
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          Export your learning progress anytime. CSV exports are automatically sanitized against spreadsheet formula injection.
+        <p className="text-xs text-zinc-400 leading-relaxed">
+          Export your learning progress anytime. CSV exports are sanitized against spreadsheet formula injection.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
           <a
             href="/api/export?format=plan-csv"
             download
-            className="p-3.5 rounded-lg border border-border hover:border-primary/50 bg-secondary/30 hover:bg-secondary/60 flex items-center justify-between text-xs transition-all group"
+            className="p-3 rounded border border-white/[0.08] hover:border-white/[0.18] bg-[#090A0C] flex items-center justify-between text-xs transition-colors group"
           >
             <div className="flex items-center gap-2.5">
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-              <div className="text-left">
-                <span className="font-semibold text-foreground block group-hover:text-primary">
+              <div>
+                <span className="font-semibold text-zinc-200 block group-hover:text-white">
                   Export Plan CSV
                 </span>
-                <span className="text-[11px] text-muted-foreground">Tasks & checked status</span>
+                <span className="text-[10px] text-zinc-500 font-mono">Tasks & checked status</span>
               </div>
             </div>
-            <Download className="w-3.5 h-3.5 text-muted-foreground" />
+            <Download className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300" />
           </a>
 
           <a
             href="/api/export?format=courses-csv"
             download
-            className="p-3.5 rounded-lg border border-border hover:border-primary/50 bg-secondary/30 hover:bg-secondary/60 flex items-center justify-between text-xs transition-all group"
+            className="p-3 rounded border border-white/[0.08] hover:border-white/[0.18] bg-[#090A0C] flex items-center justify-between text-xs transition-colors group"
           >
             <div className="flex items-center gap-2.5">
-              <FileSpreadsheet className="w-4 h-4 text-primary" />
-              <div className="text-left">
-                <span className="font-semibold text-foreground block group-hover:text-primary">
+              <FileSpreadsheet className="w-4 h-4 text-blue-400" />
+              <div>
+                <span className="font-semibold text-zinc-200 block group-hover:text-white">
                   Course Targets CSV
                 </span>
-                <span className="text-[11px] text-muted-foreground">16 course objectives</span>
+                <span className="text-[10px] text-zinc-500 font-mono">16 course objectives</span>
               </div>
             </div>
-            <Download className="w-3.5 h-3.5 text-muted-foreground" />
+            <Download className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300" />
           </a>
 
           <a
             href="/api/export?format=json"
             download
-            className="p-3.5 rounded-lg border border-border hover:border-primary/50 bg-secondary/30 hover:bg-secondary/60 flex items-center justify-between text-xs transition-all group"
+            className="p-3 rounded border border-white/[0.08] hover:border-white/[0.18] bg-[#090A0C] flex items-center justify-between text-xs transition-colors group"
           >
             <div className="flex items-center gap-2.5">
               <FileJson className="w-4 h-4 text-purple-400" />
-              <div className="text-left">
-                <span className="font-semibold text-foreground block group-hover:text-primary">
+              <div>
+                <span className="font-semibold text-zinc-200 block group-hover:text-white">
                   Full Backup JSON
                 </span>
-                <span className="text-[11px] text-muted-foreground">Complete database dump</span>
+                <span className="text-[10px] text-zinc-500 font-mono">Complete database dump</span>
               </div>
             </div>
-            <Download className="w-3.5 h-3.5 text-muted-foreground" />
+            <Download className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300" />
           </a>
         </div>
       </div>
