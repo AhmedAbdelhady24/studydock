@@ -24,7 +24,7 @@ export function ProgressTimeline({
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.06]">
         <div>
-          <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block font-semibold">
+          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block font-semibold">
             Curriculum Checklist
           </span>
           <h3 className="text-sm font-bold text-zinc-900 dark:text-white tracking-tight">
@@ -91,12 +91,12 @@ export function ProgressTimeline({
                   <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                 </div>
 
-                <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-zinc-500">
+                <div className="flex items-center gap-2 mt-1 text-xs font-mono text-zinc-500">
                   <span className="capitalize">{task.category}</span>
                   {isInProgress && (
                     <>
                       <span>•</span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-black/[0.06] dark:bg-white/[0.08] text-zinc-800 dark:text-zinc-200 font-semibold">
+                      <span className="text-[11px] font-mono px-1.5 py-0.5 rounded-full bg-black/[0.06] dark:bg-white/[0.08] text-zinc-800 dark:text-zinc-200 font-semibold">
                         In Flight
                       </span>
                     </>

@@ -31,7 +31,7 @@ export function StatCard({
           {title}
         </span>
         {badge && (
-          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08] font-medium">
+          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08] font-medium">
             {badge}
           </span>
         )}

@@ -158,7 +158,7 @@ export function NotificationDropdown() {
       case "checkpoint":
         return <ShieldCheck className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400" />;
       case "dsa":
-        return <Binary className="w-3.5 h-3.5 text-purple-500 dark:text-purple-400" />;
+        return <Binary className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />;
       default:
         return <Sparkles className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />;
     }
@@ -181,7 +181,7 @@ export function NotificationDropdown() {
       >
         <Bell className="w-4 h-4" />
         {unreadCount > 0 && (
-          <span className="w-2.5 h-2.5 rounded-full bg-[#4F46E5] absolute top-1.5 right-1.5 ring-2 ring-white dark:ring-[#131418] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 absolute top-2 right-2 ring-2 ring-white dark:ring-[#131418]" />
         )}
       </button>
 
@@ -194,11 +194,11 @@ export function NotificationDropdown() {
             <div className="flex items-center gap-2.5">
               <span className="font-bold text-sm tracking-tight">Notifications</span>
               {unreadCount > 0 ? (
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-xs">
+                <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-xs">
                   {unreadCount} unread
                 </span>
               ) : (
-                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-500">
+                <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-500">
                   All caught up
                 </span>
               )}
@@ -289,7 +289,7 @@ export function NotificationDropdown() {
                       >
                         {notif.title}
                       </h4>
-                      <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
+                      <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
                         {notif.time}
                       </span>
                     </div>
@@ -319,7 +319,7 @@ export function NotificationDropdown() {
                       <div className="flex items-center gap-2">
                         {notif.unread && (
                           <span
-                            className="w-1.5 h-1.5 rounded-full bg-[#4F46E5]"
+                            className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400"
                             title="Unread"
                           />
                         )}

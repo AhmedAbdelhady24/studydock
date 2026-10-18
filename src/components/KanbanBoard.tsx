@@ -35,7 +35,7 @@ const CATEGORY_META: Record<
 > = {
   dsa: {
     label: "DSA",
-    dot: "bg-purple-500",
+    dot: "bg-indigo-500",
     text: "text-zinc-700 dark:text-zinc-300 font-medium",
     bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
@@ -218,7 +218,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
               )}
             >
               <span>{f.label}</span>
-              <span className={cn("text-[10px]", selectedFilter === f.id ? "text-zinc-300 dark:text-zinc-600 font-bold" : "text-zinc-500 dark:text-zinc-400")}>
+              <span className={cn("text-[11px]", selectedFilter === f.id ? "text-zinc-300 dark:text-zinc-600 font-bold" : "text-zinc-500 dark:text-zinc-400")}>
                 ({f.count})
               </span>
             </button>
@@ -287,7 +287,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                   <span className={cn("w-2 h-2 rounded-full", col.dotColor)} />
                   <span className="font-bold text-zinc-900 dark:text-zinc-100">{col.title}</span>
                 </div>
-                <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.08] font-semibold tabular-nums">
+                <span className="font-mono text-[11px] px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.08] font-semibold tabular-nums">
                   {colTasks.length} {colTasks.length === 1 ? "task" : "tasks"}
                 </span>
               </div>
@@ -297,7 +297,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                 {colTasks.length === 0 ? (
                   <div className="h-32 flex flex-col items-center justify-center border border-dashed border-black/[0.08] dark:border-white/[0.06] rounded-2xl text-zinc-500 dark:text-zinc-600 text-xs font-mono p-4 text-center">
                     <span>No {col.title.toLowerCase()} tasks</span>
-                    <span className="text-[10px] text-zinc-400 dark:text-zinc-700 mt-1">Drop a card here to transition</span>
+                    <span className="text-[11px] text-zinc-400 dark:text-zinc-700 mt-1">Drop a card here to transition</span>
                   </div>
                 ) : (
                   colTasks.map((task) => {
@@ -335,10 +335,10 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                       >
                         {/* Top Metadata Row: Category & Authoritative Resource Pill & Circular Action Icon */}
                         <div className="flex items-center justify-between gap-1.5 min-w-0">
-                          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono min-w-0">
+                          <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono min-w-0">
                             <span
                               className={cn(
-                                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border shrink-0 text-[10px] font-mono shadow-sm",
+                                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border shrink-0 text-[11px] font-mono shadow-sm",
                                 meta.bg,
                                 meta.text
                               )}
@@ -354,7 +354,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                 title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
                               >
                                 {task.resourceCategory === "dsa" || task.category === "dsa" ? (
-                                  <Binary className="w-2.5 h-2.5 text-purple-500 dark:text-purple-400 shrink-0" />
+                                  <Binary className="w-2.5 h-2.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
                                 ) : task.resourceCategory === "architecture" || task.category === "design" ? (
                                   <Layers className="w-2.5 h-2.5 text-blue-500 dark:text-blue-400 shrink-0" />
                                 ) : task.resourceCategory === "implementation" || task.category === "implementation" ? (
@@ -381,14 +381,14 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                         </div>
 
                         {/* Title */}
-                        <h4
+                        <h3
                           className={cn(
                             "text-xs sm:text-sm font-bold leading-snug transition-colors duration-150 group-hover:text-black dark:group-hover:text-white break-words [overflow-wrap:anywhere]",
                             task.status === "done" ? "line-through text-zinc-400 dark:text-zinc-500" : "text-zinc-900 dark:text-zinc-100"
                           )}
                         >
                           {task.title}
-                        </h4>
+                        </h3>
 
                         {/* Description Preview */}
                         {task.description && (
@@ -400,14 +400,14 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                         {/* Card Footer: Quick Actions & Status Advance */}
                         <div className="pt-2 border-t border-black/[0.06] dark:border-white/[0.04] flex items-center justify-between text-xs">
                           {/* Confidence or DSA Tag */}
-                          <div className="flex items-center gap-1 font-mono text-[10px] text-zinc-500">
+                          <div className="flex items-center gap-1 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
                             {task.confidence ? (
                               <div className="flex items-center gap-0.5 text-amber-500 dark:text-amber-400">
                                 <Star className="w-2.5 h-2.5 fill-amber-400" />
                                 <span>{task.confidence}/5</span>
                               </div>
                             ) : task.dsaTargetCount ? (
-                              <span className="text-purple-600 dark:text-purple-400 font-semibold">
+                              <span className="text-indigo-600 dark:text-indigo-400 font-semibold">
                                 {task.dsaTargetCount} problems
                               </span>
                             ) : (
@@ -424,7 +424,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                 type="button"
                                 disabled={isBusy}
                                 onClick={(e) => handleMoveStatus(e, task, "in_progress")}
-                                className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-zinc-900 hover:bg-black text-white dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                                className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-zinc-900 hover:bg-black text-white dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                                 title="Move to In Progress"
                               >
                                 <span>Start</span>
@@ -447,7 +447,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                   type="button"
                                   disabled={isBusy}
                                   onClick={(e) => handleMoveStatus(e, task, "done")}
-                                  className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
+                                  className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                                   title="Complete task"
                                 >
                                   <span>Complete</span>
@@ -461,7 +461,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                 type="button"
                                 disabled={isBusy}
                                 onClick={(e) => handleMoveStatus(e, task, "in_progress")}
-                                className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-zinc-100 dark:bg-white/[0.05] hover:bg-zinc-200 dark:hover:bg-white/[0.1] border border-black/[0.08] dark:border-white/[0.08] flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                                className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-zinc-100 dark:bg-white/[0.05] hover:bg-zinc-200 dark:hover:bg-white/[0.1] border border-black/[0.08] dark:border-white/[0.08] flex items-center gap-1 transition-all cursor-pointer active:scale-95"
                                 title="Reopen task"
                               >
                                 <RotateCcw className="w-2.5 h-2.5" />

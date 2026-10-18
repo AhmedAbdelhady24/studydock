@@ -91,20 +91,20 @@ export default function ProfilePage() {
       </div>
 
       {/* Live Preview Bento Card (Matching mobile & LMS aesthetic) */}
-      <div className="bg-[#C8B6FF] text-[#181329] rounded-3xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
+      <div className="bg-zinc-950 dark:bg-[#13151A] text-white rounded-3xl p-6 sm:p-8 border border-black/[0.08] dark:border-white/[0.08] shadow-sm relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#18191E] text-white flex items-center justify-center text-xl font-extrabold shadow-md border-2 border-white/20 shrink-0">
+            <div className="w-16 h-16 rounded-2xl bg-zinc-900 text-white flex items-center justify-center text-xl font-extrabold shadow-md border-2 border-white/20 shrink-0">
               {avatarInitials || "PE"}
             </div>
             <div className="space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#181329]/70 block font-mono">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block font-mono">
                 Live Studio Identity
               </span>
-              <h2 className="text-2xl font-extrabold tracking-tight text-[#181329]">
+              <h2 className="text-2xl font-extrabold tracking-tight text-white">
                 Good Day, {name || "Engineer"}
               </h2>
-              <p className="text-xs font-semibold text-[#181329]/80">
+              <p className="text-xs font-semibold text-zinc-300">
                 {title || "Product Engineer"} • {weeklyTargetHours || 16}h Weekly Study Target
               </p>
             </div>
@@ -152,7 +152,7 @@ export default function ProfilePage() {
                 }}
                 placeholder="e.g. John Bruno or Ahmed"
                 required
-                className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-all"
+                className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-all"
               />
               <span className="text-[10px] text-zinc-500">
                 This name appears on your dashboard greeting and milestones.
@@ -170,7 +170,7 @@ export default function ProfilePage() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Product Engineer or Full-Stack"
                 required
-                className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-all"
+                className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-all"
               />
               <span className="text-[10px] text-zinc-500">
                 Your current engineering specialty or target career role.
@@ -188,14 +188,14 @@ export default function ProfilePage() {
                 value={avatarInitials}
                 onChange={(e) => setAvatarInitials(e.target.value.toUpperCase())}
                 placeholder="e.g. AA or JB"
-                className="w-full px-4 py-2.5 text-xs font-mono font-bold uppercase rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-all"
+                className="w-full px-4 py-2.5 text-xs font-mono font-bold uppercase rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-all"
               />
             </div>
 
             {/* Weekly Target Hours */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                Weekly Target Study Hours: <span className="text-[#4F46E5] dark:text-[#C8B6FF] font-mono">{weeklyTargetHours}h</span>
+                Weekly Target Study Hours: <span className="text-zinc-900 dark:text-zinc-100 font-mono font-bold">{weeklyTargetHours}h</span>
               </label>
               <div className="flex items-center gap-3">
                 <input
@@ -205,13 +205,13 @@ export default function ProfilePage() {
                   step="1"
                   value={weeklyTargetHours}
                   onChange={(e) => setWeeklyTargetHours(Number(e.target.value))}
-                  className="flex-1 accent-[#4F46E5] cursor-pointer"
+                  className="flex-1 accent-blue-600 cursor-pointer"
                 />
                 <span className="text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 w-8 text-right">
                   {weeklyTargetHours}h
                 </span>
               </div>
-              <span className="text-[10px] text-zinc-500">
+              <span className="text-xs text-zinc-500">
                 Curriculum syllabus standard is 16h per week.
               </span>
             </div>
@@ -227,7 +227,7 @@ export default function ProfilePage() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="e.g. Mastering Full-Stack TypeScript, NestJS, and System Design to ship scalable products."
-              className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-all resize-none"
+              className="w-full px-4 py-2.5 text-xs rounded-xl bg-zinc-50 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-all resize-none"
             />
           </div>
 
@@ -243,11 +243,11 @@ export default function ProfilePage() {
                 className={cn(
                   "p-3 rounded-2xl border text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer",
                   selectedTheme === "dark"
-                    ? "bg-[#18191E] text-white border-white/30 shadow-md ring-2 ring-[#C8B6FF]"
+                    ? "bg-[#18191E] text-white border-white/30 shadow-md ring-2 ring-white"
                     : "bg-zinc-100 dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-white"
                 )}
               >
-                <Moon className="w-4 h-4 text-purple-400" />
+                <Moon className="w-4 h-4 text-blue-400" />
                 <span>Dark Mode</span>
               </button>
 
@@ -257,7 +257,7 @@ export default function ProfilePage() {
                 className={cn(
                   "p-3 rounded-2xl border text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer",
                   selectedTheme === "light"
-                    ? "bg-white text-zinc-950 border-black/30 shadow-md ring-2 ring-[#C8B6FF]"
+                    ? "bg-white text-zinc-950 border-black/30 shadow-md ring-2 ring-zinc-900"
                     : "bg-zinc-100 dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-white"
                 )}
               >

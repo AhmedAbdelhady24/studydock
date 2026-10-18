@@ -159,7 +159,7 @@ export default function RoadmapPage() {
               className={cn(
                 "p-4 rounded-3xl border transition-all duration-200 flex flex-col justify-between min-h-[120px]",
                 isComplete
-                  ? "bg-[#D2E4D6] text-[#132317] border-[#BED7C3]"
+                  ? "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800/40"
                   : isStarted
                   ? "bg-white dark:bg-[#18191E] border-black/[0.08] dark:border-white/[0.12] text-zinc-900 dark:text-white shadow-sm"
                   : "bg-zinc-50 dark:bg-[#111215]/60 border-black/[0.05] dark:border-white/[0.06] text-zinc-500 dark:text-zinc-400"
@@ -189,7 +189,7 @@ export default function RoadmapPage() {
                   <div
                     className={cn(
                       "h-full rounded-full transition-all duration-500",
-                      isComplete ? "bg-[#132317]" : "bg-[#C8B6FF] dark:bg-[#C8B6FF]"
+                      isComplete ? "bg-emerald-600 dark:bg-emerald-500" : "bg-blue-600 dark:bg-blue-500"
                     )}
                     style={{ width: `${Math.max(pct, isStarted ? 6 : 0)}%` }}
                   />
@@ -289,7 +289,7 @@ export default function RoadmapPage() {
                       </div>
 
                       {/* Week Title */}
-                      <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#4F46E5] dark:group-hover:text-[#C8B6FF] transition-colors line-clamp-1 leading-snug">
+                      <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 leading-snug">
                         {w.title}
                       </h3>
 
@@ -304,7 +304,7 @@ export default function RoadmapPage() {
                           {w.completedTasksCount}/{w.tasksCount} tasks done
                         </span>
                         <span className="flex items-center gap-1 font-semibold text-zinc-700 dark:text-zinc-300">
-                          <Clock className="w-3 h-3 text-[#4F46E5] dark:text-[#C8B6FF]" />
+                          <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                           <span>{w.targetHours}h target</span>
                         </span>
                       </div>
@@ -314,7 +314,7 @@ export default function RoadmapPage() {
                         <div
                           className={cn(
                             "h-full rounded-full transition-all duration-300",
-                            isDone ? "bg-emerald-500" : isStarted ? "bg-[#C8B6FF]" : "bg-transparent"
+                            isDone ? "bg-emerald-500" : isStarted ? "bg-blue-500" : "bg-transparent"
                           )}
                           style={{ width: `${taskPercent}%` }}
                         />

@@ -145,7 +145,7 @@ export default function CoursesPage() {
         </div>
         <div className="p-5 rounded-2xl sm:rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] shadow-sm hover:shadow-md transition-all">
           <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Selective Coverage</span>
-          <span className="text-2xl font-extrabold font-mono text-purple-600 dark:text-purple-400 tabular-nums">
+          <span className="text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-400 tabular-nums">
             {selectiveCount} courses
           </span>
         </div>
@@ -183,7 +183,7 @@ export default function CoursesPage() {
                             ? "bg-emerald-500"
                             : c.coverageKind === "targeted"
                             ? "bg-blue-500"
-                            : "bg-purple-500"
+                            : "bg-amber-500"
                         )}
                       />
                       <span>{c.coverageKind}</span>
@@ -238,7 +238,7 @@ export default function CoursesPage() {
                   <div
                     className={cn(
                       "h-2 rounded-full transition-all duration-300",
-                      isTargetMet ? "bg-emerald-500" : "bg-[#C8B6FF]"
+                      isTargetMet ? "bg-emerald-500" : "bg-blue-500"
                     )}
                     style={{ width: `${Math.min(100, Math.max(0, actual))}%` }}
                   />
@@ -263,7 +263,7 @@ export default function CoursesPage() {
                     max="100"
                     value={editPercent}
                     onChange={(e) => setEditPercent(Number(e.target.value))}
-                    className="w-full accent-[#4F46E5] cursor-pointer"
+                    className="w-full accent-blue-600 cursor-pointer"
                   />
                   <div className="flex justify-end gap-2 pt-1">
                     <button

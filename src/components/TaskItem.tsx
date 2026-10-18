@@ -59,8 +59,8 @@ const CATEGORY_META: Record<
 > = {
   dsa: {
     label: "DSA",
-    dot: "bg-purple-500",
-    text: "text-purple-700 dark:text-purple-300",
+    dot: "bg-indigo-500",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
   },
   design: {
     label: "Architecture",
@@ -207,11 +207,11 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             {/* Authoritative Course / Book / Resource Reference Pill */}
             {(task.resourceLabel || task.primaryCourses) && (
               <span
-                className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] truncate max-w-[260px] group-hover:border-black/20 dark:group-hover:border-white/[0.16] transition-colors"
+                className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] truncate max-w-[260px] group-hover:border-black/20 dark:group-hover:border-white/[0.16] transition-colors"
                 title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
               >
                 {task.resourceCategory === "dsa" || task.category === "dsa" ? (
-                  <Binary className="w-2.5 h-2.5 text-purple-500 dark:text-purple-400 shrink-0" />
+                  <Binary className="w-2.5 h-2.5 text-indigo-500 dark:text-indigo-400 shrink-0" />
                 ) : task.resourceCategory === "architecture" || task.category === "design" ? (
                   <Layers className="w-2.5 h-2.5 text-blue-500 dark:text-blue-400 shrink-0" />
                 ) : task.resourceCategory === "implementation" || task.category === "implementation" ? (
@@ -228,19 +228,19 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             )}
 
             {task.dsaTargetCount ? (
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
                 <span>{task.dsaTargetCount} problems</span>
               </span>
             ) : null}
 
             {!task.required && (
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">
+              <span className="text-[11px] text-zinc-400 dark:text-zinc-500 italic">
                 optional
               </span>
             )}
 
-            <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-600 ml-auto hidden sm:inline">
+            <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-600 ml-auto hidden sm:inline">
               {task.taskId.replace(/^product-engineer-33-week-/, "")}
             </span>
           </div>
@@ -266,7 +266,7 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
           <div className="mt-2.5 pt-2 border-t border-black/[0.06] dark:border-white/[0.04] flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
             {/* Confidence Rating */}
             <div className="flex items-center gap-1">
-              <span className="text-[10px] text-zinc-500 mr-1 hidden sm:inline">
+              <span className="text-[11px] text-zinc-500 mr-1 hidden sm:inline">
                 Confidence:
               </span>
               {[1, 2, 3, 4, 5].map((lvl) => (
@@ -282,7 +282,7 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
                       "w-3 h-3 transition-colors",
                       confidence >= lvl
                         ? "fill-amber-400 text-amber-400"
-                        : "text-zinc-700 hover:text-amber-400/40"
+                        : "text-zinc-300 dark:text-zinc-500 hover:text-amber-400/60"
                     )}
                   />
                 </button>

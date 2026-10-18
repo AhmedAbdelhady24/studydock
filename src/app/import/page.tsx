@@ -338,7 +338,7 @@ export default function ImportExportPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
                   <span>Ready Starter Kit</span>
                 </span>
                 <span className="text-[10px] font-mono text-zinc-400">4 Weeks</span>
@@ -355,7 +355,7 @@ export default function ImportExportPage() {
               <a
                 href="/templates/starter_curriculum_template.csv"
                 download="starter_curriculum_template.csv"
-                className="w-full py-2 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                className="w-full py-2 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs active:scale-[0.98]"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Download 4-Week Starter</span>

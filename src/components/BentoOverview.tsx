@@ -49,148 +49,139 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
       {/* 4-Card Bento Grid (Directly modeled on mobile designs Image 1 & 2) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        {/* Card 1: Lavender / Soft Purple Week in Flight Card */}
-        <div className="md:col-span-2 lg:col-span-2 bg-[#C8B6FF] text-[#19142B] rounded-3xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden group">
+        {/* Card 1: Primary Sprint in Flight (Flagship Card) */}
+        <div className="md:col-span-2 lg:col-span-2 bg-zinc-950 dark:bg-[#13151A] text-white rounded-3xl p-6 border border-black/[0.1] dark:border-white/[0.08] shadow-sm flex flex-col justify-between relative overflow-hidden group">
           <div className="flex items-start justify-between gap-3 relative z-10">
-            <div className="space-y-1">
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#19142B]/10 text-[#19142B] text-[10px] font-bold uppercase tracking-wider">
-                Current Sprint · Week {activeWeek?.weekNumber}
+            <div className="space-y-1.5">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-zinc-200 text-[11px] font-mono font-semibold uppercase tracking-wider border border-white/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>Current Sprint · Week {activeWeek?.weekNumber}</span>
               </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#19142B] leading-tight pt-1">
+              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-tight pt-1">
                 {activeWeek?.title || "JavaScript Reboot & Syntax"}
               </h3>
-              <p className="text-xs font-medium text-[#19142B]/80 leading-snug line-clamp-1">
+              <p className="text-xs font-medium text-zinc-400 leading-snug line-clamp-1">
                 {activeWeek?.primaryCourses || "Core Syllabus"} • {activeWeek?.targetHours}h weekly goal
               </p>
             </div>
 
-            {/* Circular Black Action Button with Angled Arrow */}
+            {/* Circular Action Button with Angled Arrow */}
             <Link
               href={`/weeks/${activeWeek?.weekId}`}
-              className="btn-circle-action group-hover:scale-110"
+              className="w-9 h-9 rounded-full bg-white hover:bg-zinc-200 text-zinc-950 flex items-center justify-center transition-all duration-150 shrink-0 shadow-sm active:scale-95 group-hover:scale-105"
               title="Inspect Week Details"
             >
               <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
             </Link>
           </div>
 
-          {/* Progress bar container (from screenshot) */}
+          {/* Progress bar container */}
           <div className="pt-6 relative z-10 space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold text-[#19142B]">
-              <span>Sprint Progress</span>
-              <span className="font-mono">{progressPercent}%</span>
+            <div className="flex items-center justify-between text-xs font-bold text-zinc-300">
+              <span className="font-mono text-[11px] text-zinc-400 uppercase tracking-wider">Sprint Progress</span>
+              <span className="font-mono text-white tabular-nums">{progressPercent}%</span>
             </div>
-            <div className="w-full bg-[#19142B]/15 rounded-full h-3 p-0.5 overflow-hidden">
+            <div className="w-full bg-white/10 rounded-full h-2.5 p-0.5 overflow-hidden">
               <div
-                className="bg-[#19142B] h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${Math.max(progressPercent, 4)}%` }}
               />
             </div>
           </div>
         </div>
 
-        {/* Card 2: Sage Green Course Card */}
-        <div className="md:col-span-2 lg:col-span-2 bg-[#D2E4D6] text-[#132317] rounded-3xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden group">
+        {/* Card 2: Primary Course Focus */}
+        <div className="md:col-span-2 lg:col-span-2 bg-white dark:bg-[#121418] text-zinc-900 dark:text-white rounded-3xl p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-xs flex flex-col justify-between relative overflow-hidden group hover:border-black/20 dark:hover:border-white/20 transition-all">
           <div className="flex items-start justify-between gap-3 relative z-10">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/70 text-[#132317] text-[10px] font-bold uppercase tracking-wider">
-                  Full Course
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08] text-[11px] font-mono font-semibold uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                  <span>Primary Course</span>
                 </span>
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/50 text-[#132317] text-[10px] font-semibold">
-                  {activeWeek?.targetHours}h : 00m target
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 text-[11px] font-mono font-semibold border border-black/[0.06] dark:border-white/[0.08]">
+                  {activeWeek?.targetHours}h target
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#132317] leading-snug">
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-white leading-snug">
                 {activeWeek?.primaryCourses || "JavaScript: The Hard Parts v3"}
               </h3>
-              <p className="text-xs font-medium text-[#132317]/80 line-clamp-1">
+              <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 line-clamp-1">
                 Phase: {activeWeek?.phaseTitle || "Syntax & Call Stack Mastery"}
               </p>
             </div>
 
-            {/* Circular Black Action Button with Play / Arrow */}
+            {/* Circular Action Button */}
             <Link
               href="/courses"
-              className="btn-circle-action group-hover:scale-110"
+              className="w-9 h-9 rounded-full bg-zinc-900 hover:bg-black dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 flex items-center justify-center transition-all duration-150 shrink-0 shadow-sm active:scale-95 group-hover:scale-105"
               title="Open Course Syllabus"
             >
-              <Play className="w-3.5 h-3.5 fill-white stroke-none ml-0.5" />
+              <Play className="w-3.5 h-3.5 fill-current stroke-none ml-0.5" />
             </Link>
           </div>
 
           {/* Bottom Avatars / Tags */}
-          <div className="pt-4 flex items-center justify-between text-xs text-[#132317]/80 font-medium">
+          <div className="pt-4 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 font-medium border-t border-black/[0.06] dark:border-white/[0.06]">
             <div className="flex items-center gap-1.5">
-              <div className="flex -space-x-1.5">
-                <div className="w-6 h-6 rounded-full bg-white/80 border border-[#D2E4D6] flex items-center justify-center text-[10px] font-bold text-zinc-800">
-                  JS
-                </div>
-                <div className="w-6 h-6 rounded-full bg-[#FFE6A3] border border-[#D2E4D6] flex items-center justify-center text-[10px] font-bold text-zinc-800">
-                  TS
-                </div>
-                <div className="w-6 h-6 rounded-full bg-[#C8B6FF] border border-[#D2E4D6] flex items-center justify-center text-[10px] font-bold text-zinc-800">
-                  +5
-                </div>
-              </div>
-              <span className="text-[11px] font-medium ml-1">Frontend Masters & Books</span>
+              <span className="text-[11px] font-medium">Frontend Masters & Books</span>
             </div>
-            <span className="text-[11px] font-mono font-bold">Primary Lecture</span>
+            <span className="text-[11px] font-mono font-bold text-zinc-700 dark:text-zinc-300">Core Lecture</span>
           </div>
         </div>
 
-        {/* Card 3: Butter Yellow Stat Card (Tasks Done) */}
-        <div className="bg-[#FFE6A3] text-[#281F08] rounded-3xl p-5 shadow-md flex flex-col justify-between min-h-[140px] group">
+        {/* Card 3: Sprint Tasks */}
+        <div className="bg-white dark:bg-[#121418] text-zinc-900 dark:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-5 shadow-xs flex flex-col justify-between min-h-[140px] group hover:border-black/20 dark:hover:border-white/20 transition-all">
           <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-[#281F08]">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300">
               <BookOpen className="w-4 h-4 stroke-[2.2]" />
             </div>
             <Link
               href="/roadmap"
-              className="btn-circle-action w-7 h-7 group-hover:scale-110"
+              className="w-7 h-7 rounded-full bg-black/[0.05] dark:bg-white/[0.06] hover:bg-zinc-900 dark:hover:bg-white text-zinc-700 dark:text-zinc-300 hover:text-white dark:hover:text-zinc-950 flex items-center justify-center transition-all duration-150 group-hover:scale-105 active:scale-95"
               title="View Roadmap"
             >
               <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </Link>
           </div>
           <div>
-            <span className="text-xs font-bold text-[#281F08]/80 block">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block">
               Week Tasks
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-3xl font-extrabold tracking-tight text-[#281F08] tabular-nums">
+              <span className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white tabular-nums">
                 {completedTasks}
               </span>
-              <span className="text-xs font-semibold text-[#281F08]/70">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                 / {totalTasks} done
               </span>
             </div>
           </div>
         </div>
 
-        {/* Card 4: Lilac / Soft Purple Stat Card (Hours Studied) */}
-        <div className="bg-[#E2D9F3] text-[#221A33] rounded-3xl p-5 shadow-md flex flex-col justify-between min-h-[140px] group">
+        {/* Card 4: Hours Studied */}
+        <div className="bg-white dark:bg-[#121418] text-zinc-900 dark:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-5 shadow-xs flex flex-col justify-between min-h-[140px] group hover:border-black/20 dark:hover:border-white/20 transition-all">
           <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-[#221A33]">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300">
               <Clock className="w-4 h-4 stroke-[2.2]" />
             </div>
             <Link
               href="/sessions"
-              className="btn-circle-action w-7 h-7 group-hover:scale-110"
+              className="w-7 h-7 rounded-full bg-black/[0.05] dark:bg-white/[0.06] hover:bg-zinc-900 dark:hover:bg-white text-zinc-700 dark:text-zinc-300 hover:text-white dark:hover:text-zinc-950 flex items-center justify-center transition-all duration-150 group-hover:scale-105 active:scale-95"
               title="Open Focus Timer"
             >
               <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </Link>
           </div>
           <div>
-            <span className="text-xs font-bold text-[#221A33]/80 block">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block">
               Logged Hours
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-3xl font-extrabold tracking-tight text-[#221A33] tabular-nums">
+              <span className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white tabular-nums">
                 {metrics?.totalHoursStudied || 0}
               </span>
-              <span className="text-xs font-semibold text-[#221A33]/70">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                 / {activeWeek?.targetHours || 16}h target
               </span>
             </div>

@@ -35,7 +35,7 @@ const CATEGORY_META: Record<
 > = {
   dsa: {
     label: "DSA / Algorithms",
-    dot: "bg-purple-500",
+    dot: "bg-indigo-500",
     text: "text-zinc-700 dark:text-zinc-300",
     bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
@@ -192,10 +192,10 @@ export function TaskDetailDrawer({
         <div className="p-6 border-b border-black/[0.08] dark:border-white/[0.08] space-y-3 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase bg-black/[0.05] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-0.5 rounded-full">
+              <span className="text-[11px] font-mono font-bold uppercase bg-black/[0.05] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-0.5 rounded-full">
                 Week {task.weekNumber ? task.weekNumber.toString().padStart(2, "0") : "01"}
               </span>
-              <span className="text-[10px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] px-2.5 py-0.5 rounded-full font-medium">
+              <span className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] px-2.5 py-0.5 rounded-full font-medium">
                 {isDsa
                   ? "Algorithms Track"
                   : isArch
@@ -209,8 +209,8 @@ export function TaskDetailDrawer({
                   : task.phaseTitle || "Curriculum"}
               </span>
               {task.topicBadge && (
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] px-2.5 py-0.5 rounded-full font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] px-2.5 py-0.5 rounded-full font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
                   <span>{task.topicBadge}</span>
                 </span>
               )}
@@ -288,7 +288,7 @@ export function TaskDetailDrawer({
             <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-2.5">
               <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-200 font-bold text-xs">
                 {isDsa ? (
-                  <Binary className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                  <Binary className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                 ) : isArch ? (
                   <Layers className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                 ) : isCoding ? (
@@ -302,7 +302,7 @@ export function TaskDetailDrawer({
                 )}
                 <span>Task Learning Resource & Reference</span>
               </div>
-              <span className="font-mono text-[10px] text-zinc-500 uppercase font-semibold">
+              <span className="font-mono text-[11px] text-zinc-500 uppercase font-semibold">
                 {task.resourceCategory || task.category}
               </span>
             </div>
@@ -311,7 +311,7 @@ export function TaskDetailDrawer({
             <div className="p-4 rounded-2xl bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] space-y-2 shadow-sm">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                  <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
                     Primary Learning Resource
                   </span>
                   <p className="text-sm font-bold text-zinc-900 dark:text-white leading-snug">
@@ -335,14 +335,14 @@ export function TaskDetailDrawer({
             {/* Category-Specific Concepts Tag List */}
             {((task.taskConcepts && task.taskConcepts.length > 0) || (task.category === "course" && task.concepts)) && (
               <div>
-                <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block mb-1.5 font-semibold">
+                <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block mb-1.5 font-semibold">
                   Concepts & Topics Covered
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {(task.taskConcepts || (task.concepts ? task.concepts.split(",") : [])).map((c: string, idx: number) => (
                     <span
                       key={idx}
-                      className="font-mono text-[10px] bg-white dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 font-medium"
+                      className="font-mono text-[11px] bg-white dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 font-medium"
                     >
                       {c.trim()}
                     </span>
@@ -356,7 +356,7 @@ export function TaskDetailDrawer({
           <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111317] p-5 space-y-3 shadow-sm">
             <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-200">Task Deliverable</span>
-              <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+              <span className="text-[11px] font-mono text-zinc-500 font-semibold">
                 {task.required ? "Required for Week Pass" : "Optional Enhancement"}
               </span>
             </div>
@@ -367,7 +367,7 @@ export function TaskDetailDrawer({
 
             {task.dsaTargetCount && (
               <div className="p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 text-xs font-mono font-medium flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
                 <span>Target: Solve at least {task.dsaTargetCount} problems independently without editor peek.</span>
               </div>
             )}
@@ -392,7 +392,7 @@ export function TaskDetailDrawer({
               <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-semibold">
                 Understanding & Confidence
               </label>
-              <span className="text-[10px] font-mono text-zinc-500 tabular-nums">
+              <span className="text-[11px] font-mono text-zinc-500 tabular-nums">
                 {confidence > 0 ? `${confidence} / 5 stars` : "Unrated"}
               </span>
             </div>
@@ -436,7 +436,7 @@ export function TaskDetailDrawer({
                 Evidence, PR Link & Notes
               </label>
               {saveSuccess && (
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 animate-in fade-in flex items-center gap-1 font-bold">
+                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 animate-in fade-in flex items-center gap-1 font-bold">
                   <Check className="w-3 h-3 text-emerald-500" />
                   <span>Saved successfully</span>
                 </span>
@@ -449,11 +449,11 @@ export function TaskDetailDrawer({
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Paste Git commit SHA, PR link, or retrospective note..."
                 rows={4}
-                className="w-full rounded-2xl bg-zinc-50 dark:bg-[#111317] border border-black/[0.08] dark:border-white/[0.08] p-4 text-xs text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] font-mono resize-none shadow-sm"
+                className="w-full rounded-2xl bg-zinc-50 dark:bg-[#111317] border border-black/[0.08] dark:border-white/[0.08] p-4 text-xs text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white font-mono resize-none shadow-sm"
               />
 
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-zinc-400">
+                <span className="text-[11px] font-mono text-zinc-400">
                   Persisted in PostgreSQL task_progress
                 </span>
                 <button

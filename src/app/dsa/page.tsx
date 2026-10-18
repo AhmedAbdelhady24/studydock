@@ -182,7 +182,7 @@ export default function DsaPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. 3Sum, LRU Cache, Trapping Rain Water"
-                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] font-medium"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white font-medium"
                 required
               />
             </div>
@@ -194,7 +194,7 @@ export default function DsaPage() {
               <select
                 value={pattern}
                 onChange={(e) => setPattern(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
               >
                 {DSA_PATTERNS.map((p) => (
                   <option key={p} value={p}>
@@ -213,7 +213,7 @@ export default function DsaPage() {
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value as any)}
-                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] capitalize"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white capitalize"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -231,7 +231,7 @@ export default function DsaPage() {
                   min="0"
                   value={minutesSpent}
                   onChange={(e) => setMinutesSpent(e.target.value)}
-                  className="w-20 font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+                  className="w-20 font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
                 />
                 <div className="flex gap-1.5">
                   {["20", "35", "50"].map((mins) => (
@@ -257,7 +257,7 @@ export default function DsaPage() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://leetcode.com/problems/..."
-                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] text-xs"
+                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white text-xs"
               />
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function DsaPage() {
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. O(N) time with HashMap, two-pointer trick to avoid extra memory..."
               rows={2}
-              className="w-full text-xs font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-3 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+              className="w-full text-xs font-mono bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-3 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
             />
           </div>
 
@@ -339,7 +339,7 @@ export default function DsaPage() {
           <select
             value={patternFilter}
             onChange={(e) => setPatternFilter(e.target.value)}
-            className="bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.08] rounded-full px-4 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] shadow-sm"
+            className="bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.08] rounded-full px-4 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white shadow-sm"
           >
             <option value="all">All Patterns</option>
             {DSA_PATTERNS.map((p) => (

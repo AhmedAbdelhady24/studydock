@@ -137,7 +137,7 @@ export function AppShell({ children }: AppShellProps) {
   const breadcrumbs = getBreadcrumbs();
 
   return (
-    <div className="min-h-screen bg-[#F4F2F7] dark:bg-[#0C0D10] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-[#C8B6FF]/30 selection:text-white transition-colors duration-200">
+    <div className="min-h-screen bg-[#F4F2F7] dark:bg-[#0C0D10] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950 transition-colors duration-200">
       {/* Outer Studio Container */}
       <div className="flex-1 w-full max-w-[1640px] mx-auto p-2 sm:p-4 md:p-6 lg:p-7 flex flex-col">
         {/* Floating LMS Application Card (Inspired by learnspring & mobile designs) */}
@@ -163,8 +163,8 @@ export function AppShell({ children }: AppShellProps) {
                   )}
                   title="StudyDock Dashboard"
                 >
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-200 shrink-0">
-                    <BookOpen className="w-5 h-5 stroke-[2.2]" />
+                  <div className="w-9 h-9 rounded-xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-zinc-900 font-bold border border-zinc-800 dark:border-zinc-200 shadow-xs group-hover:scale-105 transition-transform duration-200 shrink-0">
+                    <BookOpen className="w-4 h-4 stroke-[2.2]" />
                   </div>
                   {!isCollapsed && (
                     <div className="overflow-hidden">
@@ -172,7 +172,7 @@ export function AppShell({ children }: AppShellProps) {
                         <span className="text-base font-bold tracking-tight text-zinc-900 dark:text-white truncate">
                           StudyDock
                         </span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                       </div>
                       <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block tracking-wide truncate">
                         Product Engineer 33w
@@ -211,9 +211,9 @@ export function AppShell({ children }: AppShellProps) {
               )}
 
               {/* Navigation Menu */}
-              <nav className="space-y-1.5 w-full">
+              <nav className="space-y-1 w-full">
                 {!isCollapsed && (
-                  <div className="px-3 pb-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">
+                  <div className="px-3 pb-1.5 text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
                     Curriculum Nav
                   </div>
                 )}
@@ -229,24 +229,27 @@ export function AppShell({ children }: AppShellProps) {
                       href={item.href}
                       title={isCollapsed ? item.label : undefined}
                       className={cn(
-                        "flex items-center rounded-2xl text-xs font-semibold transition-colors duration-150 group",
+                        "flex items-center rounded-xl text-xs font-medium transition-colors duration-150 group",
                         isCollapsed
-                          ? "justify-center w-10 h-10 mx-auto"
-                          : "gap-3.5 px-4 py-3 w-full",
+                          ? "justify-center w-9 h-9 mx-auto"
+                          : "gap-3 px-3.5 py-2.5 w-full",
                         isActive
-                          ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-md font-bold"
-                          : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.04]"
+                          ? "bg-zinc-100 dark:bg-zinc-800/90 text-zinc-950 dark:text-white font-semibold border border-zinc-200/90 dark:border-zinc-700/80 shadow-xs"
+                          : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
                       )}
                     >
                       <Icon
                         className={cn(
                           "w-4 h-4 shrink-0 transition-colors",
                           isActive
-                            ? "text-white dark:text-zinc-950"
-                            : "text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white"
+                            ? "text-zinc-900 dark:text-white"
+                            : "text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-white"
                         )}
                       />
-                      {!isCollapsed && <span className="truncate">{item.label}</span>}
+                      {!isCollapsed && <span className="flex-1 truncate text-left">{item.label}</span>}
+                      {!isCollapsed && isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                      )}
                     </Link>
                   );
                 })}
@@ -255,36 +258,36 @@ export function AppShell({ children }: AppShellProps) {
 
             {/* Bottom Promo / Companion Card */}
             {!isCollapsed ? (
-              <div className="p-4 rounded-3xl bg-[#FFE6A3]/25 dark:bg-[#FFE6A3]/10 border border-[#FFE6A3]/50 dark:border-[#FFE6A3]/20 text-[#6B4E00] dark:text-[#FFE6A3] relative overflow-hidden group">
+              <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 relative overflow-hidden group">
                 <div className="flex items-start justify-between gap-3 relative z-10">
                   <div className="space-y-1">
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/10 dark:bg-[#FFE6A3]/20 text-zinc-800 dark:text-[#FFE6A3] text-[10px] font-bold uppercase tracking-wider">
-                      <Sparkles className="w-3 h-3 text-[#7C3AED] dark:text-[#FFE6A3]" />
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium">
+                      <Clock className="w-3 h-3 text-zinc-500 dark:text-zinc-400" />
                       <span>Focus Mode</span>
                     </div>
-                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white pt-1">
+                    <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 pt-1">
                       Study Time Tracker
                     </h4>
-                    <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-snug">
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-snug">
                       Log deep work intervals & pomodoros
                     </p>
                   </div>
                   <Link
                     href="/sessions"
-                    className="w-8 h-8 rounded-full bg-[#4F46E5] hover:bg-[#4338CA] text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-md shrink-0"
+                    className="w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-900 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-sm shrink-0"
                     title="Open Study Sessions"
                   >
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
             ) : (
               <Link
                 href="/sessions"
-                className="w-10 h-10 rounded-2xl bg-[#FFE6A3]/30 dark:bg-[#FFE6A3]/15 text-[#7C3AED] dark:text-[#FFE6A3] flex items-center justify-center hover:scale-110 transition-transform shadow-sm mx-auto"
+                className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-sm mx-auto"
                 title="Focus Study Timer"
               >
-                <Clock className="w-5 h-5 stroke-[2.2]" />
+                <Clock className="w-4 h-4 stroke-[2]" />
               </Link>
             )}
           </aside>
@@ -347,7 +350,7 @@ export function AppShell({ children }: AppShellProps) {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search topics or concepts..."
-                    className="w-48 xl:w-60 pl-9 pr-4 py-2 text-xs rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-shadow duration-150"
+                    className="w-48 xl:w-60 pl-9 pr-4 py-2 text-xs rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-shadow duration-150"
                   />
                 </div>
 
@@ -362,7 +365,7 @@ export function AppShell({ children }: AppShellProps) {
                   {theme === "dark" ? (
                     <Sun className="w-4 h-4 text-amber-400 stroke-[2.2]" />
                   ) : (
-                    <Moon className="w-4 h-4 text-purple-600 stroke-[2.2]" />
+                    <Moon className="w-4 h-4 text-zinc-700 stroke-[2.2]" />
                   )}
                 </button>
 
@@ -375,16 +378,14 @@ export function AppShell({ children }: AppShellProps) {
                   className="flex items-center gap-3 pl-2 sm:border-l sm:border-black/[0.08] dark:sm:border-white/[0.08] group cursor-pointer"
                   title="View and Edit Profile"
                 >
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#C8B6FF] to-[#D2E4D6] p-[2px] shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                    <div className="w-full h-full rounded-full bg-zinc-900 text-white flex items-center justify-center text-xs font-bold uppercase">
-                      {profile.avatarInitials || "PE"}
-                    </div>
+                  <div className="w-9 h-9 rounded-full border border-black/[0.1] dark:border-white/[0.15] bg-zinc-900 text-white flex items-center justify-center text-xs font-bold uppercase shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                    {profile.avatarInitials || "PE"}
                   </div>
                   <div className="hidden xl:block text-left">
-                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium leading-none">
+                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block font-medium leading-none">
                       Good Day,
                     </span>
-                    <span className="text-xs font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-[#4F46E5] transition-colors">
+                    <span className="text-xs font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {profile.name || "Engineer"}
                     </span>
                   </div>
@@ -429,7 +430,7 @@ export function AppShell({ children }: AppShellProps) {
         </div>
 
         {/* Footer info ribbon */}
-        <footer className="mt-4 px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-zinc-500 dark:text-zinc-500 font-mono">
+        <footer className="mt-4 px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
             <span>StudyDock Studio • 33-Week Product Engineer Track</span>

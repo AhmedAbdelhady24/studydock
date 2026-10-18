@@ -5,23 +5,23 @@
 @layer base {
   :root {
     /* Studio Light Palette (Warm tinted canvas & clean floating cards) */
-    --background: 260 15% 97%;       /* #F6F4F8 */
-    --foreground: 220 20% 12%;       /* #16181F */
+    --background: 240 5% 98%;       /* #FAFAFA neutral architectural canvas */
+    --foreground: 240 10% 10%;      /* #18181B */
 
     --card: 0 0% 100%;               /* #FFFFFF */
-    --card-foreground: 220 20% 12%;
+    --card-foreground: 240 10% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 12%;
+    --popover-foreground: 240 10% 10%;
 
     --primary: 217 91% 60%;          /* #388BFD */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 94%;        /* #EEF0F5 */
-    --secondary-foreground: 220 20% 12%;
+    --secondary: 240 5% 96%;        /* #F4F4F5 */
+    --secondary-foreground: 240 10% 10%;
 
-    --muted: 220 12% 92%;            /* #E7EAF0 */
-    --muted-foreground: 220 10% 45%; /* #687285 */
+    --muted: 240 5% 93%;            /* #E4E4E7 */
+    --muted-foreground: 240 4% 46%; /* #71717A */
 
     --accent: 152 69% 45%;           /* #10B981 emerald */
     --accent-foreground: 0 0% 100%;
@@ -29,8 +29,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 88%;
-    --input: 220 13% 86%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
     --ring: 217 91% 60%;
 
     --radius: 0.75rem;
@@ -176,13 +176,13 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 120, 130, 0.2);
+  background: rgba(0, 0, 0, 0.16);
   border-radius: 9999px;
   transition: background 150ms ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 120, 130, 0.35);
+  background: rgba(0, 0, 0, 0.28);
 }
 
 .dark ::-webkit-scrollbar-thumb {
@@ -214,29 +214,6 @@
 }
 
 .btn-circle-action:active {
-  transform: scale(0.94);
-}
-
-.btn-circle-coral {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  background-color: #e05353;
-  color: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(224, 83, 83, 0.25);
-  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, background-color 180ms ease;
-  flex-shrink: 0;
-}
-
-.btn-circle-coral:hover {
-  transform: scale(1.06);
-  background-color: #eb5e5e;
-}
-
-.btn-circle-coral:active {
   transform: scale(0.94);
 }
 

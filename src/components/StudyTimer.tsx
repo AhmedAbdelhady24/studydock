@@ -176,7 +176,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
                 key={mins}
                 type="button"
                 onClick={() => addPresetMinutes(mins)}
-                className="px-2.5 py-1 text-[10px] font-mono rounded-full bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.06] font-semibold transition-colors"
+                className="px-2.5 py-1 text-xs font-mono rounded-full bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.06] font-semibold transition-colors"
               >
                 +{mins}m
               </button>
@@ -222,11 +222,11 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
           {/* Select Week & Notes */}
           <div className="w-full space-y-2 pt-1 text-xs">
             <div>
-              <label className="block text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Associate Week:</label>
+              <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Associate Week:</label>
               <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
               >
                 {Array.from({ length: 33 }, (_, i) => {
                   const num = i + 1;
@@ -245,7 +245,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="What did you work on? (optional)"
-                className="w-full bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] placeholder:text-zinc-400"
+                className="w-full bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white placeholder:text-zinc-400"
               />
             </div>
           </div>
@@ -254,7 +254,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
         <form onSubmit={handleSaveManualSession} className="mt-2 space-y-3 text-xs">
           <div className="grid grid-cols-2 gap-2.5">
             <div>
-              <label className="block text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+              <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">
                 Minutes:
               </label>
               <input
@@ -262,32 +262,32 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
                 min="1"
                 value={manualMinutes}
                 onChange={(e) => setManualMinutes(e.target.value)}
-                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
                 required
               />
             </div>
             <div>
-              <label className="block text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+              <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">
                 Date:
               </label>
               <input
                 type="date"
                 value={manualDate}
                 onChange={(e) => setManualDate(e.target.value)}
-                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+                className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">
               Week:
             </label>
             <select
               value={weekId}
               onChange={(e) => setWeekId(e.target.value)}
-              className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF]"
+              className="w-full font-mono bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white"
             >
               <option value="">General Study</option>
               {Array.from({ length: 33 }, (_, i) => {
@@ -308,7 +308,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Session notes..."
-              className="w-full bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] placeholder:text-zinc-400"
+              className="w-full bg-white dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3 py-2 text-zinc-800 dark:text-zinc-300 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white placeholder:text-zinc-400"
             />
           </div>
 

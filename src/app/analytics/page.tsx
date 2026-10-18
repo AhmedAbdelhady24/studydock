@@ -211,8 +211,8 @@ export default function AnalyticsPage() {
                 <YAxis stroke="#71717a" fontSize={10} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend wrapperStyle={{ fontSize: "11px" }} />
-                <Bar dataKey="Target" fill="#cbd5e1" radius={[4, 4, 0, 0]} isAnimationActive={false} />
-                <Bar dataKey="Actual" fill="#C8B6FF" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Target" fill="#94a3b8" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="Actual" fill="#3b82f6" radius={[4, 4, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -251,7 +251,7 @@ export default function AnalyticsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-600 dark:text-zinc-400 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
+          <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-zinc-600 dark:text-zinc-400 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
             {categoryData.map((c, i) => (
               <div key={c.name} className="flex items-center gap-1.5">
                 <span
@@ -269,7 +269,7 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               System Architecture & Progress Invariants
             </h3>
-            <span className="text-[10px] font-mono text-zinc-400">Data Guarantees</span>
+            <span className="text-[11px] font-mono text-zinc-400">Data Guarantees</span>
           </div>
 
           <div className="space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
