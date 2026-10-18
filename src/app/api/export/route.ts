@@ -35,6 +35,48 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    if (format === "template-plan") {
+      const fs = await import("fs/promises");
+      const path = await import("path");
+      const filePath = path.join(process.cwd(), "public", "templates", "plan_template.csv");
+      const csv = await fs.readFile(filePath, "utf-8");
+      return new NextResponse(csv, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": 'attachment; filename="plan_template.csv"',
+        },
+      });
+    }
+
+    if (format === "template-courses") {
+      const fs = await import("fs/promises");
+      const path = await import("path");
+      const filePath = path.join(process.cwd(), "public", "templates", "courses_template.csv");
+      const csv = await fs.readFile(filePath, "utf-8");
+      return new NextResponse(csv, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": 'attachment; filename="courses_template.csv"',
+        },
+      });
+    }
+
+    if (format === "template-starter") {
+      const fs = await import("fs/promises");
+      const path = await import("path");
+      const filePath = path.join(process.cwd(), "public", "templates", "starter_curriculum_template.csv");
+      const csv = await fs.readFile(filePath, "utf-8");
+      return new NextResponse(csv, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": 'attachment; filename="starter_curriculum_template.csv"',
+        },
+      });
+    }
+
     // Default: plan-csv
     const csv = await exportPlanAsCsv(planSlug);
     return new NextResponse(csv, {

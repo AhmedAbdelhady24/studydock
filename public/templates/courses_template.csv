@@ -1,0 +1,4 @@
+plan_slug,course_id,course_title,planned_weeks,coverage_kind,target_min,target_max,target_unit,coverage_note,reference_url
+my-curriculum,my-curriculum-course-01,"Foundational Engineering",1–4,percentage,80,100,%,Complete core modules and exercises,https://example.com/course-1
+my-curriculum,my-curriculum-course-02,"Architecture & System Design",5–8,percentage,75,95,%,Read chapters 1 to 8 and build demo,https://example.com/course-2
+my-curriculum,my-curriculum-course-03,"Algorithms & Problem Solving",1–12,count,50,100,problems,Target solving 50+ medium difficulty problems,https://leetcode.com/
