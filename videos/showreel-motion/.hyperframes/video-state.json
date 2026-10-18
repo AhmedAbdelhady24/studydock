@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "historyId": "7eff76a0-31aa-4bf0-8c91-f698bfc40f9c",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "index.html": {
+      "hash": "287bce390ff9ef389309bde0acb2377b8535f1f0a096105af7b5038ff236fea9",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/28/287bce390ff9ef389309bde0acb2377b8535f1f0a096105af7b5038ff236fea9"
+    },
+    "synthesize-audio.mjs": {
+      "hash": "5ad3d9c127eda4cf86f7872df05ee28e25943b29f12d328217c1f01048d399ea",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/5a/5ad3d9c127eda4cf86f7872df05ee28e25943b29f12d328217c1f01048d399ea"
+    },
+    "assets/soundtrack.wav": {
+      "hash": "ad4e82abaee2e15db4cc4ad3feee6d15f8ead2bbedb21c714a8e18cf8b561319",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/ad/ad4e82abaee2e15db4cc4ad3feee6d15f8ead2bbedb21c714a8e18cf8b561319"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "renders": {
+    "latest": {
+      "id": "60b82505-ffd3-4f80-b3b5-1bbf6c9fad6b",
+      "completedAt": 1792324435695,
+      "output": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/videos/showreel-motion/showreel-motion.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
+}

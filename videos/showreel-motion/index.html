@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <title>Motion Designer Showreel — Pure Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #050608;
+        color: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+        overflow: hidden;
+        user-select: none;
+      }
+      #root {
+        position: relative;
+        width: 1280px;
+        height: 720px;
+        background: #06070a;
+        overflow: hidden;
+      }
+
+      /* Background Canvas (3D Wireframes, Attractors, Spectrum, Particles) */
+      #bg-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1280px;
+        height: 720px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* Fullscreen Vignette & CRT Scanline Texture */
+      .vignette-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5, 6, 8, 0.85) 95%);
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      /* Global HUD Overlay Frame */
+      .hud-frame {
+        position: absolute;
+        inset: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 10;
+        pointer-events: none;
+      }
+      .hud-corner {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #00f0ff;
+      }
+      .hud-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+      .hud-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+      .hud-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+      .hud-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+      .hud-topbar {
+        position: absolute;
+        top: 14px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        color: #94a3b8;
+      }
+      .hud-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 240, 255, 0.08);
+        border: 1px solid rgba(0, 240, 255, 0.25);
+        color: #00f0ff;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-weight: 700;
+      }
+      .hud-tag .blink-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #00f0ff;
+      }
+
+      .hud-bottombar {
+        position: absolute;
+        bottom: 14px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        color: #64748b;
+      }
+
+      /* Stage Layer (HTML/SVG Motion Elements) */
+      .stage-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      /* ======================================================== */
+      /* SCENE 1: KINETIC CALIBRATION (0.0s - 2.66s)             */
+      /* ======================================================== */
+      #scene-1 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .s1-kicker {
+        font-family: ui-monospace, monospace;
+        font-size: 13px;
+        letter-spacing: 0.35em;
+        color: #00f0ff;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        font-weight: 700;
+      }
+      .s1-title {
+        font-size: 88px;
+        font-weight: 900;
+        line-height: 0.92;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .s1-sublines {
+        margin-top: 24px;
+        display: flex;
+        gap: 32px;
+        font-family: ui-monospace, monospace;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #94a3b8;
+      }
+      .s1-counter {
+        position: absolute;
+        bottom: 90px;
+        font-family: ui-monospace, monospace;
+        font-size: 44px;
+        font-weight: 900;
+        color: #38bdf8;
+        letter-spacing: -0.02em;
+      }
+
+      /* ======================================================== */
+      /* SCENE 2: 3D PROCEDURAL DROP (2.66s - 6.8s)              */
+      /* ======================================================== */
+      #scene-2 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .s2-typography {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+      }
+      .s2-word {
+        font-size: 96px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+      }
+      .s2-word-1 {
+        color: #ffffff;
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+      }
+      .s2-word-2 {
+        color: #38bdf8;
+        text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+      }
+      .s2-word-3 {
+        color: #a855f7;
+        text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+      }
+
+      /* ======================================================== */
+      /* SCENE 3: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s)*/
+      /* ======================================================== */
+      #scene-3 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card-deck {
+        position: relative;
+        width: 920px;
+        height: 380px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .haptic-card {
+        width: 275px;
+        height: 340px;
+        background: rgba(15, 23, 42, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 24px;
+        padding: 24px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .card-glow {
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+      }
+      .haptic-card:nth-child(1) .card-glow { background: rgba(0, 240, 255, 0.35); }
+      .haptic-card:nth-child(2) .card-glow { background: rgba(168, 85, 247, 0.35); }
+      .haptic-card:nth-child(3) .card-glow { background: rgba(16, 185, 129, 0.35); }
+
+      .card-header-badge {
+        font-family: ui-monospace, monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .card-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-top: 10px;
+        letter-spacing: -0.01em;
+      }
+      .card-desc {
+        font-size: 12px;
+        color: #94a3b8;
+        line-height: 1.5;
+        margin-top: 4px;
+      }
+      .card-graphic {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 16px 0;
+      }
+      .card-stat {
+        font-family: ui-monospace, monospace;
+        font-size: 32px;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+      }
+
+      /* Scene 3 Big Scrolling Ticker */
+      .s3-ticker-wrap {
+        position: absolute;
+        bottom: 50px;
+        left: 0;
+        width: 1280px;
+        overflow: hidden;
+      }
+      .s3-ticker {
+        display: flex;
+        gap: 40px;
+        white-space: nowrap;
+        font-family: ui-monospace, monospace;
+        font-size: 13px;
+        letter-spacing: 0.25em;
+        color: #38bdf8;
+        font-weight: 700;
+      }
+
+      /* ======================================================== */
+      /* SCENE 4: CLIMAX VELOCITY (10.66s - 13.33s)              */
+      /* ======================================================== */
+      #scene-4 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .climax-headline {
+        font-size: 110px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.04em;
+        line-height: 0.9;
+        color: #ffffff;
+        text-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(168, 85, 247, 0.5);
+      }
+      .climax-sub {
+        font-family: ui-monospace, monospace;
+        font-size: 16px;
+        letter-spacing: 0.3em;
+        color: #00f0ff;
+        font-weight: 700;
+        margin-top: 18px;
+        text-transform: uppercase;
+      }
+
+      /* ======================================================== */
+      /* SCENE 5: FINALE MONOLITH LOCKUP (13.33s - 15.0s)        */
+      /* ======================================================== */
+      #scene-5 {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .monolith-emblem {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 22px;
+        position: relative;
+      }
+      .brand-hero {
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .brand-role {
+        font-family: ui-monospace, monospace;
+        font-size: 14px;
+        letter-spacing: 0.35em;
+        color: #00f0ff;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 12px;
+      }
+      .brand-footnote {
+        margin-top: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 9999px;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        color: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1280"
+      data-height="720"
+      data-duration="15"
+    >
+      <!-- Synthesized Audio Track -->
+      <audio
+        id="showreel-soundtrack"
+        class="clip"
+        src="assets/soundtrack.wav"
+        data-start="0"
+        data-duration="15"
+      ></audio>
+
+      <!-- 3D WebGL / Math Canvas -->
+      <canvas id="bg-canvas" width="1280" height="720"></canvas>
+
+      <!-- Vignette & Ambience -->
+      <div class="vignette-overlay"></div>
+
+      <!-- HUD Frame Overlay -->
+      <div class="hud-frame">
+        <div class="hud-corner tl"></div>
+        <div class="hud-corner tr"></div>
+        <div class="hud-corner bl"></div>
+        <div class="hud-corner br"></div>
+
+        <div class="hud-topbar">
+          <div class="hud-tag">
+            <span class="blink-dot"></span>
+            <span>REEL // 2026.1</span>
+          </div>
+          <div>MOTION DESIGN SHOWREEL · PURE CODE</div>
+          <div id="hud-timer">00:00:00</div>
+        </div>
+
+        <div class="hud-bottombar">
+          <div>FPS: 60.00 · HARDWARE GPU</div>
+          <div>ZERO ASSETS · 100% CODE SYNTHESIS</div>
+          <div>ANTIGRAVITY ENGINE</div>
+        </div>
+      </div>
+
+      <!-- Stage Visual Scenes -->
+      <div class="stage-layer">
+        
+        <!-- ACT I: CALIBRATION & INTRO (0.0s - 2.66s) -->
+        <div id="scene-1">
+          <div class="s1-kicker" id="s1-kicker">DIRECTOR SHOWREEL</div>
+          <div class="s1-title" id="s1-title">KINETIC<br/>ENGINE</div>
+          <div class="s1-sublines" id="s1-sublines">
+            <span>[ SYSTEM: DETERMINISTIC ]</span>
+            <span>[ SHADERS: PROCEDURAL ]</span>
+            <span>[ PHYSICS: SPRING_MASS ]</span>
+          </div>
+          <div class="s1-counter" id="s1-countdown">03</div>
+        </div>
+
+        <!-- ACT II: 3D PROCEDURAL DROP (2.66s - 6.8s) -->
+        <div id="scene-2">
+          <div class="s2-typography">
+            <div class="s2-word s2-word-1" id="s2-word-1">PURE MATHEMATICS</div>
+            <div class="s2-word s2-word-2" id="s2-word-2">FLUID ELASTICITY</div>
+            <div class="s2-word s2-word-3" id="s2-word-3">SUB-PIXEL CRAFT</div>
+          </div>
+        </div>
+
+        <!-- ACT III: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s) -->
+        <div id="scene-3">
+          <div class="card-deck">
+            <!-- Card 1: Vector Curve Interpolation -->
+            <div class="haptic-card" id="card-1">
+              <div class="card-glow"></div>
+              <div>
+                <div class="card-header-badge">
+                  <span>MODULE 01</span>
+                  <span>EASING DYNAMICS</span>
+                </div>
+                <div class="card-title">Custom Springs</div>
+                <div class="card-desc">Non-linear cubic-bezier & damped harmonic oscillations.</div>
+              </div>
+              <div class="card-graphic">
+                <svg width="220" height="90" viewBox="0 0 220 90" fill="none">
+                  <path d="M 10 75 C 60 75, 70 15, 120 15 C 160 15, 170 45, 210 45" stroke="#00f0ff" stroke-width="3" stroke-linecap="round" />
+                  <circle cx="10" cy="75" r="4" fill="#00f0ff" />
+                  <circle cx="120" cy="15" r="5" fill="#ffffff" />
+                  <circle cx="210" cy="45" r="4" fill="#00f0ff" />
+                  <line x1="70" y1="15" x2="120" y2="15" stroke="rgba(255,255,255,0.4)" stroke-dasharray="3 3" />
+                </svg>
+              </div>
+              <div class="card-stat">60 FPS</div>
+            </div>
+
+            <!-- Card 2: Real-time Parametric Wave -->
+            <div class="haptic-card" id="card-2">
+              <div class="card-glow"></div>
+              <div>
+                <div class="card-header-badge">
+                  <span>MODULE 02</span>
+                  <span>SPATIAL RHYTHM</span>
+                </div>
+                <div class="card-title">Nested Depth</div>
+                <div class="card-desc">Concentric machining & double-bezel micro-surfaces.</div>
+              </div>
+              <div class="card-graphic">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" stroke="rgba(168,85,247,0.25)" stroke-width="6" fill="none" />
+                  <circle id="card-2-ring" cx="50" cy="50" r="42" stroke="#a855f7" stroke-width="6" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="66" fill="none" transform="rotate(-90 50 50)" />
+                  <text x="50" y="55" fill="#ffffff" font-size="16" font-family="ui-monospace" font-weight="bold" text-anchor="middle">75%</text>
+                </svg>
+              </div>
+              <div class="card-stat">0.0ms LAG</div>
+            </div>
+
+            <!-- Card 3: Deterministic Sync -->
+            <div class="haptic-card" id="card-3">
+              <div class="card-glow"></div>
+              <div>
+                <div class="card-header-badge">
+                  <span>MODULE 03</span>
+                  <span>CHOREOGRAPHY</span>
+                </div>
+                <div class="card-title">Frame Perfect</div>
+                <div class="card-desc">Exact timeline synchronization and audio reactivity.</div>
+              </div>
+              <div class="card-graphic">
+                <svg width="220" height="90" viewBox="0 0 220 90">
+                  <rect x="15" y="30" width="190" height="32" rx="16" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" />
+                  <circle cx="175" cy="46" r="12" fill="#10b981" />
+                  <text x="75" y="51" fill="#10b981" font-size="12" font-family="ui-monospace" font-weight="bold">ACTIVE</text>
+                </svg>
+              </div>
+              <div class="card-stat">100% CODE</div>
+            </div>
+          </div>
+
+          <div class="s3-ticker-wrap">
+            <div class="s3-ticker" id="s3-ticker">
+              <span>/// INTERACTION DESIGN</span>
+              <span>/// SYSTEM CHOREOGRAPHY</span>
+              <span>/// HAPTIC PHYSICS</span>
+              <span>/// PROCEDURAL SHADERS</span>
+              <span>/// AUDITABLE TIMING</span>
+              <span>/// ZERO ASSETS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACT IV: CLIMAX VELOCITY (10.66s - 13.33s) -->
+        <div id="scene-4">
+          <div>
+            <div class="climax-headline" id="climax-headline">UNSTOPPABLE<br/>VELOCITY</div>
+            <div class="climax-sub" id="climax-sub">MASS · MOMENTUM · FRICTION · INTENT</div>
+          </div>
+        </div>
+
+        <!-- ACT V / FINALE: THE MONOLITH (13.33s - 15.0s) -->
+        <div id="scene-5">
+          <svg class="monolith-emblem" viewBox="0 0 80 80" fill="none" id="monolith-emblem">
+            <polygon points="40,4 76,40 40,76 4,40" stroke="#00f0ff" stroke-width="3" fill="rgba(0,240,255,0.08)" />
+            <polygon points="40,16 64,40 40,64 16,40" stroke="#a855f7" stroke-width="2.5" fill="rgba(168,85,247,0.12)" />
+            <circle cx="40" cy="40" r="8" fill="#ffffff" />
+            <line x1="40" y1="4" x2="40" y2="76" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+            <line x1="4" y1="40" x2="76" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+          </svg>
+          <div class="brand-hero" id="brand-hero">ANTIGRAVITY</div>
+          <div class="brand-role" id="brand-role">LEAD MOTION DESIGNER &amp; CREATIVE TECHNOLOGIST</div>
+          <div class="brand-footnote" id="brand-footnote">
+            <span>60 FPS DETERMINISTIC</span>
+            <span>•</span>
+            <span>ZERO SAMPLES</span>
+            <span>•</span>
+            <span>PURE CODE</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      // ========================================================
+      // 1. PROCEDURAL 3D WIREFRAME & PARTICLE ENGINE (CANVAS)
+      // ========================================================
+      const canvas = document.getElementById("bg-canvas");
+      const ctx = canvas.getContext("2d");
+      const W = 1280;
+      const H = 720;
+      const CX = W / 2;
+      const CY = H / 2;
+
+      // Icosahedron 3D Geometry Definition (12 vertices, 30 edges)
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const rawIcoVerts = [
+        [-1,  phi, 0], [ 1,  phi, 0], [-1, -phi, 0], [ 1, -phi, 0],
+        [ 0, -1,  phi], [ 0,  1,  phi], [ 0, -1, -phi], [ 0,  1, -phi],
+        [ phi, 0, -1], [ phi, 0,  1], [-phi, 0, -1], [-phi, 0,  1]
+      ];
+      // Normalize
+      const icoVerts = rawIcoVerts.map(v => {
+        const len = Math.hypot(...v);
+        return [v[0] / len, v[1] / len, v[2] / len];
+      });
+      // Find edges (vertices with distance ~ 1.05)
+      const icoEdges = [];
+      for (let i = 0; i < icoVerts.length; i++) {
+        for (let j = i + 1; j < icoVerts.length; j++) {
+          const d = Math.hypot(
+            icoVerts[i][0] - icoVerts[j][0],
+            icoVerts[i][1] - icoVerts[j][1],
+            icoVerts[i][2] - icoVerts[j][2]
+          );
+          if (d < 1.15) icoEdges.push([i, j]);
+        }
+      }
+
+      // 4D Hypercube / Tesseract Vertices (16 vertices, 32 edges)
+      const tesseractVerts = [];
+      for (let i = 0; i < 16; i++) {
+        tesseractVerts.push([
+          (i & 1 ? 1 : -1) * 0.6,
+          (i & 2 ? 1 : -1) * 0.6,
+          (i & 4 ? 1 : -1) * 0.6,
+          (i & 8 ? 1 : -1) * 0.6,
+        ]);
+      }
+      const tesseractEdges = [];
+      for (let i = 0; i < 16; i++) {
+        for (let j = i + 1; j < 16; j++) {
+          let diffs = 0;
+          for (let k = 0; k < 4; k++) {
+            if (tesseractVerts[i][k] !== tesseractVerts[j][k]) diffs++;
+          }
+          if (diffs === 1) tesseractEdges.push([i, j]);
+        }
+      }
+
+      // Orbital Particle Swarm (140 deterministic particles)
+      const particles = [];
+      for (let i = 0; i < 140; i++) {
+        const angle = (i / 140) * Math.PI * 2;
+        const radius = 90 + (i % 7) * 45;
+        const speed = 0.8 + (i % 5) * 0.35;
+        const yOffset = ((i % 11) - 5) * 25;
+        particles.push({ angle, radius, speed, yOffset, seed: i });
+      }
+
+      // 3D Rotation helper
+      function rotateX(v, a) {
+        const cos = Math.cos(a), sin = Math.sin(a);
+        return [v[0], v[1] * cos - v[2] * sin, v[1] * sin + v[2] * cos];
+      }
+      function rotateY(v, a) {
+        const cos = Math.cos(a), sin = Math.sin(a);
+        return [v[0] * cos + v[2] * sin, v[1], -v[0] * sin + v[2] * cos];
+      }
+      function rotateZ(v, a) {
+        const cos = Math.cos(a), sin = Math.sin(a);
+        return [v[0] * cos - v[1] * sin, v[0] * sin + v[1] * cos, v[2]];
+      }
+
+      // Master deterministic Canvas Render function called on every frame of GSAP
+      function renderCanvas(t) {
+        ctx.clearRect(0, 0, W, H);
+
+        // 1. Perspective Grid (Floor & Ceiling)
+        const gridSpeed = (t * 220) % 60;
+        ctx.strokeStyle = "rgba(0, 240, 255, 0.07)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        // Perspective rays
+        for (let x = -W; x <= W * 2; x += 80) {
+          ctx.moveTo(x, H);
+          ctx.lineTo(CX + (x - CX) * 0.1, CY + 80);
+        }
+        // Horizontal depth rungs
+        for (let d = 0; d < 12; d++) {
+          const depthProgress = ((d * 40 + gridSpeed) % 480) / 480;
+          const y = CY + 80 + Math.pow(depthProgress, 2.2) * (CY - 80);
+          ctx.moveTo(0, y);
+          ctx.lineTo(W, y);
+        }
+        ctx.stroke();
+
+        // 2. Audio-reactive Spectrum Visualizer Bars (Bottom HUD)
+        const bpm = 135;
+        const beatProgress = (t * (bpm / 60)) % 1;
+        const isDrop = t >= 2.66 && t < 13.33;
+        const kickPulse = isDrop ? Math.pow(1 - beatProgress, 3) : 0.15;
+
+        const numBars = 48;
+        const barW = 12;
+        const barGap = 6;
+        const totalW = numBars * (barW + barGap);
+        const startX = CX - totalW / 2;
+
+        ctx.fillStyle = "rgba(0, 240, 255, 0.35)";
+        for (let i = 0; i < numBars; i++) {
+          const normIdx = i / numBars;
+          const harmonic = Math.sin(normIdx * Math.PI * 4 + t * 8);
+          const barH = 8 + (kickPulse * 45 + Math.abs(harmonic) * 35);
+          const x = startX + i * (barW + barGap);
+          const y = H - 56 - barH;
+          ctx.fillRect(x, y, barW, barH);
+        }
+
+        // 3. Shockwave Rings on Drop Impacts
+        const drops = [2.66, 7.11, 10.66, 13.33];
+        for (const drop of drops) {
+          if (t >= drop && t < drop + 1.2) {
+            const shockAge = (t - drop) / 1.2;
+            const shockR = shockAge * 520;
+            const shockAlpha = (1 - shockAge) * 0.6;
+            ctx.strokeStyle = `rgba(0, 240, 255, ${shockAlpha})`;
+            ctx.lineWidth = 3 * (1 - shockAge);
+            ctx.beginPath();
+            ctx.arc(CX, CY, shockR, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+
+        // 4. Center 3D Wireframe Core (Active during Act II, III, IV)
+        if (t >= 2.2 && t <= 13.5) {
+          const coreScale = t < 2.66
+            ? ((t - 2.2) / 0.46) * 160
+            : t > 13.0
+            ? (1 - (t - 13.0) / 0.5) * 180
+            : 160 + kickPulse * 28;
+
+          const rx = t * 1.4;
+          const ry = t * 1.8;
+          const rz = t * 0.9;
+
+          // Interpolate between Icosahedron (Act II) and Tesseract (Act III/IV)
+          const useTesseract = t > 6.8 && t < 10.8;
+
+          if (!useTesseract) {
+            // Render Icosahedron
+            const projected = icoVerts.map(v => {
+              let p = rotateX(v, rx);
+              p = rotateY(p, ry);
+              p = rotateZ(p, rz);
+              const zDist = p[2] + 2.8;
+              const fov = 420;
+              return [
+                CX + (p[0] * fov * coreScale) / (zDist * 160),
+                CY + (p[1] * fov * coreScale) / (zDist * 160),
+                p[2]
+              ];
+            });
+
+            // Draw Edges
+            ctx.strokeStyle = `rgba(0, 240, 255, ${0.45 + kickPulse * 0.4})`;
+            ctx.lineWidth = 2.2;
+            for (const [i, j] of icoEdges) {
+              ctx.beginPath();
+              ctx.moveTo(projected[i][0], projected[i][1]);
+              ctx.lineTo(projected[j][0], projected[j][1]);
+              ctx.stroke();
+            }
+
+            // Draw Glowing Vertices
+            for (const [x, y, z] of projected) {
+              const nodeR = 3.5 + (z + 1) * 2;
+              ctx.fillStyle = "#ffffff";
+              ctx.beginPath();
+              ctx.arc(x, y, nodeR, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          } else {
+            // Render 4D Tesseract (Hypercube projection to 3D to 2D)
+            const rot4D = t * 1.5;
+            const cos4 = Math.cos(rot4D), sin4 = Math.sin(rot4D);
+
+            const projected4D = tesseractVerts.map(v4 => {
+              // Rotate in XW and YZ planes
+              const x4 = v4[0] * cos4 - v4[3] * sin4;
+              const w4 = v4[0] * sin4 + v4[3] * cos4;
+              const y4 = v4[1];
+              const z4 = v4[2];
+
+              // Stereographic 4D to 3D
+              const dist4 = 1.8 - w4;
+              const p3 = [x4 / dist4, y4 / dist4, z4 / dist4];
+
+              // 3D rotation
+              let p = rotateX(p3, rx * 0.7);
+              p = rotateY(p, ry * 0.7);
+              const zDist = p[2] + 2.6;
+              const fov = 420;
+              return [
+                CX + (p[0] * fov * coreScale) / (zDist * 160),
+                CY + (p[1] * fov * coreScale) / (zDist * 160),
+                p[2]
+              ];
+            });
+
+            ctx.strokeStyle = `rgba(168, 85, 247, ${0.5 + kickPulse * 0.4})`;
+            ctx.lineWidth = 2.0;
+            for (const [i, j] of tesseractEdges) {
+              ctx.beginPath();
+              ctx.moveTo(projected4D[i][0], projected4D[i][1]);
+              ctx.lineTo(projected4D[j][0], projected4D[j][1]);
+              ctx.stroke();
+            }
+
+            for (const [x, y] of projected4D) {
+              ctx.fillStyle = "#00f0ff";
+              ctx.beginPath();
+              ctx.arc(x, y, 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          // Orbital Particle Swarm Ring
+          ctx.fillStyle = "rgba(0, 240, 255, 0.75)";
+          for (const p of particles) {
+            const curAngle = p.angle + t * p.speed * 0.8;
+            const px = CX + Math.cos(curAngle) * p.radius * (1 + kickPulse * 0.2);
+            const py = CY + Math.sin(curAngle) * (p.radius * 0.45) + p.yOffset;
+            const size = 1.5 + (Math.sin(curAngle) + 1) * 1.5;
+            ctx.beginPath();
+            ctx.arc(px, py, size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // 5. Climax Laser Mandala (Act IV: 10.66s - 13.33s)
+        if (t >= 10.66 && t < 13.33) {
+          const mandalaProgress = (t - 10.66) / 2.67;
+          const petals = 12;
+          ctx.save();
+          ctx.translate(CX, CY);
+          ctx.rotate(t * 3.5);
+          for (let p = 0; p < petals; p++) {
+            ctx.rotate((Math.PI * 2) / petals);
+            const radius = 180 + Math.sin(t * 16 + p) * 60 + kickPulse * 40;
+            ctx.strokeStyle = p % 2 === 0 ? "rgba(0, 240, 255, 0.45)" : "rgba(168, 85, 247, 0.45)";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-radius / 2, -radius / 2, radius, radius);
+          }
+          ctx.restore();
+        }
+
+        // Update HUD timecode
+        const mins = Math.floor(t / 60);
+        const secs = Math.floor(t % 60);
+        const frames = Math.floor((t % 1) * 60);
+        const pad = (n) => n.toString().padStart(2, "0");
+        const timecodeStr = `${pad(mins)}:${pad(secs)}:${pad(frames)}`;
+        const timerEl = document.getElementById("hud-timer");
+        if (timerEl) timerEl.textContent = timecodeStr;
+      }
+
+      // ========================================================
+      // 2. MASTER CHOREOGRAPHY GSAP TIMELINE
+      // ========================================================
+      const tl = gsap.timeline({ paused: true });
+
+      // Initial Visibility Setup
+      gsap.set(["#scene-1", "#scene-2", "#scene-3", "#scene-4", "#scene-5"], { opacity: 0 });
+      gsap.set("#s1-kicker", { opacity: 0, y: -20 });
+      gsap.set("#s1-title", { opacity: 0, scale: 0.85 });
+      gsap.set("#s1-sublines", { opacity: 0, y: 15 });
+      gsap.set(["#s2-word-1", "#s2-word-2", "#s2-word-3"], { opacity: 0, scale: 0.7 });
+      gsap.set(["#card-1", "#card-2", "#card-3"], { opacity: 0, y: 80, scale: 0.9 });
+      gsap.set("#scene-4", { opacity: 0, scale: 0.8 });
+      gsap.set("#scene-5", { opacity: 0, scale: 0.9 });
+
+      // Drive canvas deterministically
+      const animState = { t: 0 };
+      tl.to(animState, {
+        t: 15.0,
+        duration: 15.0,
+        ease: "none",
+        onUpdate: () => renderCanvas(animState.t)
+      }, 0);
+
+      // --------------------------------------------------------
+      // ACT I: CALIBRATION & KINETIC INTRO (0.0s - 2.66s)
+      // --------------------------------------------------------
+      tl.to("#scene-1", { opacity: 1, duration: 0.2 }, 0.05)
+        .to("#s1-kicker", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1)
+        .to("#s1-title", { opacity: 1, scale: 1, duration: 0.6, ease: "elastic.out(1, 0.75)" }, 0.25)
+        .to("#s1-sublines", { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.6)
+        // Countdown ticks on beats 3, 4, 5
+        .set("#s1-countdown", { textContent: "03" }, 0.88)
+        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 0.88)
+        .set("#s1-countdown", { textContent: "02" }, 1.33)
+        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 1.33)
+        .set("#s1-countdown", { textContent: "01" }, 1.77)
+        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 1.77)
+        // Fade out Scene 1 before drop
+        .to("#scene-1", { opacity: 0, scale: 1.15, duration: 0.3, ease: "power2.in" }, 2.45);
+
+      // --------------------------------------------------------
+      // ACT II: THE DROP & 3D PROCEDURAL EXPANSION (2.66s - 6.8s)
+      // --------------------------------------------------------
+      tl.to("#scene-2", { opacity: 1, duration: 0.1 }, 2.66)
+        // Word 1: PURE MATHEMATICS (2.66s)
+        .to("#s2-word-1", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 2.66)
+        .to("#s2-word-1", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 3.9)
+        // Word 2: FLUID ELASTICITY (4.0s)
+        .to("#s2-word-2", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 4.0)
+        .to("#s2-word-2", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 5.25)
+        // Word 3: SUB-PIXEL CRAFT (5.33s)
+        .to("#s2-word-3", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 5.33)
+        .to("#s2-word-3", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 6.5)
+        .to("#scene-2", { opacity: 0, duration: 0.2 }, 6.7);
+
+      // --------------------------------------------------------
+      // ACT III: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s)
+      // --------------------------------------------------------
+      tl.to("#scene-3", { opacity: 1, duration: 0.2 }, 6.8)
+        // Stagger in the 3 cards with Apple fluid physics
+        .to("#card-1", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 6.9)
+        .to("#card-2", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 7.15)
+        .to("#card-3", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 7.4)
+        // Card micro-motion
+        .to("#card-2-ring", { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 7.5)
+        // Horizontal ticker scroll
+        .fromTo("#s3-ticker", { x: 300 }, { x: -600, duration: 3.5, ease: "none" }, 6.8)
+        // Cards exit with acceleration
+        .to(["#card-1", "#card-2", "#card-3"], { opacity: 0, y: -60, scale: 0.85, duration: 0.35, stagger: 0.08, ease: "power2.in" }, 10.2)
+        .to("#scene-3", { opacity: 0, duration: 0.2 }, 10.55);
+
+      // --------------------------------------------------------
+      // ACT IV: CLIMAX VELOCITY (10.66s - 13.33s)
+      // --------------------------------------------------------
+      tl.to("#scene-4", { opacity: 1, scale: 1, duration: 0.2, ease: "power3.out" }, 10.66)
+        .fromTo("#climax-headline", { scale: 0.7, opacity: 0 }, { scale: 1.05, opacity: 1, duration: 0.35, ease: "elastic.out(1, 0.6)" }, 10.66)
+        // Beat pulsing to climax melody
+        .to("#climax-headline", { scale: 1.15, duration: 0.15, yoyo: true, repeat: 5, ease: "power1.inOut" }, 11.1)
+        .to("#scene-4", { opacity: 0, scale: 1.4, duration: 0.25, ease: "power3.in" }, 13.05);
+
+      // --------------------------------------------------------
+      // ACT V: THE FINALE MONOLITH STING (13.33s - 15.0s)
+      // --------------------------------------------------------
+      tl.to("#scene-5", { opacity: 1, scale: 1, duration: 0.3, ease: "power4.out" }, 13.33)
+        .fromTo("#monolith-emblem", { scale: 0.2, rotation: -90, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.6, ease: "back.out(2.2)" }, 13.33)
+        .fromTo("#brand-hero", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 13.55)
+        .fromTo("#brand-role", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 13.75)
+        .fromTo("#brand-footnote", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }, 13.95)
+        // Gentle cinematic fade to black at 14.8s
+        .to("#root", { opacity: 0, duration: 0.35, ease: "power2.in" }, 14.65);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
