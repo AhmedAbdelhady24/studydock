@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/candidate.json",
+    "sha256": "03c54f15fbdf03b960e32d2cf528bc2327a08458759fe31720b930a894a95736",
+    "bytes": 5235
+  },
+  "artifact": {
+    "path": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/studydock-architecture.html",
+    "sha256": "64febf1396d690d3e17d33a7d0dee5ae754791bc68d775118b3f7a6844b94b50",
+    "bytes": 827205
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/studydock-architecture.finalize.json",
+    "summaryReceipt": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/studydock-architecture.finalize-summary.json",
+    "browserCheckReceipt": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/studydock-architecture.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.1.0",
+    "availableVersion": "3.1.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-18T11:30:29.372Z",
+    "source": "network",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2379,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 1,
+      "routesOverSuggestedBends": 1,
+      "routesOverSuggestedStretch": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "router-to-metrics",
+            "from": "router",
+            "to": "metrics",
+            "label": "Audit Hours",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "right": {
+            "id": "csv-to-drizzle",
+            "from": "csv_engine",
+            "to": "drizzle",
+            "label": "Batch Upsert",
+            "collectionIndex": 6,
+            "artifactIndex": 7
+          },
+          "point": [
+            463,
+            322
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "id": "router-to-metrics",
+            "from": "router",
+            "to": "metrics",
+            "label": "Audit Hours",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "bends": 4,
+          "stretch": 1.749,
+          "directCorridorBlockers": [
+            {
+              "id": "csv_engine",
+              "label": "Curriculum Studio",
+              "box": [
+                300,
+                290,
+                160,
+                64
+              ]
+            }
+          ]
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "router → metrics crosses csv_engine → drizzle: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  },
+  "layoutReviewRecommendation": {
+    "action": "inspect-leading-space",
+    "evidence": {
+      "measured": true,
+      "emptyTopPx": 130,
+      "emptyTopRatio": 0.227,
+      "occupiedTop": 130,
+      "viewBoxTop": 0,
+      "canvasHeight": 572,
+      "typicalNodeHeight": 64,
+      "reviewSuggested": true
+    },
+    "reason": "Measured content, including routes and labels, leaves a large empty area above the diagram. This is a composition suggestion, not a failed gate.",
+    "repair": "Check whether that leading space is intentional. If not, reposition the connected scene nearer the canvas origin while retaining room for its actual boundaries, labels and return routes. Preserve all meaning and user-fixed geometry, then rerun finalize. No screenshot is required."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "historyId": "656aec92-687a-48ed-bdf2-bbc03de7d0dc",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "assets/01_today.png": {
+      "hash": "331b439918db67a4be57fa6dc0ce1871cea8817a7684ab9bb2f5f3d866d56349",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/33/331b439918db67a4be57fa6dc0ce1871cea8817a7684ab9bb2f5f3d866d56349"
+    },
+    "assets/01_today_drawer.png": {
+      "hash": "614cd86c4bb706810be289bb4f26877c5042a795844886ced489580973d153c2",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/61/614cd86c4bb706810be289bb4f26877c5042a795844886ced489580973d153c2"
+    },
+    "assets/02_roadmap.png": {
+      "hash": "9d41b06515a34b4a84c21c416bbbd5229f05c4b53dd91f48ff068f6f53d7288a",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/9d/9d41b06515a34b4a84c21c416bbbd5229f05c4b53dd91f48ff068f6f53d7288a"
+    },
+    "assets/07_analytics.png": {
+      "hash": "ebe086bb9397153143a04fc7e7d85906aab858fb6a735bec0fbe197ecfb46570",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/eb/ebe086bb9397153143a04fc7e7d85906aab858fb6a735bec0fbe197ecfb46570"
+    },
+    "assets/icon.svg": {
+      "hash": "da1dcd419269ad64b636c8ed64ea0623fef36735f3def42948e297a755589113",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/da/da1dcd419269ad64b636c8ed64ea0623fef36735f3def42948e297a755589113"
+    },
+    "index.html": {
+      "hash": "53bdfb677dc3f6b3335cf44d5452ae8192e4af236b28a1cad2ca0df17fdc07ce",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/656aec92-687a-48ed-bdf2-bbc03de7d0dc/blobs/53/53bdfb677dc3f6b3335cf44d5452ae8192e4af236b28a1cad2ca0df17fdc07ce"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "renders": {
+    "latest": {
+      "id": "1ee70bc5-6d04-41b4-aa29-0c93ea430b23",
+      "completedAt": 1792323381398,
+      "output": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/assets/studydock-demo.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
+}

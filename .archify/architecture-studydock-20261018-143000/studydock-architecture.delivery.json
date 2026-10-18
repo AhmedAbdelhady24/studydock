@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "f509f63c-95b0-44d1-ae36-d0dd15737d55",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/candidate.json",
+  "output": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/.archify/architecture-studydock-20261018-143000/studydock-architecture.html",
+  "specification": {
+    "sha256": "91f58619e2853df922ace97b86be3de728601ff98cb87dae3eb497ee4ba702ac",
+    "bytes": 5233
+  },
+  "artifact": {
+    "sha256": "c8217f99978d305717ecb7d44aa7555cdd8dada39ff658b7ce651b69fbafee13",
+    "bytes": 827192
+  }
+}

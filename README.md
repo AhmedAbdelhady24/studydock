@@ -15,8 +15,8 @@
 </p>
 
 <p align="center">
-  <a href="screenshots/01_today.png">
-    <img src="screenshots/01_today.png" alt="StudyDock Today View: active focus week, interactive workbench, task detail drawer, and study stopwatch" width="100%">
+  <a href="#install--quickstart">
+    <img src="assets/studydock-setup-and-demo.gif" alt="Install, launch database, seed 33-week syllabus, and run StudyDock: docker compose up -d db, pnpm db:migrate && pnpm db:seed, then pnpm dev. Click for quickstart." width="720">
   </a>
 </p>
 
@@ -37,6 +37,19 @@ Across intensive multi-month engineering curricula, StudyDock enforces strict op
 
 The system natively supports **Docker Compose and standalone host execution**, **collapsible responsive navigation**, **dark and light themes**, **Sonner toast pipelines**, and **Fallow codebase intelligence**.
 
+## Video overview & architecture
+
+* **Interactive Architecture Diagram**: [Explore live interactive HTML/SVG diagram](public/docs/studydock-architecture.html)
+* **Product Setup & Demo Walkthrough**: [Watch / Download MP4 (10.0s)](assets/studydock-demo.mp4)
+* **System Architecture Walkthrough**: [Watch / Download MP4 (9.0s)](assets/studydock-architecture.mp4)
+
+<p align="center">
+  <a href="public/docs/studydock-architecture.html">
+    <img src="assets/studydock-architecture.gif" alt="StudyDock 3-Tier System Architecture: Client, Application, and Persistence Tiers with 100% Zero-Telemetry Boundary" width="720">
+  </a>
+</p>
+<p align="center"><em>Generated with Archify and HyperFrames · Click diagram to explore interactive nodes and live traces.</em></p>
+
 ## Visual overview
 
 <p align="center">
@@ -50,6 +63,7 @@ The system natively supports **Docker Compose and standalone host execution**, *
 
 ## Contents
 
+- [Video overview & architecture](#video-overview--architecture)
 - [Visual overview](#visual-overview)
 - [System components](#system-components)
 - [Empirical invariants](#empirical-invariants)
@@ -66,11 +80,11 @@ The system natively supports **Docker Compose and standalone host execution**, *
 
 ## System components
 
-StudyDock exposes eight modular subsystems engineered around the learner: **curriculum engine, workbench & kanban, focus timer telemetry, DSA drill tracker, persistence layer, tactile interaction system, toast notification bus, and the break-ui stress harness**. They govern roadmap lifecycle, state transitions, time verification, and visual resilience.
+StudyDock exposes eight modular subsystems engineered around the learner: **curriculum engine, workbench & kanban, focus timer telemetry, DSA drill tracker, persistence layer, tactile interaction system, toast notification bus, and the adversarial edge case suite**. They govern roadmap lifecycle, state transitions, time verification, and visual resilience.
 
 <p align="center">
   <a href="screenshots/03_week_detail.png">
-    <img src="screenshots/03_week_detail.png" alt="StudyDock Eight System Components: Curriculum Engine, Workbench, Focus Timer, DSA Tracker, Persistence, Tactile System, Toast Bus, Break-UI Harness" width="100%">
+    <img src="screenshots/03_week_detail.png" alt="StudyDock Eight System Components: Curriculum Engine, Workbench, Focus Timer, DSA Tracker, Persistence, Tactile System, Toast Bus, Adversarial Suite" width="100%">
   </a>
 </p>
 

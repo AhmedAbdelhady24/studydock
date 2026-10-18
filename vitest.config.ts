@@ -6,6 +6,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: [],
+    include: ["tests/**/*.test.ts"],
+    exclude: ["**/node_modules/**", "**/.agents/**", "**/.archify/**", "**/.hyperframes/**"],
   },
   resolve: {
     alias: {

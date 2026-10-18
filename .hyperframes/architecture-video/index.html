@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <title>StudyDock Architecture Walkthrough</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #08090d;
+        color: #f4f4f5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        overflow: hidden;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 10%, #151922 0%, #08090d 80%);
+        overflow: hidden;
+      }
+
+      /* Grid overlay */
+      .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-size: 40px 40px;
+        background-image: 
+          linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        pointer-events: none;
+      }
+
+      /* Header Bar */
+      .top-nav {
+        position: absolute;
+        top: 24px;
+        left: 48px;
+        right: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 24px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        backdrop-filter: blur(12px);
+        z-index: 10;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand img {
+        width: 28px;
+        height: 28px;
+      }
+      .brand-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+      }
+      .brand-subtitle {
+        font-size: 13px;
+        color: #71717a;
+        font-family: ui-monospace, monospace;
+      }
+      .pill-badges {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge {
+        font-size: 11px;
+        font-family: ui-monospace, monospace;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #a1a1aa;
+        font-weight: 600;
+      }
+      .badge.green {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #34d399;
+      }
+      .badge.blue {
+        background: rgba(56, 189, 248, 0.12);
+        border-color: rgba(56, 189, 248, 0.3);
+        color: #38bdf8;
+      }
+
+      /* Scenes container */
+      .stage {
+        position: absolute;
+        top: 96px;
+        left: 48px;
+        right: 48px;
+        bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Scene 1: Hero statement */
+      #scene-1 {
+        position: absolute;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin: 0;
+        background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero-desc {
+        margin-top: 16px;
+        font-size: 20px;
+        color: #a1a1aa;
+        max-width: 680px;
+        line-height: 1.5;
+      }
+      .hero-pills {
+        margin-top: 28px;
+        display: flex;
+        gap: 12px;
+      }
+
+      /* Scene 2: 3-Tier Architecture Cards */
+      #scene-2 {
+        position: absolute;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        align-items: stretch;
+      }
+      .arch-card {
+        background: rgba(18, 20, 26, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 16px;
+      }
+      .card-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .card-dot.cyan { background: #38bdf8; box-shadow: 0 0 12px #38bdf8; }
+      .card-dot.emerald { background: #10b981; box-shadow: 0 0 12px #10b981; }
+      .card-dot.rose { background: #f43f5e; box-shadow: 0 0 12px #f43f5e; }
+      .card-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+      .card-tag {
+        margin-left: auto;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        color: #71717a;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2px 8px;
+        border-radius: 6px;
+      }
+      .card-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .card-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13.5px;
+        color: #d4d4d8;
+        line-height: 1.4;
+      }
+      .card-item svg {
+        flex-shrink: 0;
+        margin-top: 3px;
+        width: 14px;
+        height: 14px;
+        color: #34d399;
+      }
+
+      /* Scene 3: Invariants */
+      #scene-3 {
+        position: absolute;
+        width: 100%;
+        max-width: 900px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .invariants-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 24px;
+      }
+      .invariants-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+      }
+      .invariant-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 14px;
+        text-align: left;
+      }
+      .invariant-icon {
+        font-size: 20px;
+      }
+      .invariant-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+      .invariant-sub {
+        font-size: 12px;
+        color: #a1a1aa;
+      }
+
+      /* Scene 4: Outro */
+      #scene-4 {
+        position: absolute;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .outro-link {
+        margin-top: 20px;
+        font-family: ui-monospace, monospace;
+        font-size: 14px;
+        color: #38bdf8;
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        padding: 8px 18px;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1280"
+      data-height="720"
+      data-duration="9"
+    >
+      <div class="grid-bg"></div>
+
+      <!-- Persistent Navigation Bar -->
+      <header class="top-nav">
+        <div class="brand">
+          <img src="assets/icon.svg" alt="StudyDock" />
+          <span class="brand-title">StudyDock</span>
+          <span class="brand-subtitle">/ Architecture Walkthrough</span>
+        </div>
+        <div class="pill-badges">
+          <span class="badge blue">Next.js 14.2</span>
+          <span class="badge">TypeScript 5.7</span>
+          <span class="badge green">PostgreSQL 16</span>
+          <span class="badge green">Air-Gapped</span>
+        </div>
+      </header>
+
+      <main class="stage">
+        <!-- Scene 1: Hero Overview (0.0s - 2.5s) -->
+        <section id="scene-1">
+          <h1 class="hero-title">Local-First System Architecture</h1>
+          <p class="hero-desc">
+            A privacy-respecting engineering workbench with non-destructive roadmap sync, honest study time accounting, and zero telemetry leakage.
+          </p>
+          <div class="hero-pills">
+            <span class="badge blue">3 Architectural Tiers</span>
+            <span class="badge green">0ms Cloud Latency</span>
+            <span class="badge">OWASP Formula Defended</span>
+          </div>
+        </section>
+
+        <!-- Scene 2: 3-Tier Breakdown (2.5s - 6.0s) -->
+        <section id="scene-2">
+          <!-- Card 1: Client Tier -->
+          <div class="arch-card" id="card-client">
+            <div class="card-header">
+              <span class="card-dot cyan"></span>
+              <span class="card-title">Client Tier</span>
+              <span class="card-tag">127.0.0.1:3000</span>
+            </div>
+            <ul class="card-list">
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Next.js 14 App Router + React 18 Server Components</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Emil Kowalski tactile physics (:active scale 0.97)</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Zero-layout-shift Sonner toast feedback pipeline</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Responsive collapsible navigation &amp; dark/light themes</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Application Tier -->
+          <div class="arch-card" id="card-app">
+            <div class="card-header">
+              <span class="card-dot emerald"></span>
+              <span class="card-title">Application Tier</span>
+              <span class="card-tag">Node 20 Server</span>
+            </div>
+            <ul class="card-list">
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>REST Route Handlers (/api/plan, /api/tasks, /api/dsa)</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Deterministic CSV Diff Engine with immutable IDs</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>OWASP Formula Injection Defense (=, +, -, @ sanitize)</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Honest Study Hours Accounting &amp; Exit Gatekeeper</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Persistence Tier -->
+          <div class="arch-card" id="card-db">
+            <div class="card-header">
+              <span class="card-dot rose"></span>
+              <span class="card-title">Persistence Tier</span>
+              <span class="card-tag">Localhost:5432</span>
+            </div>
+            <ul class="card-list">
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>PostgreSQL 16 isolated in local Docker container</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Drizzle ORM 0.39 with zero runtime schema drift</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Persistent Docker volume (studydock_postgres_data)</span>
+              </li>
+              <li class="card-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Air-gapped 100% zero outbound telemetry guarantee</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Scene 3: Four Core Invariants (6.0s - 8.0s) -->
+        <section id="scene-3">
+          <div class="invariants-title">Four Non-Negotiable Invariants</div>
+          <div class="invariants-grid">
+            <div class="invariant-pill" id="inv-1">
+              <span class="invariant-icon">🔒</span>
+              <div>
+                <div class="invariant-text">Zero Outbound Telemetry</div>
+                <div class="invariant-sub">Strictly bound to 127.0.0.1 with 0 external tracking</div>
+              </div>
+            </div>
+            <div class="invariant-pill" id="inv-2">
+              <span class="invariant-icon">⚡</span>
+              <div>
+                <div class="invariant-text">60/120fps GPU Motion Budget</div>
+                <div class="invariant-sub">Emil Kowalski spring physics &amp; compositing isolation</div>
+              </div>
+            </div>
+            <div class="invariant-pill" id="inv-3">
+              <span class="invariant-icon">🛡️</span>
+              <div>
+                <div class="invariant-text">OWASP Formula Sanitization</div>
+                <div class="invariant-sub">Escapes spreadsheet injection on all CSV exports</div>
+              </div>
+            </div>
+            <div class="invariant-pill" id="inv-4">
+              <span class="invariant-icon">💾</span>
+              <div>
+                <div class="invariant-text">Deterministic Progress Preservation</div>
+                <div class="invariant-sub">Immutable IDs preserve 100% of user notes &amp; sessions</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Scene 4: Outro (8.0s - 9.0s) -->
+        <section id="scene-4">
+          <h1 class="hero-title">StudyDock</h1>
+          <p class="hero-desc">
+            Open-source, local-first learning management system for engineers.
+          </p>
+          <div class="outro-link">
+            Interactive Architecture: public/docs/studydock-architecture.html
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // Single paused GSAP timeline registered on window.__timelines["main"]
+      const tl = gsap.timeline({ paused: true });
+
+      // Initial states
+      gsap.set(["#scene-1", "#scene-2", "#scene-3", "#scene-4"], { opacity: 0 });
+      gsap.set(["#card-client", "#card-app", "#card-db"], { y: 30, opacity: 0 });
+      gsap.set(["#inv-1", "#inv-2", "#inv-3", "#inv-4"], { y: 20, opacity: 0 });
+
+      // Scene 1: Intro (0.0s - 2.4s)
+      tl.to("#scene-1", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.2)
+        .from("#scene-1 .hero-title", { y: 25, duration: 0.6, ease: "power3.out" }, 0.2)
+        .from("#scene-1 .hero-desc", { y: 20, duration: 0.5, ease: "power3.out" }, 0.4)
+        .from("#scene-1 .hero-pills", { y: 15, duration: 0.4, ease: "power3.out" }, 0.6)
+        .to("#scene-1", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, 2.2);
+
+      // Scene 2: 3-Tier Architecture Cards (2.5s - 5.8s)
+      tl.to("#scene-2", { opacity: 1, duration: 0.1 }, 2.5)
+        .to("#card-client", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.5)
+        .to("#card-app", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.7)
+        .to("#card-db", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.9)
+        .to("#scene-2", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, 5.5);
+
+      // Scene 3: Four Core Invariants (5.8s - 7.8s)
+      tl.to("#scene-3", { opacity: 1, duration: 0.1 }, 5.8)
+        .from("#scene-3 .invariants-title", { opacity: 0, y: 15, duration: 0.4, ease: "power2.out" }, 5.8)
+        .to("#inv-1", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 6.0)
+        .to("#inv-2", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 6.1)
+        .to("#inv-3", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 6.2)
+        .to("#inv-4", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 6.3)
+        .to("#scene-3", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, 7.5);
+
+      // Scene 4: Outro (7.8s - 9.0s)
+      tl.to("#scene-4", { opacity: 1, duration: 0.5, ease: "power2.out" }, 7.8)
+        .from("#scene-4 .hero-title", { y: 20, opacity: 0, duration: 0.5, ease: "power3.out" }, 7.8)
+        .from("#scene-4 .hero-desc", { y: 15, opacity: 0, duration: 0.5, ease: "power3.out" }, 8.0)
+        .from("#scene-4 .outro-link", { y: 10, opacity: 0, duration: 0.4, ease: "power3.out" }, 8.2);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

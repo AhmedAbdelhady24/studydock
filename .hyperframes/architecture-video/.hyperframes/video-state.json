@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "historyId": "05b9f8bf-c6a0-4d7c-88d4-95a9816d2888",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "assets/icon.svg": {
+      "hash": "da1dcd419269ad64b636c8ed64ea0623fef36735f3def42948e297a755589113",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/05b9f8bf-c6a0-4d7c-88d4-95a9816d2888/blobs/da/da1dcd419269ad64b636c8ed64ea0623fef36735f3def42948e297a755589113"
+    },
+    "index.html": {
+      "hash": "57cf938b9f6dab164e7701087fe3cc36dd691fa6642bdfd4e8d825d57344238d",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/05b9f8bf-c6a0-4d7c-88d4-95a9816d2888/blobs/57/57cf938b9f6dab164e7701087fe3cc36dd691fa6642bdfd4e8d825d57344238d"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "renders": {
+    "latest": {
+      "id": "74207190-bd8e-4766-98e0-87713d1e845e",
+      "completedAt": 1792323270037,
+      "output": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/assets/studydock-architecture.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
+}

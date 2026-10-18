@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "StudyDock Local-First System Architecture",
+    "subtitle": "High-Performance Learning Workbench, Reactive UI & Isolated Persistence",
+    "output": ".archify/architecture-studydock-20261018-143000/studydock-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "Web Client UI",
+      "sublabel": "Next.js 14 / React 18",
+      "tag": "127.0.0.1:3000",
+      "pos": [40, 90],
+      "size": [150, 64]
+    },
+    {
+      "id": "motion",
+      "type": "frontend",
+      "label": "Tactile Motion Engine",
+      "sublabel": "Emil Kowalski / Sonner",
+      "tag": "60fps Compositor",
+      "pos": [40, 210],
+      "size": [150, 64]
+    },
+    {
+      "id": "airgap",
+      "type": "security",
+      "label": "Zero-Telemetry Guard",
+      "sublabel": "Air-Gapped Localhost",
+      "tag": "100% Offline",
+      "pos": [40, 330],
+      "size": [150, 64]
+    },
+    {
+      "id": "router",
+      "type": "backend",
+      "label": "App Router & APIs",
+      "sublabel": "Server Actions & Handlers",
+      "tag": "Node 20 Runtime",
+      "pos": [280, 90],
+      "size": [160, 64]
+    },
+    {
+      "id": "metrics",
+      "type": "backend",
+      "label": "Metrics & Gatekeeper",
+      "sublabel": "Hour Telemetry & Exit Gates",
+      "tag": "Honest Accounting",
+      "pos": [280, 210],
+      "size": [160, 64]
+    },
+    {
+      "id": "csv_engine",
+      "type": "backend",
+      "label": "Curriculum Studio",
+      "sublabel": "CSV Parser & Diff Ingest",
+      "tag": "OWASP Sanitized",
+      "pos": [280, 330],
+      "size": [160, 64]
+    },
+    {
+      "id": "drizzle",
+      "type": "backend",
+      "label": "Drizzle ORM 0.39",
+      "sublabel": "Type-Safe Relational Layer",
+      "tag": "Zero Schema Drift",
+      "pos": [540, 150],
+      "size": [150, 64]
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "PostgreSQL 16",
+      "sublabel": "Relational DB :5432",
+      "tag": "ACID Engine",
+      "pos": [770, 150],
+      "size": [150, 64]
+    },
+    {
+      "id": "docker_vol",
+      "type": "database",
+      "label": "Docker Volume",
+      "sublabel": "Named Local Storage",
+      "tag": "studydock_postgres_data",
+      "pos": [770, 290],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Host Environment (127.0.0.1:3000)",
+      "wraps": ["browser", "motion", "airgap", "router", "metrics", "csv_engine", "drizzle"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Isolated Docker Network (Local Bridge)",
+      "wraps": ["postgres", "docker_vol"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-to-router",
+      "from": "browser",
+      "to": "router",
+      "label": "HTTP Actions",
+      "variant": "emphasis"
+    },
+    {
+      "id": "motion-to-browser",
+      "from": "motion",
+      "to": "browser",
+      "label": "UI Touch Events",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "airgap-to-router",
+      "from": "airgap",
+      "to": "router",
+      "label": "Blocks Outbound",
+      "variant": "security"
+    },
+    {
+      "id": "router-to-metrics",
+      "from": "router",
+      "to": "metrics",
+      "label": "Audit Hours",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "router-to-csv",
+      "from": "router",
+      "to": "csv_engine",
+      "label": "Syllabus File",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "router-to-drizzle",
+      "from": "router",
+      "to": "drizzle",
+      "label": "Typed Query",
+      "variant": "emphasis"
+    },
+    {
+      "id": "csv-to-drizzle",
+      "from": "csv_engine",
+      "to": "drizzle",
+      "label": "Batch Upsert",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "drizzle-to-postgres",
+      "from": "drizzle",
+      "to": "postgres",
+      "label": "SQL :5432",
+      "variant": "emphasis"
+    },
+    {
+      "id": "postgres-to-volume",
+      "from": "postgres",
+      "to": "docker_vol",
+      "label": "WAL Flush",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Client Tier",
+      "items": [
+        "Next.js 14 App Router with React 18 Server Components",
+        "Emil Kowalski tactile physics (:active scale 0.97, cubic-bezier easing)",
+        "Zero-layout-shift Sonner toast notification bus"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Application Tier",
+      "items": [
+        "Deterministic CSV diff engine with immutable task IDs",
+        "OWASP spreadsheet formula injection defense (=, +, -, @ escaping)",
+        "Honest study hours telemetry calculated exclusively from authenticated session logs"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Persistence & Privacy",
+      "items": [
+        "PostgreSQL 16 isolated in local Docker container with volume persistence",
+        "Drizzle ORM type-safe relational schemas with zero runtime drift",
+        "Air-gapped 100% zero outbound telemetry guarantee"
+      ]
+    }
+  ]
+}
