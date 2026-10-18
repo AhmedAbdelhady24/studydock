@@ -149,25 +149,23 @@ export function AppShell({ children }: AppShellProps) {
       >
         <div className="space-y-7 w-full">
           {/* Brand Logo Header */}
-          <div className="flex items-center gap-3">
+          <div className="relative flex items-center group w-full">
             <Link
               href="/"
               className={cn(
-                "flex items-center gap-3 group",
+                "flex items-center gap-3",
                 isCollapsed && "justify-center w-full"
               )}
-              title="StudyDock Dashboard"
             >
               <div className="w-9 h-9 rounded-xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-zinc-900 font-bold border border-zinc-800 dark:border-zinc-200 shadow-xs group-hover:scale-105 transition-transform duration-200 shrink-0">
                 <BookOpen className="w-4 h-4 stroke-[2.2]" />
               </div>
               {!isCollapsed && (
                 <div className="overflow-hidden">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center">
                     <span className="text-base font-bold tracking-tight text-zinc-900 dark:text-white truncate">
                       StudyDock
                     </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                   </div>
                   <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block tracking-wide truncate">
                     Product Engineer 33w
@@ -175,6 +173,12 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
               )}
             </Link>
+            {isCollapsed && (
+              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
+                <span>StudyDock</span>
+              </div>
+            )}
           </div>
 
           {/* Navigation Menu */}
@@ -186,33 +190,38 @@ export function AppShell({ children }: AppShellProps) {
                 : pathname.startsWith(item.href);
 
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  title={isCollapsed ? item.label : undefined}
-                  className={cn(
-                    "flex items-center rounded-xl text-xs font-medium transition-colors duration-150 group",
-                    isCollapsed
-                      ? "justify-center w-9 h-9 mx-auto"
-                      : "gap-3 px-3.5 py-2.5 w-full",
-                    isActive
-                      ? "bg-zinc-100 dark:bg-zinc-800/90 text-zinc-950 dark:text-white font-semibold border border-zinc-200/90 dark:border-zinc-700/80 shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
-                  )}
-                >
-                  <Icon
+                <div key={item.href} className="relative flex items-center group w-full">
+                  <Link
+                    href={item.href}
                     className={cn(
-                      "w-4 h-4 shrink-0 transition-colors",
+                      "flex items-center rounded-xl text-xs font-medium transition-colors duration-150 relative",
+                      isCollapsed
+                        ? "justify-center w-9 h-9 mx-auto"
+                        : "gap-3 px-3.5 py-2.5 w-full",
                       isActive
-                        ? "text-zinc-900 dark:text-white"
-                        : "text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-white"
+                        ? "bg-zinc-100 dark:bg-zinc-800/90 text-zinc-950 dark:text-white font-semibold border border-zinc-200/90 dark:border-zinc-700/80 shadow-xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
                     )}
-                  />
-                  {!isCollapsed && <span className="flex-1 truncate text-left">{item.label}</span>}
-                  {!isCollapsed && isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  >
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 shrink-0 transition-colors",
+                        isActive
+                          ? "text-zinc-900 dark:text-white"
+                          : "text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-white"
+                      )}
+                    />
+                    {!isCollapsed && <span className="flex-1 truncate text-left">{item.label}</span>}
+                  </Link>
+
+                  {/* Custom On-Hover Tooltip when Collapsed */}
+                  {isCollapsed && (
+                    <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+                      <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
+                      <span>{item.label}</span>
+                    </div>
                   )}
-                </Link>
+                </div>
               );
             })}
           </nav>
@@ -245,13 +254,18 @@ export function AppShell({ children }: AppShellProps) {
               </div>
             </div>
           ) : (
-            <Link
-              href="/sessions"
-              className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-sm mx-auto"
-              title="Focus Study Timer"
-            >
-              <Clock className="w-4 h-4 stroke-[2]" />
-            </Link>
+            <div className="relative flex items-center group mx-auto w-full justify-center">
+              <Link
+                href="/sessions"
+                className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-sm mx-auto"
+              >
+                <Clock className="w-4 h-4 stroke-[2]" />
+              </Link>
+              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
+                <span>Focus Study Timer</span>
+              </div>
+            </div>
           )}
 
           {/* Bottom Collapse / Expand Button */}
@@ -267,16 +281,19 @@ export function AppShell({ children }: AppShellProps) {
               <PanelLeftClose className="w-4 h-4 text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors shrink-0" />
             </button>
           ) : (
-            <div className="flex justify-center w-full">
+            <div className="relative flex items-center group mx-auto w-full justify-center">
               <button
                 type="button"
                 onClick={toggleCollapsed}
                 className="w-9 h-9 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-center transition-colors cursor-pointer"
-                title="Expand sidebar"
                 aria-label="Expand sidebar"
               >
                 <PanelLeft className="w-4 h-4" />
               </button>
+              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
+                <span>Expand sidebar</span>
+              </div>
             </div>
           )}
         </div>
