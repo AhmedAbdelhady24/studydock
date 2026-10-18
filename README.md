@@ -1,208 +1,276 @@
-# StudyDock ⚓
+<h3 align="center">
+  <img src="public/icon.svg" alt="StudyDock" width="96"><br>
+  StudyDock<br>
+  <sub>Local-First Engineering Tracker & Curriculum Studio</sub>
+</h3>
 
-> A local-first, privacy-respecting, single-user learning management dashboard backed by PostgreSQL. Designed for intensive software engineering roadmaps with strict progress preservation and auditable progress accounting.
+<p align="center">
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14.2%20App%20Router-black?logo=next.js&logoColor=white" alt="Next.js"></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-Strict%205.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="https://orm.drizzle.team"><img src="https://img.shields.io/badge/ORM-Drizzle%200.39-C5F74F?logo=drizzle&logoColor=black" alt="Drizzle ORM"></a>
+  <a href="https://www.postgresql.org"><img src="https://img.shields.io/badge/Database-PostgreSQL%2016-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL"></a>
+  <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-12%2F12%20Passing-6E9F18?logo=vitest&logoColor=white" alt="Vitest"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-34A853" alt="License"></a>
+  <img src="https://img.shields.io/badge/Telemetry-Zero%20(Local%20Only)-blueviolet" alt="Zero Telemetry">
+</p>
 
-![StudyDock Architecture](https://img.shields.io/badge/Architecture-Local--First%20%7C%20PostgreSQL-blue)
-![Next.js](https://img.shields.io/badge/Next.js-14.2%20App%20Router-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
-![Drizzle ORM](https://img.shields.io/badge/ORM-Drizzle%200.39-yellow)
-![Docker](https://img.shields.io/badge/Docker-Compose%20Ready-2496ED)
-![Tests](https://img.shields.io/badge/Tests-Vitest%2012%2F12%20Passing-emerald)
+<p align="center">
+  <a href="screenshots/01_today.png">
+    <img src="screenshots/01_today.png" alt="StudyDock Today View: active focus week, interactive workbench, task detail drawer, and study stopwatch" width="100%">
+  </a>
+</p>
 
----
+A **learning harness** is the deliberate system around an engineer that converts ambitious study intent into sustained, auditable technical mastery: structured roadmaps, spaced retrieval cadences, honest exit gates, session telemetry, and immutable progress accounting. **StudyDock** is an open, local-first workbench engineered to harness intensive software engineering curricula without cloud lock-in, data leaks, or gamified vanity metrics.
 
-## 🌟 Core Design Principles & Invariants
+StudyDock couples two interconnected loops while preserving complete ownership of your learning data:
 
-1. **Local-First & Single-User Privacy**:
-   - Web application is strictly bound to `127.0.0.1:3000`.
-   - PostgreSQL runs in an isolated container bound only to localhost with named volume persistence (`studydock_postgres_data`).
-   - Zero external telemetry, tracking, or cloud dependencies.
+* **Execution-level loop**: Drives daily deliberate practice through a 60fps optimistic Kanban board, an integrated digital focus stopwatch, categorized algorithmic drill tracking (DSA), and mandatory exit checkpoint attestations before advancing.
+* **Curriculum-level loop**: Manages long-horizon engineering roadmaps with deterministic CSV diffing, non-destructive re-imports via immutable task IDs (`w01_t01` through `w33_t07`), formula-injection defense, and complete SQL snapshot backups.
 
-2. **Deterministic Progress Preservation**:
-   - Re-importing revised learning plans matches tasks by immutable IDs (`w01_t01` through `w33_t07`).
-   - Re-imports **never** overwrite completed checkboxes, confidence ratings, notes, DSA attempt logs, or study sessions.
-   - Tasks removed from an upstream roadmap are safely archived (`archived_at = NOW()`), not deleted.
+<p align="center">
+  <a href="screenshots/02_roadmap.png">
+    <img src="screenshots/02_roadmap.png" alt="StudyDock Roadmap Pipeline. Multi-phase structured engineering progression with phase milestones, week-by-week checkpoints, and live completion analytics." width="100%">
+  </a>
+</p>
 
-3. **Honest, Un-Gamified Metrics**:
-   - A week is only counted as complete when **all active required tasks are done AND the Exit Checkpoint has been attested as passed**.
-   - Total hours studied derive purely from real, logged study sessions—never from static planned targets.
+Across intensive multi-month engineering curricula, StudyDock enforces strict operational invariants: **zero telemetry** outbound calls, **0ms remote lag** via direct local PostgreSQL transactions, **formula-sanitized exports** conforming to OWASP spreadsheet standards, and an **adversarial Break-UI testing harness** ensuring resilient layout integrity against worst-case data.
 
-4. **Spreadsheet Formula Defense**:
-   - All CSV exports sanitize potential command and formula characters (`=`, `+`, `-`, `@`, `\t`, `\r`) with single-quote escaping to prevent formula injection when opened in Excel or Google Sheets.
+The system natively supports **Docker Compose and standalone host execution**, **collapsible responsive navigation**, **dark and light themes**, **Sonner toast pipelines**, and **Fallow codebase intelligence**.
 
----
+## Visual overview
 
-## 🏗️ Architecture & Tech Stack
+<p align="center">
+  <a href="screenshots/01_today_drawer.png"><img src="screenshots/01_today_drawer.png" width="48%" alt="Task Detail Slide-Over Drawer"></a>
+  <a href="screenshots/07_analytics.png"><img src="screenshots/07_analytics.png" width="48%" alt="Analytics & Hours Telemetry"></a>
+</p>
+<p align="center">
+  <a href="screenshots/05_dsa.png"><img src="screenshots/05_dsa.png" width="48%" alt="DSA Algorithmic Drill Tracker"></a>
+  <a href="screenshots/08_import.png"><img src="screenshots/08_import.png" width="48%" alt="Curriculum Import & Diff Preview Studio"></a>
+</p>
 
-- **Framework**: Next.js 14 (App Router, Server Actions, Route Handlers)
-- **Language**: TypeScript (Strict mode enabled, zero `any` in core domain)
-- **Database & Migration**: PostgreSQL 16+ via Docker Compose, Drizzle ORM, `drizzle-kit`
-- **Data Validation**: Zod schema validation & `csv-parse`/`csv-stringify`
-- **Styling & UI**: Tailwind CSS, Radix UI primitives, Lucide icons, Dark-first engineering theme
-- **Visualizations**: Recharts
-- **Testing**: Vitest unit & integration test suite
+## Contents
 
----
+- [Visual overview](#visual-overview)
+- [System components](#system-components)
+- [Empirical invariants](#empirical-invariants)
+- [Install & quickstart](#install--quickstart)
+- [Operational workflow](#operational-workflow)
+- [Experiments & adversarial stress-testing](#experiments--adversarial-stress-testing)
+- [Local-first privacy & zero telemetry](#local-first-privacy--zero-telemetry)
+- [Database schema & persistence](#database-schema--persistence)
+- [Design engineering & tactile standards](#design-engineering--tactile-standards)
+- [Verification & code quality](#verification--code-quality)
+- [Contributing](#contributing)
+- [License](#license)
+- [Disclaimer](#disclaimer)
 
-## 🚀 Quickstart
+## System components
 
-### Option A: Complete Docker Compose (Recommended)
+StudyDock exposes eight modular subsystems engineered around the learner: **curriculum engine, workbench & kanban, focus timer telemetry, DSA drill tracker, persistence layer, tactile interaction system, toast notification bus, and the break-ui stress harness**. They govern roadmap lifecycle, state transitions, time verification, and visual resilience.
 
-To run the complete application and database in isolated containers:
+<p align="center">
+  <a href="screenshots/03_week_detail.png">
+    <img src="screenshots/03_week_detail.png" alt="StudyDock Eight System Components: Curriculum Engine, Workbench, Focus Timer, DSA Tracker, Persistence, Tactile System, Toast Bus, Break-UI Harness" width="100%">
+  </a>
+</p>
+
+| Component | Architecture & Purpose | Key Capabilities |
+|---|---|---|
+| **1. Curriculum Engine** | Multi-phase syllabus parser and milestone coordinator | Dynamic week length parsing, weekly learning objectives, mandatory exit checkpoints, and flexible curriculum templates. |
+| **2. Workbench & Kanban** | 60fps task orchestration surface | Drag-and-drop status lanes (*To Do*, *In Progress*, *Done*), slide-over detail drawer, category tags, and optimistic UI transitions. |
+| **3. Focus Session Telemetry** | Real-time and retroactive time tracking | Digital stopwatch with 1-click recording, manual session audit logs, target vs. actual hours reconciliation. |
+| **4. DSA Drill Tracker** | Deliberate algorithmic practice logger | Pattern tagging (Sliding Window, Two Pointers, DP, Graphs), difficulty metrics, and independent solve rate evaluation. |
+| **5. Persistence & Drizzle Schema** | Relational data layer over PostgreSQL 16 | Type-safe migrations (`drizzle-kit`), relational integrity, immutable task keys, and automated SQL snapshot scripts. |
+| **6. Tactile Interaction System** | Emil Kowalski & Apple WWDC motion standard | `:active { transform: scale(0.97) }`, `cubic-bezier(0.16, 1, 0.3, 1)` easing curves, zero tap-highlight delays, and mobile-native polish. |
+| **7. Toast Notification Bus** | Zero-layout-shift feedback bus via Sonner | Light/dark theme awareness, action confirmations, asynchronous operation status, and non-intrusive error reporting. |
+| **8. Break-UI Adversarial Harness** | Dev-time visual stress-testing switcher | Instant toggle between *Normal*, *Worst-case* (German compounds, 200-char URLs), *1-item count*, and *0-item empty state*. |
+
+## Empirical invariants
+
+StudyDock enforces four non-negotiable engineering invariants:
+
+1. **Deterministic Progress Preservation**:
+   - Re-importing a revised syllabus matches tasks by immutable IDs (`w01_t01` through `w33_t07`).
+   - Re-imports **never** overwrite completed checkboxes, confidence ratings, notes, DSA attempt records, or study sessions.
+   - Tasks deleted from an upstream file are marked as safely archived (`archived_at = NOW()`), never hard-deleted.
+2. **Honest, Un-Gamified Metrics**:
+   - A week is only certified as complete when **all active required tasks are done AND the Exit Checkpoint has been attested as passed**.
+   - Total study hours derive strictly from authenticated session logs—never from static planned estimations.
+3. **Spreadsheet Formula Defense**:
+   - All CSV exports sanitize potential command execution and formula prefixes (`=`, `+`, `-`, `@`, `\t`, `\r`) with single-quote escaping to prevent remote code execution or formula injection in Excel, Numbers, and Google Sheets.
+4. **Local-First Boundary**:
+   - The web server binds strictly to `127.0.0.1:3000`.
+   - PostgreSQL binds exclusively to localhost with persistent Docker volume storage (`studydock_postgres_data`).
+   - Zero analytics pixels, external web fonts, CDN dependencies, or cloud sync daemons.
+
+## Install & quickstart
+
+Use **macOS, Linux, or WSL2 with Node.js 20+, pnpm 9+, and Docker**.
+
+### Option A: Complete Docker Compose (Fastest)
+
+Launch both the Next.js web application and isolated PostgreSQL database:
 
 ```bash
-# 1. Start database and web application
+# Clone the repository
+git clone https://github.com/your-username/studydock.git
+cd studydock
+
+# Build and start all services in detached mode
 docker compose up --build -d
 
-# 2. Check container status
+# Verify running health
 docker compose ps
 
-# 3. Open your browser
+# Open in browser
 open http://127.0.0.1:3000
 ```
 
-### Option B: Local Node.js Development
+### Option B: Local Host Development (Recommended for Development)
 
-If you prefer running Next.js directly on your host while running PostgreSQL in Docker:
+Run the Next.js app natively with hot reloading while keeping PostgreSQL containerized:
 
 ```bash
-# 1. Start the PostgreSQL container only
+# 1. Start isolated PostgreSQL database container
 docker compose up -d db
 
 # 2. Install dependencies
 pnpm install
 
-# 3. Run database migrations
+# 3. Apply Drizzle database migrations
 pnpm db:migrate
 
-# 4. Seed initial 33-week roadmap and course targets
+# 4. Seed initial roadmap and course targets
 pnpm db:seed
 
-# 5. Start the development server
+# 5. Start development server
 pnpm dev
 ```
 
 Visit [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
----
+## Operational workflow
 
-## 📋 Features Overview
-
-### 1. Today View (`/`)
-- Active focus week in flight with live task checklist.
-- Key KPI cards: Overall completion %, Weeks completed / 33, Actual hours studied, DSA problems solved.
-- Interactive Study Stopwatch timer with 1-click recording.
-- Exit criteria gatekeeper with attestation review.
-
-### 2. 33-Week Roadmap (`/roadmap`)
-- Complete 33 weeks structured across 4 distinct phases:
-  - **Phase 1**: Foundations & Systems Core (Weeks 1-8)
-  - **Phase 2**: Distributed Backend & Data Engineering (Weeks 9-16)
-  - **Phase 3**: Advanced Frontend & Micro-Architectures (Weeks 17-24)
-  - **Phase 4**: Capstone, Production Mastery & System Design (Weeks 25-33)
-- Quick status filters: *All (33)*, *Active*, *Completed*, *Remaining*.
-
-### 3. Week Detail (`/weeks/[weekId]`)
-- Task checklist grouped by category (*DSA*, *Architecture*, *Independent Coding*, *Course*, *Review*, *Checkpoint*).
-- 1-to-5 star confidence rating per task.
-- Inline notes and evidence links editor.
-- Exit criteria checkpoint gatekeeper.
-
-### 4. Course Curriculum Tracker (`/courses`)
-- 16 foundational courses from `course_targets.csv`.
-- Target coverage range comparison vs actual progress slider.
-- Direct links to course references and learning strategies.
-
-### 5. DSA Tracker (`/dsa`)
-- Log LeetCode / NeetCode problem attempts by algorithmic pattern and difficulty.
-- Track independent solve rate (% solved without editorial assistance).
-- Filter attempts by category.
-
-### 6. Study Sessions Logger (`/sessions`)
-- Real-time digital stopwatch with Start, Pause, and Record.
-- Manual retroactive session logger.
-- Chronological session audit log.
-
-### 7. Analytics Dashboard (`/analytics`)
-- Recharts visualizations: Phase completion bars, weekly target vs actual hours, task category distributions.
-- Progress invariant status overview.
-
-### 8. Import & Export (`/import`)
-- Safe CSV file uploader with schema validation.
-- Interactive diff preview before committing to the database.
-- One-click exports in CSV and JSON formats with formula sanitization.
-
----
-
-## 💾 Database Backup & Restore
-
-### Automated Backup
-Creates a timestamped SQL dump in `./backups/`:
+StudyDock provides a unified set of pnpm scripts for development, data integrity, and backup operations:
 
 ```bash
-pnpm db:backup
-# or directly:
-bash scripts/db-backup.sh
-```
+# Start development server on http://localhost:3000
+pnpm dev
 
-### Restore from Backup
-Restores a previous SQL snapshot:
-
-```bash
-bash scripts/db-restore.sh backups/studydock_backup_20261017_120000.sql
-```
-
----
-
-## 🧪 Testing & Verification
-
-Run the automated test suite:
-
-```bash
-# Run all Vitest tests
+# Execute full Vitest automated test suite (12/12 passing)
 pnpm test
 
-# Run TypeScript typecheck
+# Run Vitest in interactive watch mode
+pnpm test:watch
+
+# Execute Playwright end-to-end integration test suite
+pnpm test:e2e
+
+# Type-check TypeScript codebase without emitting JS
 pnpm typecheck
 
-# Run production build
+# Build optimized production bundle
 pnpm build
+
+# Run automated Fallow codebase intelligence audit
+pnpm run audit
 ```
 
----
+### Database & Backup Operations
 
-## 📂 Project Structure
+| Command | Action | Description |
+|---|---|---|
+| `pnpm db:migrate` | Apply Migrations | Applies pending Drizzle ORM schema migrations against PostgreSQL. |
+| `pnpm db:seed` | Ingest Roadmap Seed | Ingests initial 33-week syllabus (`data/import/plan_import.csv`) and course goals. |
+| `pnpm db:generate` | Generate SQL DDL | Generates fresh Drizzle migration files from `src/db/schema.ts`. |
+| `pnpm db:push` | Direct Push Schema | Synchronizes schema directly with the database in rapid prototyping. |
+| `pnpm db:backup` | Timestamped Dump | Exports an atomic SQL snapshot to `./backups/studydock_backup_<timestamp>.sql`. |
+| `pnpm db:restore` | Database Snapshot Restore | Restores a selected snapshot (e.g. `bash scripts/db-restore.sh backups/<file>.sql`). |
+
+## Experiments & adversarial stress-testing
+
+StudyDock includes a dedicated **Break-UI Adversarial Harness** (`src/components/BreakUIToggle.tsx`) to verify visual resilience under extreme data conditions without corrupting production database tables.
 
 ```
-├── data/
-│   └── import/
-│       ├── plan_import.csv          # 33 weeks • 231 tasks fixture
-│       ├── course_targets.csv       # 16 course goals fixture
-│       └── product-engineer-33-week-import.zip
-├── docs/
-│   ├── adr/
-│   │   └── 001-studydock-architecture.md
-│   └── import-schema.md             # Schema specification v1.0
-├── scripts/
-│   ├── db-backup.sh                 # PostgreSQL backup script
-│   ├── db-restore.sh                # PostgreSQL restore script
-│   ├── markdown_to_csv.py           # Markdown-to-CSV parser
-│   └── seed.ts                      # CLI database seeder
-├── src/
-│   ├── app/                         # Next.js App Router pages & APIs
-│   │   ├── analytics/               # Recharts telemetry
-│   │   ├── api/                     # REST Route Handlers
-│   │   ├── courses/                 # Course tracking
-│   │   ├── dsa/                     # DSA tracker
-│   │   ├── import/                  # Import/export dashboard
-│   │   ├── roadmap/                 # 33-week phase roadmap
-│   │   ├── sessions/                # Study sessions log
-│   │   └── weeks/[weekId]/          # Week detail view
-│   ├── components/                  # UI components (Navbar, TaskItem, Timer, etc.)
-│   ├── db/                          # Drizzle schema & PostgreSQL client
-│   └── lib/                         # CSV parser, importer, exporter, metrics engine
-├── tests/                           # Vitest test suite
-├── Dockerfile                       # Multi-stage production container
-├── docker-compose.yaml              # Local-first container orchestration
-└── tailwind.config.ts               # Theme & styles configuration
+┌────────────────────────────────────────────────────────────────────────┐
+│ [Break-UI Mode]  ● Normal   ○ Worst Case   ○ 1 Item   ○ 0 Items (Empty)│
+└────────────────────────────────────────────────────────────────────────┘
 ```
+
+The harness tests four deterministic states:
+
+* **Normal**: Standard curriculum data with typical word lengths and card densities.
+* **Worst-Case**: Stresses flexbox and CSS grid with German compound nouns (`Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft`), unbroken 250-character URLs, extreme numeric counts, and Unicode emoji clusters.
+* **1-Item**: Verifies that layout containers do not stretch awkwardly when only a single record exists.
+* **0-Items (Empty)**: Verifies that empty state illustrations, instructions, and CTA actions render cleanly without layout collapse.
+
+Activate the toggle in development by clicking the **Break-UI** badge in the global navigation bar.
+
+## Local-first privacy & zero telemetry
+
+StudyDock is intentionally architected to operate **100% offline**:
+
+```
+[User Browser]
+      │  (HTTP / localhost:3000)
+      ▼
+[Next.js App Router (Node 20)]
+      │  (Connection Pool / localhost:5432)
+      ▼
+[PostgreSQL 16 Engine] ───► [Persistent Docker Volume: studydock_postgres_data]
+      │
+      └─── NO OUTBOUND TELEMETRY ───► (Internet Isolated)
+```
+
+- **Zero Cloud Leakage**: No telemetry pings, error reporting beacons, or analytics scripts.
+- **Self-Contained Fonts & Icons**: Lucide icons are bundled locally; Tailwind relies entirely on system font stacks (`-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, `Inter`).
+- **Data Portability**: Full data export available at `/import` in both CSV and JSON formats at any time.
+
+## Database schema & persistence
+
+The relational schema is defined with TypeScript safety in [`src/db/schema.ts`](src/db/schema.ts):
+
+* **`weeks`**: Weekly milestones, phase groupings (Phase 1–4), target study hours, exit checkpoint requirements, and attestation logs.
+* **`tasks`**: Granular learning items tied to immutable task IDs (`w01_t01`), categories (*DSA*, *Architecture*, *Independent Coding*, *Course*, *Review*, *Checkpoint*), status (*to_do*, *in_progress*, *done*), confidence ratings (1–5), notes, and evidence URLs.
+* **`study_sessions`**: Verified time records with start/end timestamps, duration in seconds, task associations, and qualitative notes.
+* **`dsa_attempts`**: Problem-solving logs recording difficulty (*Easy*, *Medium*, *Hard*), algorithmic pattern, independent solve boolean, and review notes.
+* **`course_targets`**: Curriculum course definitions with target week intervals and completion progress.
+
+## Design engineering & tactile standards
+
+StudyDock adheres to Emil Kowalski design engineering principles and Apple WWDC fluid interface standards:
+
+* **Tactile Press States**: Interactive elements feature micro-spring active feedback (`:active { transform: scale(0.97); }`).
+* **Calibrated Easing**: Motion uses hardware-accelerated cubic-bezier curves (`cubic-bezier(0.16, 1, 0.3, 1)`) with durations capped at 200ms to eliminate perceptible input lag.
+* **Mobile-Native Touch**: Touch targets observe `@media (hover: hover)` guards, `-webkit-tap-highlight-color: transparent`, and viewport height stability using `100dvh`.
+* **Adaptive Theme Engine**: Synchronized light and dark themes using semantic CSS variables, zero-flash SSR hydration, and subtle semi-transparent border rings.
+
+## Verification & code quality
+
+Every release is validated against automated testing suites and static code intelligence:
+
+```bash
+# Run unit & integration test suite
+pnpm test
+
+# Output:
+# ✓ tests/metrics.test.ts (3 tests)
+# ✓ tests/csv-parser.test.ts (7 tests)
+# ✓ tests/exporter.test.ts (2 tests)
+# Test Files  3 passed (3)
+# Tests       12 passed (12)
+```
+
+The codebase is audited using **Fallow** (`pnpm run audit`) to eliminate circular dependencies, identify unused exports, and enforce architectural boundary layers between the presentation tier and persistence logic.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local branch workflows, commit message conventions, and testing guidelines.
+
+## License
+
+StudyDock is licensed under the [MIT License](LICENSE).
+
+## Disclaimer
+
+StudyDock is an independent, local-first open-source productivity workbench designed for individual self-directed study and deliberate software engineering practice. It is not affiliated with any third-party bootcamps or educational corporations.
