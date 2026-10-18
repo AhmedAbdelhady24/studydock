@@ -28,3 +28,4 @@ Thumbs.db
 # HyperFrames build artifacts
 **/.hyperframes/artifacts/
 **/.hyperframes/*-lock/
+.impeccable/config.local.json
