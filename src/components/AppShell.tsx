@@ -143,7 +143,7 @@ export function AppShell({ children }: AppShellProps) {
       {/* ========================================================= */}
       <aside
         className={cn(
-          "hidden lg:flex flex-col justify-between p-5 border-r border-black/[0.06] dark:border-white/[0.06] bg-[#FBFBFC] dark:bg-[#111215]/95 shrink-0 select-none transition-[width] duration-200 ease-out relative h-screen sticky top-0",
+          "hidden lg:flex flex-col justify-between p-5 border-r border-black/[0.06] dark:border-white/[0.06] bg-[#FBFBFC] dark:bg-[#111215]/95 shrink-0 select-none transition-[width] duration-200 ease-out relative h-screen sticky top-0 z-40",
           isCollapsed ? "w-20 items-center" : "w-64 xl:w-72"
         )}
       >
@@ -174,7 +174,7 @@ export function AppShell({ children }: AppShellProps) {
               )}
             </Link>
             {isCollapsed && (
-              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+              <div className="absolute left-[60px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
                 <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
                 <span>StudyDock</span>
               </div>
@@ -216,7 +216,7 @@ export function AppShell({ children }: AppShellProps) {
 
                   {/* Custom On-Hover Tooltip when Collapsed */}
                   {isCollapsed && (
-                    <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+                    <div className="absolute left-[60px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
                       <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
                       <span>{item.label}</span>
                     </div>
@@ -261,7 +261,7 @@ export function AppShell({ children }: AppShellProps) {
               >
                 <Clock className="w-4 h-4 stroke-[2]" />
               </Link>
-              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+              <div className="absolute left-[60px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
                 <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
                 <span>Focus Study Timer</span>
               </div>
@@ -290,7 +290,7 @@ export function AppShell({ children }: AppShellProps) {
               >
                 <PanelLeft className="w-4 h-4" />
               </button>
-              <div className="absolute left-[56px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
+              <div className="absolute left-[60px] top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-150 z-50 flex items-center">
                 <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-zinc-900 dark:border-r-zinc-100" />
                 <span>Expand sidebar</span>
               </div>
@@ -305,7 +305,7 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-white dark:bg-[#131418] transition-colors duration-200">
         
         {/* Top Navigation & Global Header */}
-        <header className="px-5 sm:px-8 lg:px-10 py-4 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between gap-4 bg-white/80 dark:bg-[#131418]/80 backdrop-blur-md sticky top-0 z-40">
+        <header className="px-5 sm:px-8 lg:px-10 py-4 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between gap-4 bg-white/80 dark:bg-[#131418]/80 backdrop-blur-md sticky top-0 z-30">
           {/* Mobile Menu Button + Brand on Small Screens */}
           <div className="flex items-center gap-3 lg:hidden">
             <button
