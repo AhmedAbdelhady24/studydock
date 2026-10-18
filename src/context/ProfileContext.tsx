@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export interface UserProfileData {
+interface UserProfileData {
   name: string;
   title: string;
   avatarInitials: string;

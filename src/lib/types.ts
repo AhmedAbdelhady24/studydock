@@ -19,20 +19,9 @@ export const TASK_CATEGORIES: TaskCategory[] = [
 
 export type TaskStatus = "not_started" | "in_progress" | "done" | "blocked";
 
-export const TASK_STATUSES: TaskStatus[] = [
-  "not_started",
-  "in_progress",
-  "done",
-  "blocked",
-];
-
 export type CoverageKind = "percentage" | "count" | "text";
 
 export const COVERAGE_KINDS: CoverageKind[] = ["percentage", "count", "text"];
-
-export type DsaDifficulty = "easy" | "medium" | "hard";
-
-export const DSA_DIFFICULTIES: DsaDifficulty[] = ["easy", "medium", "hard"];
 
 export interface PlanRow {
   plan_slug: string;

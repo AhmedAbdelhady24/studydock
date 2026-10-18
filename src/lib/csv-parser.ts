@@ -2,7 +2,7 @@ import { parse } from "csv-parse/sync";
 import { PlanImportRowSchema, CourseTargetRowSchema } from "./csv-schema";
 import { PlanRow, CourseTargetRow, ValidationError } from "./types";
 
-export const REQUIRED_PLAN_HEADERS = [
+const REQUIRED_PLAN_HEADERS = [
   "plan_slug",
   "week_id",
   "week_number",
@@ -24,7 +24,7 @@ export const REQUIRED_PLAN_HEADERS = [
   "initial_checked",
 ];
 
-export const REQUIRED_COURSE_HEADERS = [
+const REQUIRED_COURSE_HEADERS = [
   "plan_slug",
   "course_id",
   "course_title",

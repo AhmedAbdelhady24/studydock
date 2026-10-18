@@ -27,7 +27,7 @@ export function sanitizeCsvField(value: any): string {
   return str;
 }
 
-export async function exportPlanAsCsv(planSlug?: string): Promise<string> {
+async function getActivePlan(planSlug?: string) {
   const plan = await db.query.plans.findFirst({
     where: planSlug ? eq(plans.slug, planSlug) : isNull(plans.archivedAt),
   });
@@ -35,6 +35,12 @@ export async function exportPlanAsCsv(planSlug?: string): Promise<string> {
   if (!plan) {
     throw new Error("No active plan found to export.");
   }
+
+  return plan;
+}
+
+export async function exportPlanAsCsv(planSlug?: string): Promise<string> {
+  const plan = await getActivePlan(planSlug);
 
   const dbWeeks = await db.query.weeks.findMany({
     where: eq(weeks.planId, plan.id),
@@ -105,13 +111,7 @@ export async function exportPlanAsCsv(planSlug?: string): Promise<string> {
 }
 
 export async function exportCoursesAsCsv(planSlug?: string): Promise<string> {
-  const plan = await db.query.plans.findFirst({
-    where: planSlug ? eq(plans.slug, planSlug) : isNull(plans.archivedAt),
-  });
-
-  if (!plan) {
-    throw new Error("No active plan found to export.");
-  }
+  const plan = await getActivePlan(planSlug);
 
   const dbCourses = await db.query.courses.findMany({
     where: eq(courses.planId, plan.id),
@@ -148,13 +148,7 @@ export async function exportCoursesAsCsv(planSlug?: string): Promise<string> {
 }
 
 export async function exportFullPlanAsJson(planSlug?: string) {
-  const plan = await db.query.plans.findFirst({
-    where: planSlug ? eq(plans.slug, planSlug) : isNull(plans.archivedAt),
-  });
-
-  if (!plan) {
-    throw new Error("No active plan found to export.");
-  }
+  const plan = await getActivePlan(planSlug);
 
   const [
     dbPhases,

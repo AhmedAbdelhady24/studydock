@@ -10,14 +10,13 @@ const connectionString =
   "postgresql://studydock:studydock_password@localhost:5433/studydock";
 
 // For queries, disable prefetch and configure pool
-export const client = postgres(connectionString, {
+const client = postgres(connectionString, {
   max: 10,
   idle_timeout: 20,
   connect_timeout: 10,
 });
 
 export const db = drizzle(client, { schema });
-export type Database = typeof db;
 
 export async function closeConnection() {
   await client.end();

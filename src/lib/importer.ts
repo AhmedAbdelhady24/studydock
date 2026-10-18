@@ -74,6 +74,25 @@ export async function computeImportPreview(
   };
 }
 
+async function ensureTaskProgress(
+  tx: any,
+  taskId: string,
+  status: "not_started" | "done" = "not_started",
+  completedAt: Date | null = null
+) {
+  const existingProgress = await tx.query.taskProgress.findFirst({
+    where: eq(taskProgress.taskId, taskId),
+  });
+
+  if (!existingProgress) {
+    await tx.insert(taskProgress).values({
+      taskId,
+      status,
+      completedAt,
+    });
+  }
+}
+
 export async function executePlanImport(
   planRows: PlanRow[],
   courseRows: CourseTargetRow[],
@@ -239,17 +258,12 @@ export async function executePlanImport(
         });
 
         // Initialize progress for new task (only applies initial_checked once)
-        const existingProgress = await tx.query.taskProgress.findFirst({
-          where: eq(taskProgress.taskId, row.task_id),
-        });
-
-        if (!existingProgress) {
-          await tx.insert(taskProgress).values({
-            taskId: row.task_id,
-            status: row.initial_checked ? "done" : "not_started",
-            completedAt: row.initial_checked ? new Date() : null,
-          });
-        }
+        await ensureTaskProgress(
+          tx,
+          row.task_id,
+          row.initial_checked ? "done" : "not_started",
+          row.initial_checked ? new Date() : null
+        );
       } else {
         // Update task definition metadata; PRESERVE taskProgress untouched!
         await tx
@@ -267,16 +281,7 @@ export async function executePlanImport(
           .where(eq(tasks.id, existingTask.id));
 
         // Ensure progress record exists without overwriting current progress
-        const existingProgress = await tx.query.taskProgress.findFirst({
-          where: eq(taskProgress.taskId, row.task_id),
-        });
-
-        if (!existingProgress) {
-          await tx.insert(taskProgress).values({
-            taskId: row.task_id,
-            status: "not_started",
-          });
-        }
+        await ensureTaskProgress(tx, row.task_id, "not_started");
       }
     }
 

@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useProfile } from "@/context/ProfileContext";
 
-export interface NotificationItem {
+interface NotificationItem {
   id: string;
   title: string;
   message: string;
