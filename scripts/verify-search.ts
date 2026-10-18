@@ -18,6 +18,12 @@ async function main() {
   await searchInput.waitFor({ state: "visible", timeout: 5000 });
   console.log("✓ Search input is visible on desktop");
 
+  // Capture search bar alone before opening to inspect placeholder and alignment
+  const searchBarContainer = page.locator('div:has(> input[placeholder*="Search topics"])').first();
+  const searchInputPillPath = path.join(ARTIFACT_DIR, "search_input_pill.png");
+  await searchBarContainer.screenshot({ path: searchInputPillPath });
+  console.log("✓ Saved search input pill screenshot:", searchInputPillPath);
+
   // 2. Click search input to open suggestions
   await searchInput.click();
   await page.waitForTimeout(400);
