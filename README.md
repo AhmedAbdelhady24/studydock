@@ -15,9 +15,12 @@
 </p>
 
 <p align="center">
-  <a href="#install--quickstart">
-    <img src="assets/studydock-setup-and-demo.gif" alt="Install, launch database, seed 33-week syllabus, and run StudyDock: docker compose up -d db, pnpm db:migrate && pnpm db:seed, then pnpm dev. Click for quickstart." width="720">
+  <a href="assets/showreel-motion.mp4">
+    <img src="assets/showreel-motion.gif" alt="StudyDock 15-second Product Motion Film: Bento Dashboard, Curriculum Roadmap, Attestation Gatekeeper, and 60fps Kanban Board" width="840">
   </a>
+</p>
+<p align="center">
+  <em>15-Second Product Motion Film (Synthesized Electronic Soundtrack & Light Architecture) · <a href="assets/showreel-motion.mp4">Watch High-Res MP4</a></em>
 </p>
 
 A **learning harness** is the deliberate system around an engineer that converts ambitious study intent into sustained, auditable technical mastery: structured roadmaps, spaced retrieval cadences, honest exit gates, session telemetry, and immutable progress accounting. **StudyDock** is an open, local-first workbench engineered to harness intensive software engineering curricula without cloud lock-in, data leaks, or gamified vanity metrics.
@@ -39,9 +42,9 @@ The system natively supports **Docker Compose and standalone host execution**, *
 
 ## Video overview & architecture
 
-* **Product Motion Film**: [Watch / Download MP4 (15.0s, 1080p Master)](assets/showreel-motion.mp4) · [Preview GIF](assets/showreel-motion.gif)
+* **Product Motion Film**: [Watch / Download MP4 (15.0s, 720p 30fps Master)](assets/showreel-motion.mp4) · [Preview GIF](assets/showreel-motion.gif) · [Interactive Composition](videos/showreel-motion/index.html)
 * **Interactive Architecture Diagram**: [Explore live interactive HTML/SVG diagram](public/docs/studydock-architecture.html)
-* **Product Setup & Demo Walkthrough**: [Watch / Download MP4 (10.0s)](assets/studydock-demo.mp4)
+* **Product Setup & Demo Walkthrough**: [Watch / Download MP4 (10.0s)](assets/studydock-demo.mp4) · [Setup GIF](assets/studydock-setup-and-demo.gif)
 * **System Architecture Walkthrough**: [Watch / Download MP4 (9.0s)](assets/studydock-architecture.mp4)
 
 <p align="center">
@@ -128,8 +131,8 @@ Launch both the Next.js web application and isolated PostgreSQL database:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/studydock.git
-cd studydock
+git clone https://github.com/AhmedAbdelHady24/Learning-Tracker.git
+cd Learning-Tracker
 
 # Build and start all services in detached mode
 docker compose up --build -d
