@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
 import { useProfile } from "@/context/ProfileContext";
 import { NotificationDropdown } from "@/components/NotificationDropdown";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -50,7 +51,6 @@ export function AppShell({ children }: AppShellProps) {
   const { profile } = useProfile();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Read saved collapsed state
@@ -349,17 +349,8 @@ export function AppShell({ children }: AppShellProps) {
 
           {/* Top Right: Search Pill & Theme Toggle & Profile Greeting */}
           <div className="flex items-center gap-3 ml-auto">
-            {/* Search Bar Pill */}
-            <div className="relative hidden md:block">
-              <Search className="w-4 h-4 text-zinc-400 dark:text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search topics or concepts..."
-                className="w-48 xl:w-60 pl-9 pr-4 py-2 text-xs rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white transition-shadow duration-150"
-              />
-            </div>
+            {/* Live Global Search Palette */}
+            <GlobalSearch />
 
             {/* Dark / Light Theme Toggle Button */}
             <button

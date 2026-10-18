@@ -62,6 +62,23 @@ export default function WeekDetailPage() {
     loadData();
   }, [weekId]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && data) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const targetTaskId = searchParams.get("taskId");
+      if (targetTaskId) {
+        for (const w of data.weeks || []) {
+          const match = (w.tasks || []).find((t: any) => t.taskId === targetTaskId);
+          if (match) {
+            setSelectedTask(match);
+            setIsDrawerOpen(true);
+            break;
+          }
+        }
+      }
+    }
+  }, [data, weekId]);
+
   if (loading && !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
