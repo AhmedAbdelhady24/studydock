@@ -3,8 +3,8 @@ import { writeFileSync } from 'node:fs';
 const SAMPLE_RATE = 48000;
 const DURATION = 15.0; // 15.0 seconds
 const TOTAL_SAMPLES = Math.floor(SAMPLE_RATE * DURATION);
-const BPM = 135;
-const SECONDS_PER_BEAT = 60 / BPM; // ~0.4444s
+const BPM = 126;
+const SECONDS_PER_BEAT = 60 / BPM; // ~0.476s
 
 // Left & Right float audio buffers
 const leftBuf = new Float32Array(TOTAL_SAMPLES);
@@ -18,7 +18,7 @@ function clamp(val, min, max) {
 }
 
 function softClip(x) {
-  return Math.tanh(x * 1.2) * 0.85;
+  return Math.tanh(x * 1.25) * 0.88;
 }
 
 // Biquad Filter implementation
@@ -87,7 +87,7 @@ class BiquadFilter {
 // -------------------------------------------------------------
 function addKick(startTime, velocity = 1.0) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const kickDuration = 0.35; // 350ms
+  const kickDuration = 0.32;
   const length = Math.floor(kickDuration * SAMPLE_RATE);
 
   for (let i = 0; i < length; i++) {
@@ -95,428 +95,416 @@ function addKick(startTime, velocity = 1.0) {
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
 
-    // Pitch sweep: 160Hz drop exponentially to 42Hz
-    const pitch = 42 + 120 * Math.exp(-t * 28);
+    // Pitch sweep: 150Hz drop to 45Hz
+    const pitch = 45 + 115 * Math.exp(-t * 30);
     const phase = 2 * Math.PI * pitch * t;
-    
-    // Amp envelope: punchy initial spike + body
-    const env = Math.exp(-t * 9);
-    // Click transient
-    const click = Math.exp(-t * 120) * (Math.random() * 2 - 1) * 0.4;
-    
-    // Sine + harmonic saturation
-    const raw = Math.sin(phase) + 0.3 * Math.sin(phase * 2);
-    const sample = softClip((raw * env + click) * 1.3 * velocity);
+    const body = Math.sin(phase);
 
-    leftBuf[idx] += sample * 0.95;
-    rightBuf[idx] += sample * 0.95;
+    // Click transient
+    const click = (Math.random() * 2 - 1) * Math.exp(-t * 200) * 0.4;
+    // Amp envelope
+    const amp = Math.exp(-t * 11) * velocity * 0.95;
+
+    const val = softClip((body + click) * amp);
+    leftBuf[idx] += val;
+    rightBuf[idx] += val;
   }
 }
 
-function addSnare(startTime, velocity = 0.9) {
+function addSnare(startTime, velocity = 1.0) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
   const snareDuration = 0.28;
   const length = Math.floor(snareDuration * SAMPLE_RATE);
-  const hpFilter = new BiquadFilter('highpass', 450, 1.2);
-  const bpFilter = new BiquadFilter('bandpass', 2200, 2.0);
 
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
 
-    // Body sine tone: 220Hz to 130Hz
-    const bodyFreq = 130 + 90 * Math.exp(-t * 22);
-    const bodyPhase = 2 * Math.PI * bodyFreq * t;
-    const body = Math.sin(bodyPhase) * Math.exp(-t * 16) * 0.7;
+    const tone = Math.sin(2 * Math.PI * 185 * t) * Math.exp(-t * 22);
+    const noise = (Math.random() * 2 - 1) * Math.exp(-t * 14);
+    const val = (tone * 0.4 + noise * 0.6) * velocity * 0.7;
 
-    // Noise wires
-    const noise = (Math.random() * 2 - 1);
-    const filteredNoise = hpFilter.process(noise) * 0.7 + bpFilter.process(noise) * 0.8;
-    const noiseEnv = Math.exp(-t * 12);
-
-    const raw = (body + filteredNoise * noiseEnv * 1.4) * velocity;
-    const sample = softClip(raw * 1.2);
-
-    // Slight stereo spread
-    leftBuf[idx] += sample * 0.85;
-    rightBuf[idx] += sample * 0.90;
+    leftBuf[idx] += val * 0.95;
+    rightBuf[idx] += val * 1.05;
   }
 }
 
-function addHiHat(startTime, open = false, velocity = 0.6) {
+function addHiHat(startTime, open = false, velocity = 0.8) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const duration = open ? 0.22 : 0.055;
+  const duration = open ? 0.22 : 0.05;
   const length = Math.floor(duration * SAMPLE_RATE);
-  const hpFilter = new BiquadFilter('highpass', 7500, 1.8);
+  const decayRate = open ? 16 : 80;
 
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
 
-    // Inharmonic square waves mix + noise
-    const m1 = Math.sin(2 * Math.PI * 3420 * t) > 0 ? 1 : -1;
-    const m2 = Math.sin(2 * Math.PI * 4830 * t) > 0 ? 1 : -1;
-    const m3 = Math.sin(2 * Math.PI * 6270 * t) > 0 ? 1 : -1;
-    const noise = (Math.random() * 2 - 1) * 1.2;
-    const rawHat = (m1 + m2 + m3) * 0.25 + noise * 0.75;
+    const noise = (Math.random() * 2 - 1);
+    const env = Math.exp(-t * decayRate) * velocity * 0.35;
+    const val = noise * env;
 
-    const filtered = hpFilter.process(rawHat);
-    const env = Math.exp(-t * (open ? 16 : 65));
-    const sample = filtered * env * velocity;
+    leftBuf[idx] += val * 0.9;
+    rightBuf[idx] += val * 1.1;
+  }
+}
+
+// -------------------------------------------------------------
+// Synth & Bass Sound Generators
+// -------------------------------------------------------------
+function addFMBass(startTime, noteFreq, duration, velocity = 0.85) {
+  const startSample = Math.floor(startTime * SAMPLE_RATE);
+  const length = Math.floor(duration * SAMPLE_RATE);
+  const filter = new BiquadFilter('lowpass', 1200, 1.2);
+
+  for (let i = 0; i < length; i++) {
+    const idx = startSample + i;
+    if (idx >= TOTAL_SAMPLES) break;
+    const t = i / SAMPLE_RATE;
+
+    // Modulator & Carrier
+    const modFreq = noteFreq * 2;
+    const modEnv = Math.exp(-t * 9) * 2.5;
+    const mod = Math.sin(2 * Math.PI * modFreq * t) * modEnv;
+
+    const carrier = Math.sin(2 * Math.PI * noteFreq * t + mod);
+    const sub = Math.sin(2 * Math.PI * (noteFreq * 0.5) * t) * 0.5;
+
+    const env = Math.exp(-t * 4.5) * velocity * 0.75;
+    const filtered = filter.process((carrier + sub) * env);
+
+    leftBuf[idx] += softClip(filtered);
+    rightBuf[idx] += softClip(filtered);
+  }
+}
+
+function addPluckArp(startTime, noteFreq, duration = 0.25, pan = 0.0, velocity = 0.6) {
+  const startSample = Math.floor(startTime * SAMPLE_RATE);
+  const length = Math.floor(duration * SAMPLE_RATE);
+
+  for (let i = 0; i < length; i++) {
+    const idx = startSample + i;
+    if (idx >= TOTAL_SAMPLES) break;
+    const t = i / SAMPLE_RATE;
+
+    const osc1 = Math.sin(2 * Math.PI * noteFreq * t);
+    const osc2 = (2 * ((noteFreq * 2 * t) % 1) - 1) * 0.3; // Saw octave
+    const env = Math.exp(-t * 14) * velocity * 0.5;
+    const val = (osc1 + osc2) * env;
 
     // Stereo panning
-    leftBuf[idx] += sample * 0.7;
-    rightBuf[idx] += sample * 0.5;
+    const leftGain = Math.cos((pan + 1) * Math.PI * 0.25);
+    const rightGain = Math.sin((pan + 1) * Math.PI * 0.25);
+
+    leftBuf[idx] += val * leftGain;
+    rightBuf[idx] += val * rightGain;
   }
 }
 
-function addCrash(startTime, velocity = 0.8) {
+function addPadChord(startTime, freqs, duration, velocity = 0.4) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const duration = 2.4;
   const length = Math.floor(duration * SAMPLE_RATE);
-  const hp = new BiquadFilter('highpass', 4200, 1.0);
+  const filter = new BiquadFilter('lowpass', 2400, 0.7);
 
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
+
+    // Attack - Sustain - Release Envelope
+    let env = 1.0;
+    if (t < 0.3) env = t / 0.3;
+    else if (t > duration - 0.5) env = Math.max(0, (duration - t) / 0.5);
+
+    let chordSum = 0;
+    for (let f of freqs) {
+      chordSum += Math.sin(2 * Math.PI * f * t) + 0.3 * Math.sin(2 * Math.PI * (f * 1.004) * t);
+    }
+    chordSum /= freqs.length;
+
+    const val = filter.process(chordSum * env * velocity * 0.55);
+    leftBuf[idx] += val * 0.95;
+    rightBuf[idx] += val * 1.05;
+  }
+}
+
+// -------------------------------------------------------------
+// Dedicated StudyDock UI Sound Effects (SFX)
+// -------------------------------------------------------------
+function addWhoosh(startTime, duration = 0.5, sweepUp = true, gain = 0.6) {
+  const startSample = Math.floor(startTime * SAMPLE_RATE);
+  const length = Math.floor(duration * SAMPLE_RATE);
+  const filter = new BiquadFilter('bandpass', sweepUp ? 300 : 2500, 2.0);
+
+  for (let i = 0; i < length; i++) {
+    const idx = startSample + i;
+    if (idx >= TOTAL_SAMPLES) break;
+    const t = i / length;
+
+    // Frequency cutoff sweep
+    const cutoff = sweepUp
+      ? 200 + 3600 * Math.pow(t, 2)
+      : 3800 - 3400 * Math.pow(t, 2);
+    filter.setParams(cutoff, 2.2);
 
     const noise = (Math.random() * 2 - 1);
-    const filtered = hp.process(noise);
-    const env = Math.exp(-t * 2.2);
-    const sample = softClip(filtered * env * velocity * 0.9);
+    const env = Math.sin(Math.PI * t) * gain;
+    const val = filter.process(noise) * env;
 
-    leftBuf[idx] += sample * 0.75;
-    rightBuf[idx] += sample * 0.85;
+    leftBuf[idx] += val * (1 - t * 0.4);
+    rightBuf[idx] += val * (0.6 + t * 0.4);
   }
 }
 
-// -------------------------------------------------------------
-// Synth Instruments
-// -------------------------------------------------------------
-// Note to Frequency helper (MIDI)
-function mtof(note) {
-  return 440 * Math.pow(2, (note - 69) / 12);
-}
-
-// Reese Bass note (dual detuned saw + sub sine + filter sweep)
-function addBassNote(startTime, duration, midiNote, cutoffStart = 800, cutoffEnd = 250, velocity = 0.85) {
+function addUIClick(startTime, gain = 0.7) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const length = Math.floor(duration * SAMPLE_RATE);
-  const freq = mtof(midiNote);
-  const lp = new BiquadFilter('lowpass', cutoffStart, 2.0);
-
-  let phase1 = 0;
-  let phase2 = 0;
-  let subPhase = 0;
+  const length = Math.floor(0.04 * SAMPLE_RATE);
 
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
-    const progress = i / length;
 
-    // Cutoff decay
-    const cutoff = cutoffStart + (cutoffEnd - cutoffStart) * Math.pow(progress, 0.7);
-    lp.setParams(cutoff, 2.2);
+    const pulse = Math.sin(2 * Math.PI * 1800 * t) * Math.exp(-t * 160);
+    const click = (Math.random() * 2 - 1) * Math.exp(-t * 220);
+    const val = (pulse * 0.6 + click * 0.4) * gain;
 
-    // Detuned sawtooths (rich stereo spread)
-    const f1 = freq * 0.994;
-    const f2 = freq * 1.006;
-    phase1 += f1 / SAMPLE_RATE;
-    phase2 += f2 / SAMPLE_RATE;
-    subPhase += (freq * 0.5) / SAMPLE_RATE;
-
-    const saw1 = 2 * (phase1 - Math.floor(phase1 + 0.5));
-    const saw2 = 2 * (phase2 - Math.floor(phase2 + 0.5));
-    const sub = Math.sin(2 * Math.PI * subPhase);
-
-    const raw = (saw1 * 0.4 + saw2 * 0.4 + sub * 0.6);
-    const filtered = lp.process(raw);
-    const env = Math.sin(Math.min(1, t / 0.015) * Math.PI * 0.5) * Math.exp(-progress * 1.2);
-    const sample = softClip(filtered * env * velocity * 1.2);
-
-    leftBuf[idx] += sample * 0.92;
-    rightBuf[idx] += sample * 0.92;
+    leftBuf[idx] += val;
+    rightBuf[idx] += val;
   }
 }
 
-// Cyberpunk Arp Note (16th note plucks with stereo ping-pong delay)
-function addArpNote(startTime, midiNote, brightness = 3200, velocity = 0.6) {
+function addCheckmarkChime(startTime, gain = 0.65) {
+  // Dual high-frequency crystal chime for verified milestone
+  const chimeFreqs = [1046.5, 1318.5, 1567.98]; // C6, E6, G6
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const noteDuration = 0.22;
-  const length = Math.floor(noteDuration * SAMPLE_RATE);
-  const freq = mtof(midiNote);
-  const lp = new BiquadFilter('lowpass', brightness, 3.2);
+  const length = Math.floor(0.6 * SAMPLE_RATE);
 
-  let phase = 0;
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
 
-    const currentCutoff = 350 + (brightness - 350) * Math.exp(-t * 24);
-    lp.setParams(currentCutoff, 3.0);
-
-    phase += freq / SAMPLE_RATE;
-    // Square + Saw hybrid pluck
-    const saw = 2 * (phase - Math.floor(phase + 0.5));
-    const sqr = Math.sin(2 * Math.PI * phase) > 0 ? 0.7 : -0.7;
-    const raw = (saw * 0.6 + sqr * 0.4);
-
-    const filtered = lp.process(raw);
-    const env = Math.exp(-t * 18);
-    const sample = softClip(filtered * env * velocity);
-
-    // Direct sound
-    leftBuf[idx] += sample * 0.75;
-    rightBuf[idx] += sample * 0.65;
-
-    // Ping-pong delay tap 1 (110ms left)
-    const d1 = idx + Math.floor(0.111 * SAMPLE_RATE);
-    if (d1 < TOTAL_SAMPLES) {
-      leftBuf[d1] += sample * 0.35;
+    let chimeSum = 0;
+    for (let f of chimeFreqs) {
+      chimeSum += Math.sin(2 * Math.PI * f * t) * Math.exp(-t * 7);
     }
-    // Ping-pong delay tap 2 (222ms right)
-    const d2 = idx + Math.floor(0.222 * SAMPLE_RATE);
-    if (d2 < TOTAL_SAMPLES) {
-      rightBuf[d2] += sample * 0.22;
-    }
+    const val = (chimeSum / chimeFreqs.length) * gain;
+
+    leftBuf[idx] += val * 1.1;
+    rightBuf[idx] += val * 0.9;
   }
 }
 
-// Riser FX
-function addRiser(startTime, duration, velocity = 0.7) {
+function addSubDrop(startTime, gain = 0.8) {
   const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const length = Math.floor(duration * SAMPLE_RATE);
-  const bp = new BiquadFilter('bandpass', 300, 3.5);
-
-  for (let i = 0; i < length; i++) {
-    const idx = startSample + i;
-    if (idx >= TOTAL_SAMPLES) break;
-    const progress = i / length;
-
-    // Filter frequency sweeps from 250Hz up to 8000Hz
-    const cutoff = 250 * Math.pow(8000 / 250, progress);
-    bp.setParams(cutoff, 3.5);
-
-    const noise = (Math.random() * 2 - 1);
-    const filtered = bp.process(noise);
-    // Pitch riser tone
-    const pitch = 150 + 600 * Math.pow(progress, 2);
-    const tone = Math.sin(2 * Math.PI * pitch * (i / SAMPLE_RATE)) * 0.4;
-
-    const env = Math.pow(progress, 1.8) * velocity;
-    const sample = softClip((filtered * 1.2 + tone) * env);
-
-    leftBuf[idx] += sample * (0.5 + 0.4 * progress);
-    rightBuf[idx] += sample * (0.9 - 0.4 * progress);
-  }
-}
-
-// Cinematic Sub-Boom / Impact
-function addSubBoom(startTime, velocity = 1.0) {
-  const startSample = Math.floor(startTime * SAMPLE_RATE);
-  const duration = 2.5;
-  const length = Math.floor(duration * SAMPLE_RATE);
+  const length = Math.floor(1.2 * SAMPLE_RATE);
 
   for (let i = 0; i < length; i++) {
     const idx = startSample + i;
     if (idx >= TOTAL_SAMPLES) break;
     const t = i / SAMPLE_RATE;
 
-    const freq = 65 * Math.exp(-t * 2.5) + 24;
-    const phase = 2 * Math.PI * freq * t;
-    const sub = Math.sin(phase) + 0.3 * Math.sin(phase * 0.5);
+    const freq = 110 * Math.exp(-t * 3.8);
+    const val = Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 2.5) * gain;
 
-    const noise = (Math.random() * 2 - 1) * Math.exp(-t * 6) * 0.3;
-    const env = Math.exp(-t * 1.5);
-    const sample = softClip((sub + noise) * env * velocity * 1.4);
-
-    leftBuf[idx] += sample;
-    rightBuf[idx] += sample;
+    leftBuf[idx] += val;
+    rightBuf[idx] += val;
   }
 }
 
 // -------------------------------------------------------------
-// Musical Composition Architecture
+// Composition Choreography
 // -------------------------------------------------------------
-console.log('Composing and synthesizing 15-second showreel soundtrack...');
+console.log('Composing StudyDock 15-Second Motion Soundtrack...');
 
-// 1. INTRO (0.0s - 2.66s): Tension, Sub-pulse & Riser
-addSubBoom(0.05, 1.0);
-addRiser(0.8, 1.86, 0.75);
+// Key notes (D Minor Pentatonic / Aeolian)
+// D2=73.42, F2=87.31, G2=98.0, A2=110.0, C3=130.81, D3=146.83
+const D2 = 73.42;
+const F2 = 87.31;
+const G2 = 98.0;
+const A2 = 110.0;
+const C3 = 130.81;
+const D3 = 146.83;
+const F3 = 174.61;
+const G3 = 196.0;
+const A3 = 220.0;
+const C4 = 261.63;
+const D4 = 293.66;
+const F4 = 349.23;
+const G4 = 392.0;
+const A4 = 440.0;
+const Bb4 = 466.16;
+const C5 = 523.25;
+const D5 = 587.33;
 
-// Intro Countdown Ticks on beats 3, 4, 5, 6
-for (let b = 2; b < 6; b++) {
-  const t = b * SECONDS_PER_BEAT;
-  addHiHat(t, false, 0.7);
-  addArpNote(t, 62 + (b - 2) * 3, 2000, 0.5); // D4, F4, G#4, B4
-}
+// Intro: Sub drop & crystal chime at 0.0s
+addSubDrop(0.05, 0.85);
+addCheckmarkChime(0.2, 0.4);
 
-// 2. ACT I & II: FULL BEAT DROP (2.66s to 8.0s)
-// D Minor Arp Motifs: D4(62), F4(65), A4(69), D5(74), C5(72), Bb4(70), A4(69), G4(67)
-const arpNotesPhase1 = [
-  62, 65, 69, 74,  65, 69, 74, 76,  62, 65, 69, 72,  70, 69, 67, 65,
-  58, 62, 65, 70,  62, 65, 70, 74,  60, 64, 67, 72,  69, 67, 65, 64,
-  62, 65, 69, 74,  65, 69, 74, 77,  76, 74, 72, 69,  70, 69, 67, 65,
-  58, 62, 65, 70,  67, 70, 74, 77,  69, 72, 76, 81,  79, 77, 76, 74
+// Beat starts at 1.8s (bar 1 of tempo)
+// 126 BPM = ~0.476s per beat
+const beatTime = SECONDS_PER_BEAT;
+
+// Add pad chord swells across scenes
+addPadChord(0.1, [D3, A3, F4], 2.8, 0.35); // Intro
+addPadChord(2.8, [F3, C4, A4], 3.0, 0.4);  // Scene 2: Bento
+addPadChord(5.8, [G3, D4, Bb4], 3.0, 0.4); // Scene 3: Roadmap
+addPadChord(8.8, [D3, A3, F4], 3.2, 0.45); // Scene 4: Kanban
+addPadChord(12.0, [D3, F3, A3, D4, F4], 2.8, 0.55); // Climax
+
+// Drums & Bass groove from 2.8s to 14.5s
+const bassPattern = [
+  D2, D2, F2, D2, G2, D2, A2, C3,
+  D2, D2, F2, D2, C3, A2, G2, F2
 ];
 
-const dropStartBeat = 6; // ~2.66s
-addCrash(dropStartBeat * SECONDS_PER_BEAT, 0.9);
+let currentBeat = 2.8;
+let beatIndex = 0;
 
-// Bassline progression (D1=26, Bb0=22, C1=24, A0=21)
-const bassProg = [
-  { note: 26, duration: SECONDS_PER_BEAT * 3.8 }, // D
-  { note: 22, duration: SECONDS_PER_BEAT * 3.8 }, // Bb
-  { note: 24, duration: SECONDS_PER_BEAT * 3.8 }, // C
-  { note: 21, duration: SECONDS_PER_BEAT * 3.8 }, // A
-];
-
-// Lay down the groove from Beat 6 to 24 (~2.66s to 10.66s)
-for (let b = 6; b < 24; b++) {
-  const beatTime = b * SECONDS_PER_BEAT;
-
-  // Kick on every beat
-  if (b < 18 || b >= 20) { // mini stutter pause at beat 18-19
-    addKick(beatTime, 1.0);
+while (currentBeat < 14.4) {
+  // Kick on beats 1 and 3 (or four-on-the-floor during climax)
+  const isClimax = currentBeat >= 11.5;
+  if (isClimax || (beatIndex % 2 === 0)) {
+    addKick(currentBeat, isClimax ? 1.0 : 0.9);
   }
 
-  // Snare on beats 2 and 4 of each 4-beat measure
-  if ((b - 6) % 2 === 1) {
-    addSnare(beatTime, 0.95);
+  // Snare on beats 2 and 4
+  if (beatIndex % 2 === 1) {
+    addSnare(currentBeat, 0.85);
   }
 
-  // Hi-Hats: 16th notes
+  // Hi-hats every 16th note
+  const stepTime = beatTime / 4;
   for (let s = 0; s < 4; s++) {
-    const subTime = beatTime + s * (SECONDS_PER_BEAT / 4);
-    const isOpen = s === 2; // offbeat open hat
-    addHiHat(subTime, isOpen, isOpen ? 0.7 : 0.45);
+    const t = currentBeat + s * stepTime;
+    if (t < 14.4) {
+      const isOpen = s === 2;
+      addHiHat(t, isOpen, isOpen ? 0.6 : 0.4);
+    }
   }
-}
 
-// Add Bassline
-for (let i = 0; i < 4; i++) {
-  const barStart = (6 + i * 4) * SECONDS_PER_BEAT;
-  if (barStart < DURATION) {
-    addBassNote(barStart, bassProg[i].duration, bassProg[i].note, 1200, 350, 0.85);
-  }
-}
-
-// Add 16th note Arpeggio from Beat 6 to 24
-for (let i = 0; i < arpNotesPhase1.length; i++) {
-  const arpTime = (6 * SECONDS_PER_BEAT) + i * (SECONDS_PER_BEAT / 4);
-  if (arpTime >= DURATION - 1.5) break;
-  // Dynamic filter brightness ramp
-  const brightness = 2400 + Math.sin(i * 0.4) * 1200;
-  addArpNote(arpTime, arpNotesPhase1[i], brightness, 0.65);
-}
-
-// 3. ACT III BREAKDOWN & CHARGED RISER (7.5s - 10.66s)
-addRiser(7.5, 3.16, 0.85);
-// Snare acceleration roll leading into climax
-for (let i = 0; i < 16; i++) {
-  const rollTime = (20 * SECONDS_PER_BEAT) + i * (SECONDS_PER_BEAT / 4);
-  const vel = 0.4 + (i / 16) * 0.6;
-  addSnare(rollTime, vel);
-}
-
-// 4. ACT IV & CLIMAX: MAXIMUM IMPACT (10.66s - 13.33s)
-const climaxStartBeat = 24; // ~10.66s
-addCrash(climaxStartBeat * SECONDS_PER_BEAT, 1.0);
-addSubBoom(climaxStartBeat * SECONDS_PER_BEAT, 1.0);
-
-// Furious double kick and lead synth blast
-for (let b = 24; b < 30; b++) {
-  const beatTime = b * SECONDS_PER_BEAT;
-  addKick(beatTime, 1.0);
-  addKick(beatTime + SECONDS_PER_BEAT * 0.5, 0.85); // Driving double kick
-
-  if ((b - 24) % 2 === 1) {
-    addSnare(beatTime, 1.0);
-  }
-  // High-energy metallic hats
+  // Rolling Bassline (16th notes)
   for (let s = 0; s < 4; s++) {
-    addHiHat(beatTime + s * (SECONDS_PER_BEAT / 4), s % 2 === 1, 0.6);
+    const t = currentBeat + s * stepTime;
+    if (t < 14.4) {
+      const note = bassPattern[(beatIndex * 4 + s) % bassPattern.length];
+      addFMBass(t, note, stepTime * 0.9, 0.7);
+    }
   }
+
+  // Arp lead notes
+  const arpNotes = [D4, F4, A4, C5, D5, C5, A4, F4];
+  for (let s = 0; s < 4; s++) {
+    const t = currentBeat + s * stepTime;
+    if (t < 14.4) {
+      const note = arpNotes[(beatIndex * 4 + s) % arpNotes.length];
+      const pan = Math.sin((beatIndex * 4 + s) * 0.6);
+      addPluckArp(t, note, stepTime * 1.2, pan, 0.45);
+    }
+  }
+
+  currentBeat += beatTime;
+  beatIndex++;
 }
 
-// Climax Lead Melody: D5, F5, E5, D5, A5
-const climaxMelody = [
-  { time: 24 * SECONDS_PER_BEAT, note: 74, dur: SECONDS_PER_BEAT },
-  { time: 25 * SECONDS_PER_BEAT, note: 77, dur: SECONDS_PER_BEAT },
-  { time: 26 * SECONDS_PER_BEAT, note: 76, dur: SECONDS_PER_BEAT },
-  { time: 27 * SECONDS_PER_BEAT, note: 74, dur: SECONDS_PER_BEAT * 0.5 },
-  { time: 27.5 * SECONDS_PER_BEAT, note: 81, dur: SECONDS_PER_BEAT * 1.5 },
-  { time: 29 * SECONDS_PER_BEAT, note: 86, dur: SECONDS_PER_BEAT }, // High D6 peak!
-];
-for (const m of climaxMelody) {
-  if (m.time < DURATION) {
-    addBassNote(m.time, m.dur, m.note - 12, 3500, 1800, 0.8);
-    addArpNote(m.time, m.note, 5000, 0.9);
-  }
-}
+// -------------------------------------------------------------
+// Visual Event Sync SFX
+// -------------------------------------------------------------
+// 2.8s: Transition to Bento Dashboard
+addWhoosh(2.5, 0.45, true, 0.65);
+addUIClick(2.82, 0.8);
 
-// 5. FINALE / OUTRO SIGNATURE STING (13.33s - 15.0s)
-const outroTime = 30 * SECONDS_PER_BEAT; // ~13.33s
-addSubBoom(outroTime, 1.0);
-addCrash(outroTime, 1.0);
+// 4.2s: Bento meter charges to 68%
+addUIClick(4.15, 0.5);
+addUIClick(4.25, 0.6);
+addUIClick(4.35, 0.7);
 
-// Final resonant chime chord: Dm9 (D4, F4, A4, C5, E5) ringing out into reverb
-[62, 65, 69, 72, 76].forEach((note, idx) => {
-  addArpNote(outroTime + idx * 0.04, note, 4500, 0.8);
-});
+// 5.8s: Transition to 33-Week Roadmap
+addWhoosh(5.5, 0.45, true, 0.7);
+addUIClick(5.82, 0.8);
+
+// 7.4s: Milestone Checkpoint Gatekeeper verified!
+addCheckmarkChime(7.4, 0.75);
+
+// 8.8s: Transition to Execution Kanban Board
+addWhoosh(8.5, 0.45, true, 0.7);
+addUIClick(8.82, 0.85);
+
+// 9.4s: Cursor clicks Start -> and card moves to In-Progress
+addUIClick(9.4, 0.9);
+addWhoosh(9.45, 0.35, false, 0.5);
+
+// 10.2s: TaskDetailDrawer slides in with spring physics
+addWhoosh(10.15, 0.4, false, 0.6);
+addUIClick(10.3, 0.6);
+
+// 12.0s: Epic Riser into Grand Multi-Screen Climax
+addWhoosh(11.4, 0.8, true, 0.85);
+addSubDrop(12.05, 0.95);
+addCheckmarkChime(12.1, 0.7);
+
+// 14.5s: Soft warm tailout
+addSubDrop(14.2, 0.4);
 
 // -------------------------------------------------------------
-// Mastering & Normalization (Transparent Limiter)
+// Master Limiting, Normalization & WAV Output
 // -------------------------------------------------------------
-console.log('Mastering audio buffers with multi-band soft saturation...');
+console.log('Mastering 48kHz Stereo WAV file...');
+
 let peak = 0;
 for (let i = 0; i < TOTAL_SAMPLES; i++) {
-  // Master stereo width and soft limiter
-  leftBuf[i] = softClip(leftBuf[i] * 0.92);
-  rightBuf[i] = softClip(rightBuf[i] * 0.92);
-
-  // Fade out smoothly in the last 0.25s
-  if (i > TOTAL_SAMPLES - SAMPLE_RATE * 0.25) {
-    const fade = (TOTAL_SAMPLES - i) / (SAMPLE_RATE * 0.25);
-    leftBuf[i] *= fade;
-    rightBuf[i] *= fade;
-  }
+  // Subtle stereo widening
+  const l = leftBuf[i];
+  const r = rightBuf[i];
+  const mid = (l + r) * 0.5;
+  const side = (l - r) * 0.5 * 1.15;
+  leftBuf[i] = softClip(mid + side);
+  rightBuf[i] = softClip(mid - side);
 
   peak = Math.max(peak, Math.abs(leftBuf[i]), Math.abs(rightBuf[i]));
 }
 
-// Convert to 16-bit PCM WAV Buffer
-const wavBuffer = Buffer.alloc(44 + TOTAL_SAMPLES * 4);
+// Normalize to -0.3dB peak (~0.96)
+const targetPeak = 0.96;
+const gainFactor = peak > 0 ? (targetPeak / peak) : 1.0;
 
-// RIFF header
-wavBuffer.write('RIFF', 0);
-wavBuffer.writeUInt32LE(36 + TOTAL_SAMPLES * 4, 4);
-wavBuffer.write('WAVE', 8);
-wavBuffer.write('fmt ', 12);
-wavBuffer.writeUInt32LE(16, 16); // SubChunk1Size (16 for PCM)
-wavBuffer.writeUInt16LE(1, 20);  // AudioFormat (1 for PCM)
-wavBuffer.writeUInt16LE(2, 22);  // NumChannels (2 for Stereo)
-wavBuffer.writeUInt32LE(SAMPLE_RATE, 24); // SampleRate (48000)
-wavBuffer.writeUInt32LE(SAMPLE_RATE * 4, 28); // ByteRate (SampleRate * NumChannels * BitsPerSample/8)
-wavBuffer.writeUInt16LE(4, 32);  // BlockAlign (NumChannels * BitsPerSample/8)
-wavBuffer.writeUInt16LE(16, 34); // BitsPerSample (16)
-wavBuffer.write('data', 36);
-wavBuffer.writeUInt32LE(TOTAL_SAMPLES * 4, 40);
+const wavHeader = Buffer.alloc(44);
+const dataSize = TOTAL_SAMPLES * 2 * 2; // 2 channels, 16-bit (2 bytes)
 
-let offset = 44;
+// RIFF chunk descriptor
+wavHeader.write('RIFF', 0);
+wavHeader.writeUInt32LE(36 + dataSize, 4);
+wavHeader.write('WAVE', 8);
+
+// fmt sub-chunk
+wavHeader.write('fmt ', 12);
+wavHeader.writeUInt32LE(16, 16); // SubChunk1Size (16 for PCM)
+wavHeader.writeUInt16LE(1, 20);  // AudioFormat (1 for PCM)
+wavHeader.writeUInt16LE(2, 22);  // NumChannels (2 for Stereo)
+wavHeader.writeUInt32LE(SAMPLE_RATE, 24); // SampleRate (48000)
+wavHeader.writeUInt32LE(SAMPLE_RATE * 2 * 2, 28); // ByteRate
+wavHeader.writeUInt16LE(4, 32);  // BlockAlign (2 * 2)
+wavHeader.writeUInt16LE(16, 34); // BitsPerSample (16)
+
+// data sub-chunk
+wavHeader.write('data', 36);
+wavHeader.writeUInt32LE(dataSize, 40);
+
+const audioData = Buffer.alloc(dataSize);
 for (let i = 0; i < TOTAL_SAMPLES; i++) {
-  const l = clamp(Math.floor(leftBuf[i] * 32767), -32768, 32767);
-  const r = clamp(Math.floor(rightBuf[i] * 32767), -32768, 32767);
-  wavBuffer.writeInt16LE(l, offset);
-  wavBuffer.writeInt16LE(r, offset + 2);
-  offset += 4;
+  const lSample = clamp(leftBuf[i] * gainFactor, -1, 1);
+  const rSample = clamp(rightBuf[i] * gainFactor, -1, 1);
+
+  const lInt16 = Math.floor(lSample < 0 ? lSample * 32768 : lSample * 32767);
+  const rInt16 = Math.floor(rSample < 0 ? rSample * 32768 : rSample * 32767);
+
+  audioData.writeInt16LE(lInt16, i * 4);
+  audioData.writeInt16LE(rInt16, i * 4 + 2);
 }
 
+const finalWav = Buffer.concat([wavHeader, audioData]);
 const outputPath = 'videos/showreel-motion/assets/soundtrack.wav';
-writeFileSync(outputPath, wavBuffer);
-console.log(`✓ Synthesized pristine 15.0s soundtrack (peak: ${peak.toFixed(2)}) -> ${outputPath}`);
+writeFileSync(outputPath, finalWav);
+console.log(`Saved master synthesized audio soundtrack to: ${outputPath} (${finalWav.length} bytes)`);

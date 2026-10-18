@@ -1,26 +1,221 @@
 {
   "version": 1,
   "historyId": "7eff76a0-31aa-4bf0-8c91-f698bfc40f9c",
-  "currentRevision": null,
+  "currentRevision": "85a5f96f-f9aa-4cbb-8bef-50c521513473",
   "pendingChanges": false,
   "files": {
     "index.html": {
-      "hash": "287bce390ff9ef389309bde0acb2377b8535f1f0a096105af7b5038ff236fea9",
-      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/28/287bce390ff9ef389309bde0acb2377b8535f1f0a096105af7b5038ff236fea9"
+      "hash": "e913d8fef88e520742e2798da4e66a722dd03eec748dbd1f67915a01738484d2",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/e9/e913d8fef88e520742e2798da4e66a722dd03eec748dbd1f67915a01738484d2"
     },
     "synthesize-audio.mjs": {
-      "hash": "5ad3d9c127eda4cf86f7872df05ee28e25943b29f12d328217c1f01048d399ea",
-      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/5a/5ad3d9c127eda4cf86f7872df05ee28e25943b29f12d328217c1f01048d399ea"
+      "hash": "2968272417dafa2080677adcbcf5d9eeef5caf751c86be1b8059b354186bd415",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/29/2968272417dafa2080677adcbcf5d9eeef5caf751c86be1b8059b354186bd415"
     },
     "assets/soundtrack.wav": {
-      "hash": "ad4e82abaee2e15db4cc4ad3feee6d15f8ead2bbedb21c714a8e18cf8b561319",
-      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/ad/ad4e82abaee2e15db4cc4ad3feee6d15f8ead2bbedb21c714a8e18cf8b561319"
+      "hash": "c388b2d001ce6d6300ab821db751095e4b4434b07f51d6f4b6a2248a56492047",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/c3/c388b2d001ce6d6300ab821db751095e4b4434b07f51d6f4b6a2248a56492047"
+    },
+    "assets/ui_analytics.png": {
+      "hash": "5054843dfea721ed87b921c5b42e6b03b98eeaedc9fe16bbe8ead2349129f87f",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/50/5054843dfea721ed87b921c5b42e6b03b98eeaedc9fe16bbe8ead2349129f87f"
+    },
+    "assets/ui_courses.png": {
+      "hash": "01776c4654df1bac0c08494291230f8e6c53be4f6f87eb8869be532daff8d90d",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/01/01776c4654df1bac0c08494291230f8e6c53be4f6f87eb8869be532daff8d90d"
+    },
+    "assets/ui_drawer.png": {
+      "hash": "3dd1bc2c0bd42a186b15a7671a94973f7dd2252f1343467c8c3aa53a854c5eaf",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/3d/3dd1bc2c0bd42a186b15a7671a94973f7dd2252f1343467c8c3aa53a854c5eaf"
+    },
+    "assets/ui_dsa.png": {
+      "hash": "0cd67b3073ba087004067c9b3eac3c16e618cc8912c260fe879d6709d8b8ffe2",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/0c/0cd67b3073ba087004067c9b3eac3c16e618cc8912c260fe879d6709d8b8ffe2"
+    },
+    "assets/ui_roadmap.png": {
+      "hash": "5b4cb97b153d2dc21ff638725581801e46d5f03ab29b02aabd347bfbdc313dba",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/5b/5b4cb97b153d2dc21ff638725581801e46d5f03ab29b02aabd347bfbdc313dba"
+    },
+    "assets/ui_today.png": {
+      "hash": "6fec9a7b6a9902ca63e489be5835122295cc7a5543cb65e664fcd4eaf0ba98bf",
+      "content": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/6f/6fec9a7b6a9902ca63e489be5835122295cc7a5543cb65e664fcd4eaf0ba98bf"
     }
   },
-  "revisions": {},
+  "revisions": {
+    "e3da1117-f422-4c6d-979f-661f44a67ccb": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1792325685058,
+      "endedAt": 1792325685076,
+      "files": {
+        "assets/soundtrack.wav": {
+          "before": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/ad/ad4e82abaee2e15db4cc4ad3feee6d15f8ead2bbedb21c714a8e18cf8b561319",
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/c3/c388b2d001ce6d6300ab821db751095e4b4434b07f51d6f4b6a2248a56492047"
+        },
+        "assets/ui_analytics.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/50/5054843dfea721ed87b921c5b42e6b03b98eeaedc9fe16bbe8ead2349129f87f"
+        },
+        "assets/ui_courses.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/01/01776c4654df1bac0c08494291230f8e6c53be4f6f87eb8869be532daff8d90d"
+        },
+        "assets/ui_drawer.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/3d/3dd1bc2c0bd42a186b15a7671a94973f7dd2252f1343467c8c3aa53a854c5eaf"
+        },
+        "assets/ui_dsa.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/0c/0cd67b3073ba087004067c9b3eac3c16e618cc8912c260fe879d6709d8b8ffe2"
+        },
+        "assets/ui_roadmap.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/5b/5b4cb97b153d2dc21ff638725581801e46d5f03ab29b02aabd347bfbdc313dba"
+        },
+        "assets/ui_today.png": {
+          "before": null,
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/6f/6fec9a7b6a9902ca63e489be5835122295cc7a5543cb65e664fcd4eaf0ba98bf"
+        },
+        "index.html": {
+          "before": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/28/287bce390ff9ef389309bde0acb2377b8535f1f0a096105af7b5038ff236fea9",
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/b9/b938ccc0770609abdea1e6af53a86aad82b516fc08c97b013ecee2fd62a7537c"
+        },
+        "synthesize-audio.mjs": {
+          "before": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/5a/5ad3d9c127eda4cf86f7872df05ee28e25943b29f12d328217c1f01048d399ea",
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/29/2968272417dafa2080677adcbcf5d9eeef5caf751c86be1b8059b354186bd415"
+        }
+      }
+    },
+    "ca87ed44-28bb-4d2c-9fd3-139d55b61160": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1792325769859,
+      "endedAt": 1792325769860,
+      "files": {
+        "index.html": {
+          "before": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/b9/b938ccc0770609abdea1e6af53a86aad82b516fc08c97b013ecee2fd62a7537c",
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/64/64e8c6330d5f3c97c3d196c5eff6a6e8d35b6054282c09eacfeb731c234f9162"
+        }
+      }
+    },
+    "85a5f96f-f9aa-4cbb-8bef-50c521513473": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1792325889536,
+      "endedAt": 1792325889536,
+      "files": {
+        "index.html": {
+          "before": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/64/64e8c6330d5f3c97c3d196c5eff6a6e8d35b6054282c09eacfeb731c234f9162",
+          "after": "/Users/ahmedabdelhady/.cache/hyperframes/history/7eff76a0-31aa-4bf0-8c91-f698bfc40f9c/blobs/e9/e913d8fef88e520742e2798da4e66a722dd03eec748dbd1f67915a01738484d2"
+        }
+      }
+    }
+  },
   "checks": {
-    "latest": null,
-    "revisions": {},
+    "latest": {
+      "revision": "85a5f96f-f9aa-4cbb-8bef-50c521513473",
+      "id": "081b2856-eac4-4991-9a3b-6023c70cd013"
+    },
+    "revisions": {
+      "e3da1117-f422-4c6d-979f-661f44a67ccb": [
+        {
+          "id": "1ab74faa-e627-402f-b461-42f7a5e4bc12",
+          "scope": "project",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": true,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 3000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1792325685217,
+          "contentHash": "5a341e842055c8946ba68dc66e98570ec19fc3282d11a2c0b7ff7a8bed11d266",
+          "revision": "e3da1117-f422-4c6d-979f-661f44a67ccb",
+          "inputFingerprint": "b4751aabc7246aadd3a10324a70c963a594fea8d8c7c12d522bff13dd44c18e6",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "d950edac-0be0-4fb8-988b-c26b945863a9"
+        }
+      ],
+      "ca87ed44-28bb-4d2c-9fd3-139d55b61160": [
+        {
+          "id": "09d347a1-45f4-439a-9b1f-5b623f2393d0",
+          "scope": "project",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 3000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1792325779383,
+          "contentHash": "cf3b2ebc5be8c7e3b1a2b45d391e4db2083e3f17c566bb06056dad744fa8d83d",
+          "revision": "ca87ed44-28bb-4d2c-9fd3-139d55b61160",
+          "inputFingerprint": "a369bbc4703f70139f8f20cfcd75cccd914fa3b8a7f85f7ae3c473d44b47ae88",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "d950edac-0be0-4fb8-988b-c26b945863a9"
+        }
+      ],
+      "85a5f96f-f9aa-4cbb-8bef-50c521513473": [
+        {
+          "id": "081b2856-eac4-4991-9a3b-6023c70cd013",
+          "scope": "project",
+          "report": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/videos/showreel-motion/.hyperframes/artifacts/checks/081b2856-eac4-4991-9a3b-6023c70cd013.json",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 3000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1792325896146,
+          "contentHash": "773de78c69998898367b20edd959dc3638922f40c78e943391d1e005544b6696",
+          "revision": "85a5f96f-f9aa-4cbb-8bef-50c521513473",
+          "inputFingerprint": "8099602c996064c9264fb41daf7f0928d237cb5b9f74022c01de1f41fb70ec80",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ]
+    },
     "unversioned": []
   },
   "snapshots": {
@@ -30,13 +225,15 @@
   },
   "renders": {
     "latest": {
-      "id": "60b82505-ffd3-4f80-b3b5-1bbf6c9fad6b",
-      "completedAt": 1792324435695,
+      "id": "d950edac-0be0-4fb8-988b-c26b945863a9",
+      "completedAt": 1792325915572,
       "output": "/Users/ahmedabdelhady/Desktop/personal_projects/Learning Tracker/videos/showreel-motion/showreel-motion.mp4",
       "status": "completed",
-      "revision": null
+      "revision": "85a5f96f-f9aa-4cbb-8bef-50c521513473"
     },
-    "retainedRevisions": []
+    "retainedRevisions": [
+      "85a5f96f-f9aa-4cbb-8bef-50c521513473"
+    ]
   },
   "pendingArtifactCleanup": []
 }

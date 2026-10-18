@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1280, height=720" />
-    <title>Motion Designer Showreel — Pure Code</title>
+    <title>StudyDock Product Film — 15s Motion Showreel</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * {
@@ -12,7 +12,7 @@
         padding: 0;
       }
       body {
-        background: #050608;
+        background: #090a0f;
         color: #f8fafc;
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         overflow: hidden;
@@ -22,11 +22,12 @@
         position: relative;
         width: 1280px;
         height: 720px;
-        background: #06070a;
+        background: #090a0f;
         overflow: hidden;
+        perspective: 1400px;
       }
 
-      /* Background Canvas (3D Wireframes, Attractors, Spectrum, Particles) */
+      /* Ambient Background Canvas (Grid & Dust Particles) */
       #bg-canvas {
         position: absolute;
         top: 0;
@@ -37,28 +38,28 @@
         pointer-events: none;
       }
 
-      /* Fullscreen Vignette & CRT Scanline Texture */
+      /* Vignette & Ambient Radial Glow */
       .vignette-overlay {
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5, 6, 8, 0.85) 95%);
+        background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 60%, rgba(7, 8, 12, 0.9) 100%);
         z-index: 2;
         pointer-events: none;
       }
 
-      /* Global HUD Overlay Frame */
+      /* Global Studio HUD Frame */
       .hud-frame {
         position: absolute;
-        inset: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        z-index: 10;
+        inset: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        z-index: 20;
         pointer-events: none;
       }
       .hud-corner {
         position: absolute;
-        width: 16px;
-        height: 16px;
-        border: 2px solid #00f0ff;
+        width: 14px;
+        height: 14px;
+        border: 2px solid #818cf8;
       }
       .hud-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
       .hud-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
@@ -75,27 +76,26 @@
         align-items: center;
         font-family: ui-monospace, monospace;
         font-size: 11px;
-        letter-spacing: 0.1em;
-        color: #94a3b8;
+        letter-spacing: 0.08em;
+        color: #cbd5e1;
       }
       .hud-tag {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(0, 240, 255, 0.08);
-        border: 1px solid rgba(0, 240, 255, 0.25);
-        color: #00f0ff;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: #e0e7ff;
         padding: 3px 10px;
-        border-radius: 4px;
-        font-weight: 700;
+        border-radius: 9999px;
+        font-weight: 600;
       }
       .hud-tag .blink-dot {
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background: #00f0ff;
+        background: #818cf8;
       }
-
       .hud-bottombar {
         position: absolute;
         bottom: 14px;
@@ -105,302 +105,356 @@
         justify-content: space-between;
         align-items: center;
         font-family: ui-monospace, monospace;
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        color: #64748b;
+        font-size: 10px;
+        color: #cbd5e1;
       }
 
-      /* Stage Layer (HTML/SVG Motion Elements) */
-      .stage-layer {
+      /* Scene Containers */
+      .scene {
         position: absolute;
         inset: 0;
         z-index: 5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        opacity: 0;
         pointer-events: none;
       }
 
       /* ======================================================== */
-      /* SCENE 1: KINETIC CALIBRATION (0.0s - 2.66s)             */
+      /* SCENE 1: BRAND IDENTITY HERO HOOK (0.0s - 2.8s)          */
       /* ======================================================== */
       #scene-1 {
-        position: absolute;
-        inset: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
       }
-      .s1-kicker {
-        font-family: ui-monospace, monospace;
-        font-size: 13px;
-        letter-spacing: 0.35em;
-        color: #00f0ff;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        font-weight: 700;
+      .brand-mark {
+        width: 88px;
+        height: 88px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        position: relative;
       }
-      .s1-title {
-        font-size: 88px;
-        font-weight: 900;
-        line-height: 0.92;
+      .brand-mark svg {
+        width: 48px;
+        height: 48px;
+        color: #ffffff;
+      }
+      .brand-title {
+        font-size: 64px;
+        font-weight: 800;
         letter-spacing: -0.04em;
-        text-transform: uppercase;
-        background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+        line-height: 1;
+        margin-bottom: 12px;
+        background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .s1-sublines {
-        margin-top: 24px;
-        display: flex;
-        gap: 32px;
-        font-family: ui-monospace, monospace;
-        font-size: 12px;
-        letter-spacing: 0.2em;
+      .brand-tagline {
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
         color: #94a3b8;
+        margin-bottom: 28px;
       }
-      .s1-counter {
-        position: absolute;
-        bottom: 90px;
+      .brand-pills {
+        display: flex;
+        gap: 12px;
+      }
+      .brand-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         font-family: ui-monospace, monospace;
-        font-size: 44px;
-        font-weight: 900;
-        color: #38bdf8;
-        letter-spacing: -0.02em;
+        font-size: 11px;
+        font-weight: 600;
+        color: #e2e8f0;
+        backdrop-filter: blur(12px);
+      }
+      .brand-pill .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
       }
 
       /* ======================================================== */
-      /* SCENE 2: 3D PROCEDURAL DROP (2.66s - 6.8s)              */
+      /* SCENE 2: BENTO DASHBOARD & LIVE SPRINT (2.8s - 5.8s)     */
       /* ======================================================== */
       #scene-2 {
-        position: absolute;
-        inset: 0;
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      .s2-typography {
-        position: absolute;
+      .device-frame {
+        width: 1040px;
+        height: 585px;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 35px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15);
+        overflow: hidden;
+        position: relative;
+        transform-style: preserve-3d;
+      }
+      .device-bar {
+        height: 32px;
+        background: #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        gap: 6px;
+      }
+      .device-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .device-dot.red { background: #ef4444; }
+      .device-dot.yellow { background: #f59e0b; }
+      .device-dot.green { background: #10b981; }
+      .device-url {
+        margin-left: 12px;
+        font-family: ui-monospace, monospace;
+        font-size: 10px;
+        color: #64748b;
+        background: #ffffff;
+        padding: 2px 14px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+      .device-img {
         width: 100%;
-        text-align: center;
+        height: calc(100% - 32px);
+        object-fit: cover;
+        object-position: top center;
+        display: block;
       }
-      .s2-word {
-        font-size: 96px;
-        font-weight: 900;
-        letter-spacing: -0.03em;
-        text-transform: uppercase;
+
+      /* Floating Feature Callouts for Bento */
+      .floating-badge {
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        white-space: nowrap;
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(16px);
+        border-radius: 18px;
+        padding: 14px 20px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 14px;
       }
-      .s2-word-1 {
-        color: #ffffff;
-        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+      .floating-badge.sprint-hero {
+        top: 140px;
+        left: 80px;
+        width: 380px;
       }
-      .s2-word-2 {
-        color: #38bdf8;
-        text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+      .sprint-meter-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 9999px;
+        overflow: hidden;
+        margin-top: 8px;
+        position: relative;
       }
-      .s2-word-3 {
-        color: #a855f7;
-        text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+      .sprint-meter-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #6366f1, #a855f7);
+        border-radius: 9999px;
+        box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+      }
+      .floating-badge.metric-1 {
+        bottom: 80px;
+        right: 90px;
+      }
+      .floating-badge.metric-2 {
+        bottom: 160px;
+        right: 90px;
       }
 
       /* ======================================================== */
-      /* SCENE 3: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s)*/
+      /* SCENE 3: 33-WEEK ROADMAP & CHECKPOINTS (5.8s - 8.8s)     */
       /* ======================================================== */
       #scene-3 {
-        position: absolute;
-        inset: 0;
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      .card-deck {
-        position: relative;
-        width: 920px;
-        height: 380px;
+      .gatekeeper-card {
+        position: absolute;
+        width: 440px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(24px);
+        border-radius: 24px;
+        padding: 24px;
+        z-index: 15;
+      }
+      .gatekeeper-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: 12px;
       }
-      .haptic-card {
-        width: 275px;
-        height: 340px;
-        background: rgba(15, 23, 42, 0.75);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 24px;
-        padding: 24px;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-        overflow: hidden;
+      .gatekeeper-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 9999px;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #34d399;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        font-weight: 700;
       }
-      .card-glow {
-        position: absolute;
-        top: -60px;
-        right: -60px;
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        filter: blur(40px);
-        pointer-events: none;
-      }
-      .haptic-card:nth-child(1) .card-glow { background: rgba(0, 240, 255, 0.35); }
-      .haptic-card:nth-child(2) .card-glow { background: rgba(168, 85, 247, 0.35); }
-      .haptic-card:nth-child(3) .card-glow { background: rgba(16, 185, 129, 0.35); }
 
-      .card-header-badge {
+      /* ======================================================== */
+      /* SCENE 4: KANBAN EXECUTION & TACTILE FLOW (8.8s - 12.0s)  */
+      /* ======================================================== */
+      #scene-4 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .kanban-demo-card {
+        position: absolute;
+        width: 320px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+        border-radius: 18px;
+        padding: 18px;
+        z-index: 12;
+      }
+      .card-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 9999px;
+        background: #f4f4f5;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        color: #3f3f46;
+        font-family: ui-monospace, monospace;
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .card-chip .chip-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #f59e0b;
+      }
+      .btn-start-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        background: #18181b;
+        color: #ffffff;
         font-family: ui-monospace, monospace;
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: #94a3b8;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .card-title {
-        font-size: 20px;
-        font-weight: 800;
-        color: #ffffff;
-        margin-top: 10px;
-        letter-spacing: -0.01em;
-      }
-      .card-desc {
-        font-size: 12px;
-        color: #94a3b8;
-        line-height: 1.5;
-        margin-top: 4px;
-      }
-      .card-graphic {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        margin: 16px 0;
-      }
-      .card-stat {
-        font-family: ui-monospace, monospace;
-        font-size: 32px;
-        font-weight: 900;
-        color: #ffffff;
-        letter-spacing: -0.02em;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       }
 
-      /* Scene 3 Big Scrolling Ticker */
-      .s3-ticker-wrap {
+      /* Virtual Pointer Cursor */
+      #virtual-cursor {
         position: absolute;
-        bottom: 50px;
-        left: 0;
-        width: 1280px;
-        overflow: hidden;
-      }
-      .s3-ticker {
-        display: flex;
-        gap: 40px;
-        white-space: nowrap;
-        font-family: ui-monospace, monospace;
-        font-size: 13px;
-        letter-spacing: 0.25em;
-        color: #38bdf8;
-        font-weight: 700;
+        width: 24px;
+        height: 24px;
+        z-index: 30;
+        pointer-events: none;
+        opacity: 0;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
       }
 
       /* ======================================================== */
-      /* SCENE 4: CLIMAX VELOCITY (10.66s - 13.33s)              */
-      /* ======================================================== */
-      #scene-4 {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-      .climax-headline {
-        font-size: 110px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -0.04em;
-        line-height: 0.9;
-        color: #ffffff;
-        text-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(168, 85, 247, 0.5);
-      }
-      .climax-sub {
-        font-family: ui-monospace, monospace;
-        font-size: 16px;
-        letter-spacing: 0.3em;
-        color: #00f0ff;
-        font-weight: 700;
-        margin-top: 18px;
-        text-transform: uppercase;
-      }
-
-      /* ======================================================== */
-      /* SCENE 5: FINALE MONOLITH LOCKUP (13.33s - 15.0s)        */
+      /* SCENE 5: MULTI-SCREEN CLIMAX & OUTRO (12.0s - 15.0s)     */
       /* ======================================================== */
       #scene-5 {
-        position: absolute;
-        inset: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
       }
-      .monolith-emblem {
-        width: 76px;
-        height: 76px;
-        margin-bottom: 22px;
-        position: relative;
+      .screen-wall {
+        position: absolute;
+        width: 1400px;
+        height: 800px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        transform-style: preserve-3d;
       }
-      .brand-hero {
-        font-size: 64px;
+      .wall-screen {
+        width: 380px;
+        height: 240px;
+        border-radius: 14px;
+        background: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+      }
+      .wall-screen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .climax-headline {
+        position: relative;
+        z-index: 10;
+        font-size: 52px;
         font-weight: 900;
-        letter-spacing: 0.12em;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
         text-transform: uppercase;
-        background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+        background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 60px rgba(99, 102, 241, 0.6);
       }
-      .brand-role {
+      .climax-sub {
+        position: relative;
+        z-index: 10;
+        font-size: 18px;
         font-family: ui-monospace, monospace;
-        font-size: 14px;
-        letter-spacing: 0.35em;
-        color: #00f0ff;
-        font-weight: 700;
-        text-transform: uppercase;
-        margin-top: 12px;
+        letter-spacing: 0.1em;
+        color: #a5b4fc;
+        margin-top: 14px;
       }
-      .brand-footnote {
-        margin-top: 28px;
-        display: inline-flex;
+      .final-lockup {
+        position: relative;
+        z-index: 12;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 12px;
-        padding: 8px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 9999px;
-        font-family: ui-monospace, monospace;
-        font-size: 11px;
-        letter-spacing: 0.15em;
-        color: #e2e8f0;
+        opacity: 0;
       }
     </style>
   </head>
   <body>
     <div
       id="root"
+      class="clip composition"
       data-composition-id="main"
       data-start="0"
       data-width="1280"
@@ -416,13 +470,13 @@
         data-duration="15"
       ></audio>
 
-      <!-- 3D WebGL / Math Canvas -->
-      <canvas id="bg-canvas" width="1280" height="720"></canvas>
+      <!-- Background Canvas: Ambient Grid & Particles -->
+      <canvas id="bg-canvas" width="1280" height="720" data-layout-allow-overflow="true"></canvas>
 
-      <!-- Vignette & Ambience -->
+      <!-- Ambient Vignette -->
       <div class="vignette-overlay"></div>
 
-      <!-- HUD Frame Overlay -->
+      <!-- Studio HUD Frame -->
       <div class="hud-frame">
         <div class="hud-corner tl"></div>
         <div class="hud-corner tr"></div>
@@ -432,520 +486,484 @@
         <div class="hud-topbar">
           <div class="hud-tag">
             <span class="blink-dot"></span>
-            <span>REEL // 2026.1</span>
+            <span>STUDYDOCK • PRODUCT FILM</span>
           </div>
-          <div>MOTION DESIGN SHOWREEL · PURE CODE</div>
-          <div id="hud-timer">00:00:00</div>
+          <div id="hud-timer">00:00:00 / 00:15:00</div>
+          <div>48kHz STEREO DSP</div>
         </div>
 
         <div class="hud-bottombar">
-          <div>FPS: 60.00 · HARDWARE GPU</div>
-          <div>ZERO ASSETS · 100% CODE SYNTHESIS</div>
-          <div>ANTIGRAVITY ENGINE</div>
+          <div>ENGINE: LOCAL-FIRST POSTGRESQL</div>
+          <div>CURRICULUM SPEC: 33 WEEKS • 1,400+ HOURS</div>
+          <div>BUILD: V1.0.0 STABLE</div>
         </div>
       </div>
 
-      <!-- Stage Visual Scenes -->
-      <div class="stage-layer">
-        
-        <!-- ACT I: CALIBRATION & INTRO (0.0s - 2.66s) -->
-        <div id="scene-1">
-          <div class="s1-kicker" id="s1-kicker">DIRECTOR SHOWREEL</div>
-          <div class="s1-title" id="s1-title">KINETIC<br/>ENGINE</div>
-          <div class="s1-sublines" id="s1-sublines">
-            <span>[ SYSTEM: DETERMINISTIC ]</span>
-            <span>[ SHADERS: PROCEDURAL ]</span>
-            <span>[ PHYSICS: SPRING_MASS ]</span>
-          </div>
-          <div class="s1-counter" id="s1-countdown">03</div>
-        </div>
+      <!-- Virtual Pointer Cursor -->
+      <div id="virtual-cursor">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
+          <path d="M4 3L11 20L14 13L21 10L4 3Z" fill="#18181b" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </div>
 
-        <!-- ACT II: 3D PROCEDURAL DROP (2.66s - 6.8s) -->
-        <div id="scene-2">
-          <div class="s2-typography">
-            <div class="s2-word s2-word-1" id="s2-word-1">PURE MATHEMATICS</div>
-            <div class="s2-word s2-word-2" id="s2-word-2">FLUID ELASTICITY</div>
-            <div class="s2-word s2-word-3" id="s2-word-3">SUB-PIXEL CRAFT</div>
-          </div>
-        </div>
-
-        <!-- ACT III: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s) -->
-        <div id="scene-3">
-          <div class="card-deck">
-            <!-- Card 1: Vector Curve Interpolation -->
-            <div class="haptic-card" id="card-1">
-              <div class="card-glow"></div>
-              <div>
-                <div class="card-header-badge">
-                  <span>MODULE 01</span>
-                  <span>EASING DYNAMICS</span>
-                </div>
-                <div class="card-title">Custom Springs</div>
-                <div class="card-desc">Non-linear cubic-bezier & damped harmonic oscillations.</div>
-              </div>
-              <div class="card-graphic">
-                <svg width="220" height="90" viewBox="0 0 220 90" fill="none">
-                  <path d="M 10 75 C 60 75, 70 15, 120 15 C 160 15, 170 45, 210 45" stroke="#00f0ff" stroke-width="3" stroke-linecap="round" />
-                  <circle cx="10" cy="75" r="4" fill="#00f0ff" />
-                  <circle cx="120" cy="15" r="5" fill="#ffffff" />
-                  <circle cx="210" cy="45" r="4" fill="#00f0ff" />
-                  <line x1="70" y1="15" x2="120" y2="15" stroke="rgba(255,255,255,0.4)" stroke-dasharray="3 3" />
-                </svg>
-              </div>
-              <div class="card-stat">60 FPS</div>
-            </div>
-
-            <!-- Card 2: Real-time Parametric Wave -->
-            <div class="haptic-card" id="card-2">
-              <div class="card-glow"></div>
-              <div>
-                <div class="card-header-badge">
-                  <span>MODULE 02</span>
-                  <span>SPATIAL RHYTHM</span>
-                </div>
-                <div class="card-title">Nested Depth</div>
-                <div class="card-desc">Concentric machining & double-bezel micro-surfaces.</div>
-              </div>
-              <div class="card-graphic">
-                <svg width="100" height="100" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="42" stroke="rgba(168,85,247,0.25)" stroke-width="6" fill="none" />
-                  <circle id="card-2-ring" cx="50" cy="50" r="42" stroke="#a855f7" stroke-width="6" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="66" fill="none" transform="rotate(-90 50 50)" />
-                  <text x="50" y="55" fill="#ffffff" font-size="16" font-family="ui-monospace" font-weight="bold" text-anchor="middle">75%</text>
-                </svg>
-              </div>
-              <div class="card-stat">0.0ms LAG</div>
-            </div>
-
-            <!-- Card 3: Deterministic Sync -->
-            <div class="haptic-card" id="card-3">
-              <div class="card-glow"></div>
-              <div>
-                <div class="card-header-badge">
-                  <span>MODULE 03</span>
-                  <span>CHOREOGRAPHY</span>
-                </div>
-                <div class="card-title">Frame Perfect</div>
-                <div class="card-desc">Exact timeline synchronization and audio reactivity.</div>
-              </div>
-              <div class="card-graphic">
-                <svg width="220" height="90" viewBox="0 0 220 90">
-                  <rect x="15" y="30" width="190" height="32" rx="16" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" />
-                  <circle cx="175" cy="46" r="12" fill="#10b981" />
-                  <text x="75" y="51" fill="#10b981" font-size="12" font-family="ui-monospace" font-weight="bold">ACTIVE</text>
-                </svg>
-              </div>
-              <div class="card-stat">100% CODE</div>
-            </div>
-          </div>
-
-          <div class="s3-ticker-wrap">
-            <div class="s3-ticker" id="s3-ticker">
-              <span>/// INTERACTION DESIGN</span>
-              <span>/// SYSTEM CHOREOGRAPHY</span>
-              <span>/// HAPTIC PHYSICS</span>
-              <span>/// PROCEDURAL SHADERS</span>
-              <span>/// AUDITABLE TIMING</span>
-              <span>/// ZERO ASSETS</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACT IV: CLIMAX VELOCITY (10.66s - 13.33s) -->
-        <div id="scene-4">
-          <div>
-            <div class="climax-headline" id="climax-headline">UNSTOPPABLE<br/>VELOCITY</div>
-            <div class="climax-sub" id="climax-sub">MASS · MOMENTUM · FRICTION · INTENT</div>
-          </div>
-        </div>
-
-        <!-- ACT V / FINALE: THE MONOLITH (13.33s - 15.0s) -->
-        <div id="scene-5">
-          <svg class="monolith-emblem" viewBox="0 0 80 80" fill="none" id="monolith-emblem">
-            <polygon points="40,4 76,40 40,76 4,40" stroke="#00f0ff" stroke-width="3" fill="rgba(0,240,255,0.08)" />
-            <polygon points="40,16 64,40 40,64 16,40" stroke="#a855f7" stroke-width="2.5" fill="rgba(168,85,247,0.12)" />
-            <circle cx="40" cy="40" r="8" fill="#ffffff" />
-            <line x1="40" y1="4" x2="40" y2="76" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
-            <line x1="4" y1="40" x2="76" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+      <!-- ======================================================== -->
+      <!-- SCENE 1: BRAND IDENTITY HERO HOOK (0.0s - 2.8s)          -->
+      <!-- ======================================================== -->
+      <div id="scene-1" class="scene">
+        <div id="s1-mark" class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
           </svg>
-          <div class="brand-hero" id="brand-hero">ANTIGRAVITY</div>
-          <div class="brand-role" id="brand-role">LEAD MOTION DESIGNER &amp; CREATIVE TECHNOLOGIST</div>
-          <div class="brand-footnote" id="brand-footnote">
-            <span>60 FPS DETERMINISTIC</span>
-            <span>•</span>
-            <span>ZERO SAMPLES</span>
-            <span>•</span>
-            <span>PURE CODE</span>
+        </div>
+        <h1 id="s1-title" class="brand-title">StudyDock</h1>
+        <p id="s1-tagline" class="brand-tagline">Product Engineer Curriculum & Execution Engine</p>
+        <div id="s1-pills" class="brand-pills">
+          <div class="brand-pill">
+            <span class="dot" style="background: #a855f7;"></span>
+            <span>33 WEEKS CURRICULUM</span>
+          </div>
+          <div class="brand-pill">
+            <span class="dot" style="background: #3b82f6;"></span>
+            <span>1,400+ HOURS DRILLS</span>
+          </div>
+          <div class="brand-pill">
+            <span class="dot" style="background: #10b981;"></span>
+            <span>LOCAL-FIRST ARCHITECTURE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCENE 2: BENTO DASHBOARD & LIVE SPRINT (2.8s - 5.8s)     -->
+      <!-- ======================================================== -->
+      <div id="scene-2" class="scene">
+        <div id="s2-device" class="device-frame">
+          <div class="device-bar">
+            <span class="device-dot red"></span>
+            <span class="device-dot yellow"></span>
+            <span class="device-dot green"></span>
+            <span class="device-url">https://studydock.internal/dashboard</span>
+          </div>
+          <img src="assets/ui_today.png" alt="StudyDock Bento Dashboard" class="device-img" data-start="2.8" data-duration="3.0" />
+        </div>
+
+        <!-- Floating Feature Badge: Current Sprint -->
+        <div id="s2-sprint-badge" class="floating-badge sprint-hero">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); display: flex; align-items: center; justify-content: center; shrink: 0;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a5b4fc" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #a5b4fc; font-weight: 700; text-transform: uppercase;">ACTIVE SPRINT 01</span>
+              <span id="s2-progress-num" style="font-family: ui-monospace, monospace; font-size: 11px; font-weight: 800; color: #ffffff;">0%</span>
+            </div>
+            <div style="font-size: 12px; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
+              JavaScript reboot & debugging
+            </div>
+            <div class="sprint-meter-bar">
+              <div id="s2-meter-fill" class="sprint-meter-fill"></div>
+            </div>
           </div>
         </div>
 
+        <!-- Floating Badge: Target Pace -->
+        <div id="s2-pace-badge" class="floating-badge metric-1">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#34d399" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10px; color: #94a3b8;">TARGET PACE</div>
+            <div style="font-size: 14px; font-weight: 800; color: #ffffff;">16h / week</div>
+          </div>
+        </div>
+
+        <!-- Floating Badge: DSA Bank -->
+        <div id="s2-dsa-badge" class="floating-badge metric-2">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#c084fc" stroke-width="2">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family: ui-monospace, monospace; font-size: 10px; color: #94a3b8;">DSA BANK</div>
+            <div style="font-size: 14px; font-weight: 800; color: #ffffff;">150+ Curated Problems</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCENE 3: 33-WEEK ROADMAP & CHECKPOINTS (5.8s - 8.8s)     -->
+      <!-- ======================================================== -->
+      <div id="scene-3" class="scene">
+        <div id="s3-device" class="device-frame">
+          <div class="device-bar">
+            <span class="device-dot red"></span>
+            <span class="device-dot yellow"></span>
+            <span class="device-dot green"></span>
+            <span class="device-url">https://studydock.internal/roadmap</span>
+          </div>
+          <img src="assets/ui_roadmap.png" alt="Curriculum Roadmap" class="device-img" data-start="5.8" data-duration="3.0" />
+        </div>
+
+        <!-- Floating Gatekeeper Attestation Card -->
+        <div id="s3-gatekeeper" class="gatekeeper-card">
+          <div class="gatekeeper-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10b981" stroke-width="2.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <span style="font-size: 14px; font-weight: 800; color: #ffffff;">Week Exit Gatekeeper</span>
+            </div>
+            <div id="s3-verified-badge" class="gatekeeper-badge" style="opacity: 0;">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Verified & Passed</span>
+            </div>
+          </div>
+
+          <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px;">
+            "Explain and trace code, implement 5 core algorithms with edge cases, and run unit tests without AI assistance."
+          </p>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="font-family: ui-monospace, monospace; font-size: 10px; color: #94a3b8;">
+              ATTESTATION: WEEK 01
+            </div>
+            <div id="s3-attest-btn" style="padding: 5px 12px; border-radius: 8px; background: #ffffff; color: #090a0f; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+              <span>Sign Off</span>
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCENE 4: KANBAN EXECUTION & TACTILE FLOW (8.8s - 12.0s)  -->
+      <!-- ======================================================== -->
+      <div id="scene-4" class="scene">
+        <!-- Background Device Frame with Kanban -->
+        <div id="s4-device" class="device-frame" style="transform: scale(1.08);">
+          <div class="device-bar">
+            <span class="device-dot red"></span>
+            <span class="device-dot yellow"></span>
+            <span class="device-dot green"></span>
+            <span class="device-url">https://studydock.internal/tasks</span>
+          </div>
+          <img src="assets/ui_today.png" alt="Kanban Execution" class="device-img" data-start="8.8" data-duration="3.2" />
+        </div>
+
+        <!-- Animated Task Card -->
+        <div id="s4-card" class="kanban-demo-card" style="top: 260px; left: 160px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="card-chip">
+              <span class="chip-dot"></span>
+              <span>Coding</span>
+            </div>
+            <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #71717a;">W01 • Task 2</span>
+          </div>
+
+          <div style="font-size: 14px; font-weight: 800; color: #090a0f; line-height: 1.3; margin-bottom: 6px;">
+            Independent coding: Pure Function Implementation
+          </div>
+          <div style="font-size: 11px; color: #71717a; line-height: 1.4; margin-bottom: 14px;">
+            Implement array sum, filtering, grouping and deduplication without library helpers.
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(0, 0, 0, 0.08);">
+            <span style="font-family: ui-monospace, monospace; font-size: 10px; color: #71717a;">Vitest suite (5 tests)</span>
+            <div id="s4-btn-start" class="btn-start-action">
+              <span>Start</span>
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task Detail Drawer Slide-in -->
+        <div id="s4-drawer" style="position: absolute; top: 0; right: 0; width: 480px; height: 720px; box-shadow: -25px 0 60px rgba(0,0,0,0.6); z-index: 25;">
+          <img src="assets/ui_drawer.png" alt="Task Detail Drawer" style="width: 100%; height: 100%; object-fit: cover; object-position: right top;" data-start="8.8" data-duration="3.2" />
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCENE 5: MULTI-SCREEN CLIMAX & OUTRO (12.0s - 15.0s)     -->
+      <!-- ======================================================== -->
+      <div id="scene-5" class="scene">
+        <!-- 3D Multi-Screen Wall -->
+        <div id="s5-wall" class="screen-wall">
+          <div class="wall-screen" style="transform: rotateY(20deg) translateZ(-60px);">
+            <img src="assets/ui_roadmap.png" alt="Roadmap" data-start="12.0" data-duration="3.0" />
+          </div>
+          <div class="wall-screen" style="transform: translateZ(40px); box-shadow: 0 40px 90px rgba(99, 102, 241, 0.4);">
+            <img src="assets/ui_today.png" alt="Today Bento" data-start="12.0" data-duration="3.0" />
+          </div>
+          <div class="wall-screen" style="transform: rotateY(-20deg) translateZ(-60px);">
+            <img src="assets/ui_dsa.png" alt="DSA Bank" data-start="12.0" data-duration="3.0" />
+          </div>
+        </div>
+
+        <!-- Kinetic Punch Headline -->
+        <div id="s5-climax-text" style="position: absolute; top: 220px; width: 100%; text-align: center;">
+          <h2 class="climax-headline">Master The Entire Stack.</h2>
+          <div class="climax-sub">ONE STRUCTURED SPRINT AT A TIME.</div>
+        </div>
+
+        <!-- Final Monolith Brand Lockup -->
+        <div id="s5-final-lockup" class="final-lockup">
+          <div class="brand-mark" style="width: 96px; height: 96px; margin-bottom: 20px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+              <path d="M6 6h10"></path>
+              <path d="M6 10h10"></path>
+            </svg>
+          </div>
+          <h1 style="font-size: 56px; font-weight: 800; letter-spacing: -0.04em; color: #ffffff; margin-bottom: 8px;">
+            StudyDock
+          </h1>
+          <p style="font-size: 16px; color: #94a3b8; font-weight: 500; margin-bottom: 20px;">
+            Open Source • Local-First Learning OS for Engineers
+          </p>
+          <div style="font-family: ui-monospace, monospace; font-size: 12px; color: #c7d2fe; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(129, 140, 248, 0.3); padding: 6px 18px; border-radius: 9999px;">
+            github.com/AhmedAbdelHady/Learning-Tracker
+          </div>
+        </div>
       </div>
     </div>
 
     <script>
-      // ========================================================
-      // 1. PROCEDURAL 3D WIREFRAME & PARTICLE ENGINE (CANVAS)
-      // ========================================================
+      // --------------------------------------------------------
+      // Seeded Deterministic PRNG for Canvas
+      // --------------------------------------------------------
+      function mulberry32(a) {
+        return function () {
+          var t = (a += 0x6d2b79f5);
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      const rng = mulberry32(1337);
+
+      // --------------------------------------------------------
+      // Background Grid & Stardust Particles (Canvas)
+      // --------------------------------------------------------
       const canvas = document.getElementById("bg-canvas");
       const ctx = canvas.getContext("2d");
-      const W = 1280;
-      const H = 720;
-      const CX = W / 2;
-      const CY = H / 2;
-
-      // Icosahedron 3D Geometry Definition (12 vertices, 30 edges)
-      const phi = (1 + Math.sqrt(5)) / 2;
-      const rawIcoVerts = [
-        [-1,  phi, 0], [ 1,  phi, 0], [-1, -phi, 0], [ 1, -phi, 0],
-        [ 0, -1,  phi], [ 0,  1,  phi], [ 0, -1, -phi], [ 0,  1, -phi],
-        [ phi, 0, -1], [ phi, 0,  1], [-phi, 0, -1], [-phi, 0,  1]
-      ];
-      // Normalize
-      const icoVerts = rawIcoVerts.map(v => {
-        const len = Math.hypot(...v);
-        return [v[0] / len, v[1] / len, v[2] / len];
-      });
-      // Find edges (vertices with distance ~ 1.05)
-      const icoEdges = [];
-      for (let i = 0; i < icoVerts.length; i++) {
-        for (let j = i + 1; j < icoVerts.length; j++) {
-          const d = Math.hypot(
-            icoVerts[i][0] - icoVerts[j][0],
-            icoVerts[i][1] - icoVerts[j][1],
-            icoVerts[i][2] - icoVerts[j][2]
-          );
-          if (d < 1.15) icoEdges.push([i, j]);
-        }
-      }
-
-      // 4D Hypercube / Tesseract Vertices (16 vertices, 32 edges)
-      const tesseractVerts = [];
-      for (let i = 0; i < 16; i++) {
-        tesseractVerts.push([
-          (i & 1 ? 1 : -1) * 0.6,
-          (i & 2 ? 1 : -1) * 0.6,
-          (i & 4 ? 1 : -1) * 0.6,
-          (i & 8 ? 1 : -1) * 0.6,
-        ]);
-      }
-      const tesseractEdges = [];
-      for (let i = 0; i < 16; i++) {
-        for (let j = i + 1; j < 16; j++) {
-          let diffs = 0;
-          for (let k = 0; k < 4; k++) {
-            if (tesseractVerts[i][k] !== tesseractVerts[j][k]) diffs++;
-          }
-          if (diffs === 1) tesseractEdges.push([i, j]);
-        }
-      }
-
-      // Orbital Particle Swarm (140 deterministic particles)
       const particles = [];
-      for (let i = 0; i < 140; i++) {
-        const angle = (i / 140) * Math.PI * 2;
-        const radius = 90 + (i % 7) * 45;
-        const speed = 0.8 + (i % 5) * 0.35;
-        const yOffset = ((i % 11) - 5) * 25;
-        particles.push({ angle, radius, speed, yOffset, seed: i });
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: rng() * 1280,
+          y: rng() * 720,
+          r: rng() * 1.5 + 0.5,
+          alpha: rng() * 0.5 + 0.2,
+          dx: (rng() - 0.5) * 0.3,
+          dy: (rng() - 0.5) * 0.3,
+        });
       }
 
-      // 3D Rotation helper
-      function rotateX(v, a) {
-        const cos = Math.cos(a), sin = Math.sin(a);
-        return [v[0], v[1] * cos - v[2] * sin, v[1] * sin + v[2] * cos];
-      }
-      function rotateY(v, a) {
-        const cos = Math.cos(a), sin = Math.sin(a);
-        return [v[0] * cos + v[2] * sin, v[1], -v[0] * sin + v[2] * cos];
-      }
-      function rotateZ(v, a) {
-        const cos = Math.cos(a), sin = Math.sin(a);
-        return [v[0] * cos - v[1] * sin, v[0] * sin + v[1] * cos, v[2]];
-      }
+      function drawCanvas(time) {
+        ctx.clearRect(0, 0, 1280, 720);
 
-      // Master deterministic Canvas Render function called on every frame of GSAP
-      function renderCanvas(t) {
-        ctx.clearRect(0, 0, W, H);
-
-        // 1. Perspective Grid (Floor & Ceiling)
-        const gridSpeed = (t * 220) % 60;
-        ctx.strokeStyle = "rgba(0, 240, 255, 0.07)";
+        // Subtle 3D perspective grid
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
         ctx.lineWidth = 1;
-        ctx.beginPath();
-        // Perspective rays
-        for (let x = -W; x <= W * 2; x += 80) {
-          ctx.moveTo(x, H);
-          ctx.lineTo(CX + (x - CX) * 0.1, CY + 80);
+
+        const gridStep = 64;
+        for (let x = 0; x < 1280; x += gridStep) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, 720);
+          ctx.stroke();
         }
-        // Horizontal depth rungs
-        for (let d = 0; d < 12; d++) {
-          const depthProgress = ((d * 40 + gridSpeed) % 480) / 480;
-          const y = CY + 80 + Math.pow(depthProgress, 2.2) * (CY - 80);
+        for (let y = 0; y < 720; y += gridStep) {
+          ctx.beginPath();
           ctx.moveTo(0, y);
-          ctx.lineTo(W, y);
-        }
-        ctx.stroke();
-
-        // 2. Audio-reactive Spectrum Visualizer Bars (Bottom HUD)
-        const bpm = 135;
-        const beatProgress = (t * (bpm / 60)) % 1;
-        const isDrop = t >= 2.66 && t < 13.33;
-        const kickPulse = isDrop ? Math.pow(1 - beatProgress, 3) : 0.15;
-
-        const numBars = 48;
-        const barW = 12;
-        const barGap = 6;
-        const totalW = numBars * (barW + barGap);
-        const startX = CX - totalW / 2;
-
-        ctx.fillStyle = "rgba(0, 240, 255, 0.35)";
-        for (let i = 0; i < numBars; i++) {
-          const normIdx = i / numBars;
-          const harmonic = Math.sin(normIdx * Math.PI * 4 + t * 8);
-          const barH = 8 + (kickPulse * 45 + Math.abs(harmonic) * 35);
-          const x = startX + i * (barW + barGap);
-          const y = H - 56 - barH;
-          ctx.fillRect(x, y, barW, barH);
+          ctx.lineTo(1280, y);
+          ctx.stroke();
         }
 
-        // 3. Shockwave Rings on Drop Impacts
-        const drops = [2.66, 7.11, 10.66, 13.33];
-        for (const drop of drops) {
-          if (t >= drop && t < drop + 1.2) {
-            const shockAge = (t - drop) / 1.2;
-            const shockR = shockAge * 520;
-            const shockAlpha = (1 - shockAge) * 0.6;
-            ctx.strokeStyle = `rgba(0, 240, 255, ${shockAlpha})`;
-            ctx.lineWidth = 3 * (1 - shockAge);
-            ctx.beginPath();
-            ctx.arc(CX, CY, shockR, 0, Math.PI * 2);
-            ctx.stroke();
-          }
+        // Draw animated particles
+        for (let p of particles) {
+          ctx.fillStyle = `rgba(165, 180, 252, ${p.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0) p.x = 1280;
+          if (p.x > 1280) p.x = 0;
+          if (p.y < 0) p.y = 720;
+          if (p.y > 720) p.y = 0;
         }
-
-        // 4. Center 3D Wireframe Core (Active during Act II, III, IV)
-        if (t >= 2.2 && t <= 13.5) {
-          const coreScale = t < 2.66
-            ? ((t - 2.2) / 0.46) * 160
-            : t > 13.0
-            ? (1 - (t - 13.0) / 0.5) * 180
-            : 160 + kickPulse * 28;
-
-          const rx = t * 1.4;
-          const ry = t * 1.8;
-          const rz = t * 0.9;
-
-          // Interpolate between Icosahedron (Act II) and Tesseract (Act III/IV)
-          const useTesseract = t > 6.8 && t < 10.8;
-
-          if (!useTesseract) {
-            // Render Icosahedron
-            const projected = icoVerts.map(v => {
-              let p = rotateX(v, rx);
-              p = rotateY(p, ry);
-              p = rotateZ(p, rz);
-              const zDist = p[2] + 2.8;
-              const fov = 420;
-              return [
-                CX + (p[0] * fov * coreScale) / (zDist * 160),
-                CY + (p[1] * fov * coreScale) / (zDist * 160),
-                p[2]
-              ];
-            });
-
-            // Draw Edges
-            ctx.strokeStyle = `rgba(0, 240, 255, ${0.45 + kickPulse * 0.4})`;
-            ctx.lineWidth = 2.2;
-            for (const [i, j] of icoEdges) {
-              ctx.beginPath();
-              ctx.moveTo(projected[i][0], projected[i][1]);
-              ctx.lineTo(projected[j][0], projected[j][1]);
-              ctx.stroke();
-            }
-
-            // Draw Glowing Vertices
-            for (const [x, y, z] of projected) {
-              const nodeR = 3.5 + (z + 1) * 2;
-              ctx.fillStyle = "#ffffff";
-              ctx.beginPath();
-              ctx.arc(x, y, nodeR, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          } else {
-            // Render 4D Tesseract (Hypercube projection to 3D to 2D)
-            const rot4D = t * 1.5;
-            const cos4 = Math.cos(rot4D), sin4 = Math.sin(rot4D);
-
-            const projected4D = tesseractVerts.map(v4 => {
-              // Rotate in XW and YZ planes
-              const x4 = v4[0] * cos4 - v4[3] * sin4;
-              const w4 = v4[0] * sin4 + v4[3] * cos4;
-              const y4 = v4[1];
-              const z4 = v4[2];
-
-              // Stereographic 4D to 3D
-              const dist4 = 1.8 - w4;
-              const p3 = [x4 / dist4, y4 / dist4, z4 / dist4];
-
-              // 3D rotation
-              let p = rotateX(p3, rx * 0.7);
-              p = rotateY(p, ry * 0.7);
-              const zDist = p[2] + 2.6;
-              const fov = 420;
-              return [
-                CX + (p[0] * fov * coreScale) / (zDist * 160),
-                CY + (p[1] * fov * coreScale) / (zDist * 160),
-                p[2]
-              ];
-            });
-
-            ctx.strokeStyle = `rgba(168, 85, 247, ${0.5 + kickPulse * 0.4})`;
-            ctx.lineWidth = 2.0;
-            for (const [i, j] of tesseractEdges) {
-              ctx.beginPath();
-              ctx.moveTo(projected4D[i][0], projected4D[i][1]);
-              ctx.lineTo(projected4D[j][0], projected4D[j][1]);
-              ctx.stroke();
-            }
-
-            for (const [x, y] of projected4D) {
-              ctx.fillStyle = "#00f0ff";
-              ctx.beginPath();
-              ctx.arc(x, y, 3, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-
-          // Orbital Particle Swarm Ring
-          ctx.fillStyle = "rgba(0, 240, 255, 0.75)";
-          for (const p of particles) {
-            const curAngle = p.angle + t * p.speed * 0.8;
-            const px = CX + Math.cos(curAngle) * p.radius * (1 + kickPulse * 0.2);
-            const py = CY + Math.sin(curAngle) * (p.radius * 0.45) + p.yOffset;
-            const size = 1.5 + (Math.sin(curAngle) + 1) * 1.5;
-            ctx.beginPath();
-            ctx.arc(px, py, size, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-
-        // 5. Climax Laser Mandala (Act IV: 10.66s - 13.33s)
-        if (t >= 10.66 && t < 13.33) {
-          const mandalaProgress = (t - 10.66) / 2.67;
-          const petals = 12;
-          ctx.save();
-          ctx.translate(CX, CY);
-          ctx.rotate(t * 3.5);
-          for (let p = 0; p < petals; p++) {
-            ctx.rotate((Math.PI * 2) / petals);
-            const radius = 180 + Math.sin(t * 16 + p) * 60 + kickPulse * 40;
-            ctx.strokeStyle = p % 2 === 0 ? "rgba(0, 240, 255, 0.45)" : "rgba(168, 85, 247, 0.45)";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(-radius / 2, -radius / 2, radius, radius);
-          }
-          ctx.restore();
-        }
-
-        // Update HUD timecode
-        const mins = Math.floor(t / 60);
-        const secs = Math.floor(t % 60);
-        const frames = Math.floor((t % 1) * 60);
-        const pad = (n) => n.toString().padStart(2, "0");
-        const timecodeStr = `${pad(mins)}:${pad(secs)}:${pad(frames)}`;
-        const timerEl = document.getElementById("hud-timer");
-        if (timerEl) timerEl.textContent = timecodeStr;
       }
 
-      // ========================================================
-      // 2. MASTER CHOREOGRAPHY GSAP TIMELINE
-      // ========================================================
-      const tl = gsap.timeline({ paused: true });
+      // --------------------------------------------------------
+      // Master GSAP Timeline Orchestration
+      // --------------------------------------------------------
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: { ease: "power2.out" },
+        onUpdate: () => {
+          const t = tl.time();
+          drawCanvas(t);
 
-      // Initial Visibility Setup
-      gsap.set(["#scene-1", "#scene-2", "#scene-3", "#scene-4", "#scene-5"], { opacity: 0 });
-      gsap.set("#s1-kicker", { opacity: 0, y: -20 });
-      gsap.set("#s1-title", { opacity: 0, scale: 0.85 });
-      gsap.set("#s1-sublines", { opacity: 0, y: 15 });
-      gsap.set(["#s2-word-1", "#s2-word-2", "#s2-word-3"], { opacity: 0, scale: 0.7 });
-      gsap.set(["#card-1", "#card-2", "#card-3"], { opacity: 0, y: 80, scale: 0.9 });
-      gsap.set("#scene-4", { opacity: 0, scale: 0.8 });
-      gsap.set("#scene-5", { opacity: 0, scale: 0.9 });
-
-      // Drive canvas deterministically
-      const animState = { t: 0 };
-      tl.to(animState, {
-        t: 15.0,
-        duration: 15.0,
-        ease: "none",
-        onUpdate: () => renderCanvas(animState.t)
-      }, 0);
+          // Update HUD timer readout
+          const mins = Math.floor(t / 60).toString().padStart(2, "0");
+          const secs = Math.floor(t % 60).toString().padStart(2, "0");
+          const millis = Math.floor((t % 1) * 100).toString().padStart(2, "0");
+          const el = document.getElementById("hud-timer");
+          if (el) el.innerText = `${mins}:${secs}:${millis} / 00:15:00`;
+        },
+      });
 
       // --------------------------------------------------------
-      // ACT I: CALIBRATION & KINETIC INTRO (0.0s - 2.66s)
+      // ACT I: BRAND IDENTITY HERO HOOK (0.0s - 2.8s)
       // --------------------------------------------------------
-      tl.to("#scene-1", { opacity: 1, duration: 0.2 }, 0.05)
-        .to("#s1-kicker", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1)
-        .to("#s1-title", { opacity: 1, scale: 1, duration: 0.6, ease: "elastic.out(1, 0.75)" }, 0.25)
-        .to("#s1-sublines", { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.6)
-        // Countdown ticks on beats 3, 4, 5
-        .set("#s1-countdown", { textContent: "03" }, 0.88)
-        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 0.88)
-        .set("#s1-countdown", { textContent: "02" }, 1.33)
-        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 1.33)
-        .set("#s1-countdown", { textContent: "01" }, 1.77)
-        .fromTo("#s1-countdown", { scale: 1.4, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 1.77)
-        // Fade out Scene 1 before drop
-        .to("#scene-1", { opacity: 0, scale: 1.15, duration: 0.3, ease: "power2.in" }, 2.45);
+      tl.to("#scene-1", { opacity: 1, duration: 0.1 }, 0.0)
+        .fromTo("#s1-mark", { scale: 0.3, rotation: -40, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.8, ease: "elastic.out(1.1, 0.5)" }, 0.05)
+        .fromTo("#s1-title", { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 0.3)
+        .fromTo("#s1-tagline", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.55)
+        .fromTo("#s1-pills .brand-pill", { opacity: 0, y: 20, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.1, ease: "back.out(2.0)" }, 0.75)
+        // Zoom out & vanish into Scene 2
+        .to("#scene-1", { scale: 1.15, opacity: 0, duration: 0.35, ease: "power2.in" }, 2.5);
 
       // --------------------------------------------------------
-      // ACT II: THE DROP & 3D PROCEDURAL EXPANSION (2.66s - 6.8s)
+      // ACT II: BENTO DASHBOARD & LIVE SPRINT (2.8s - 5.8s)
       // --------------------------------------------------------
-      tl.to("#scene-2", { opacity: 1, duration: 0.1 }, 2.66)
-        // Word 1: PURE MATHEMATICS (2.66s)
-        .to("#s2-word-1", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 2.66)
-        .to("#s2-word-1", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 3.9)
-        // Word 2: FLUID ELASTICITY (4.0s)
-        .to("#s2-word-2", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 4.0)
-        .to("#s2-word-2", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 5.25)
-        // Word 3: SUB-PIXEL CRAFT (5.33s)
-        .to("#s2-word-3", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 5.33)
-        .to("#s2-word-3", { opacity: 0, scale: 1.3, duration: 0.25, ease: "power2.in" }, 6.5)
-        .to("#scene-2", { opacity: 0, duration: 0.2 }, 6.7);
+      tl.to("#scene-2", { opacity: 1, duration: 0.1 }, 2.75)
+        .fromTo("#s2-device",
+          { opacity: 0, scale: 0.85, rotateX: 14, rotateY: -8, z: -200 },
+          { opacity: 1, scale: 1, rotateX: 3, rotateY: -2, z: 0, duration: 0.8, ease: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          2.75
+        )
+        // Stagger in Floating Badges
+        .fromTo("#s2-sprint-badge", { opacity: 0, x: -40, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 3.1)
+        .fromTo("#s2-pace-badge", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.7)" }, 3.3)
+        .fromTo("#s2-dsa-badge", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.7)" }, 3.45)
+        // Progress Meter fills from 0% to 68%
+        .to("#s2-meter-fill", { width: "68%", duration: 1.2, ease: "power3.inOut" }, 3.6)
+        .to({}, {
+          duration: 1.2,
+          onUpdate: function () {
+            const val = Math.round(this.progress() * 68);
+            const numEl = document.getElementById("s2-progress-num");
+            if (numEl) numEl.innerText = `${val}%`;
+          },
+        }, 3.6)
+        // Cursor movement in Bento
+        .fromTo("#virtual-cursor", { opacity: 0, x: 200, y: 600 }, { opacity: 1, x: 380, y: 350, duration: 0.6, ease: "power2.out" }, 3.5)
+        .to("#virtual-cursor", { x: 500, y: 280, duration: 0.8, ease: "power1.inOut" }, 4.3)
+        // Transition out
+        .to("#scene-2", { opacity: 0, scale: 1.1, x: -60, duration: 0.3, ease: "power2.in" }, 5.55);
 
       // --------------------------------------------------------
-      // ACT III: INTERACTION DESIGN & HAPTIC CARDS (6.8s - 10.66s)
+      // ACT III: 33-WEEK ROADMAP & CHECKPOINTS (5.8s - 8.8s)
       // --------------------------------------------------------
-      tl.to("#scene-3", { opacity: 1, duration: 0.2 }, 6.8)
-        // Stagger in the 3 cards with Apple fluid physics
-        .to("#card-1", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 6.9)
-        .to("#card-2", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 7.15)
-        .to("#card-3", { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, 7.4)
-        // Card micro-motion
-        .to("#card-2-ring", { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 7.5)
-        // Horizontal ticker scroll
-        .fromTo("#s3-ticker", { x: 300 }, { x: -600, duration: 3.5, ease: "none" }, 6.8)
-        // Cards exit with acceleration
-        .to(["#card-1", "#card-2", "#card-3"], { opacity: 0, y: -60, scale: 0.85, duration: 0.35, stagger: 0.08, ease: "power2.in" }, 10.2)
-        .to("#scene-3", { opacity: 0, duration: 0.2 }, 10.55);
+      tl.to("#scene-3", { opacity: 1, duration: 0.1 }, 5.75)
+        .fromTo("#s3-device",
+          { opacity: 0, scale: 0.9, x: 80, rotateY: 8 },
+          { opacity: 1, scale: 1, x: 0, rotateY: 0, duration: 0.7, ease: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          5.75
+        )
+        // Gatekeeper card springs forward
+        .fromTo("#s3-gatekeeper",
+          { opacity: 0, scale: 0.7, y: 60 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.8)" },
+          6.1
+        )
+        // Cursor targets the Sign Off button
+        .to("#virtual-cursor", { x: 740, y: 465, duration: 0.7, ease: "power2.out" }, 6.5)
+        // Click effect
+        .to("#s3-attest-btn", { scale: 0.92, duration: 0.08, yoyo: true, repeat: 1 }, 7.2)
+        // Verified badge pops in
+        .fromTo("#s3-verified-badge",
+          { opacity: 0, scale: 0.8 },
+          { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" },
+          7.35
+        )
+        // Exit scene 3
+        .to("#scene-3", { opacity: 0, scale: 0.92, duration: 0.3, ease: "power2.in" }, 8.55);
 
       // --------------------------------------------------------
-      // ACT IV: CLIMAX VELOCITY (10.66s - 13.33s)
+      // ACT IV: KANBAN EXECUTION & TACTILE FLOW (8.8s - 12.0s)
       // --------------------------------------------------------
-      tl.to("#scene-4", { opacity: 1, scale: 1, duration: 0.2, ease: "power3.out" }, 10.66)
-        .fromTo("#climax-headline", { scale: 0.7, opacity: 0 }, { scale: 1.05, opacity: 1, duration: 0.35, ease: "elastic.out(1, 0.6)" }, 10.66)
-        // Beat pulsing to climax melody
-        .to("#climax-headline", { scale: 1.15, duration: 0.15, yoyo: true, repeat: 5, ease: "power1.inOut" }, 11.1)
-        .to("#scene-4", { opacity: 0, scale: 1.4, duration: 0.25, ease: "power3.in" }, 13.05);
+      tl.to("#scene-4", { opacity: 1, duration: 0.1 }, 8.75)
+        .fromTo("#s4-device",
+          { opacity: 0, scale: 1.2 },
+          { opacity: 1, scale: 1.05, duration: 0.6, ease: "power3.out" },
+          8.75
+        )
+        // Kanban card pops up in To Do
+        .fromTo("#s4-card",
+          { opacity: 0, scale: 0.8, y: 40 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" },
+          8.9
+        )
+        // Virtual cursor targets Start button
+        .to("#virtual-cursor", { x: 420, y: 395, duration: 0.5, ease: "power2.out" }, 9.0)
+        // Click Start button
+        .to("#s4-btn-start", { scale: 0.92, duration: 0.08, yoyo: true, repeat: 1 }, 9.4)
+        // Card slides across into In-Progress column with 3D lift
+        .to("#s4-card", {
+          x: 280,
+          y: -20,
+          rotateZ: 2,
+          boxShadow: "0 35px 70px rgba(0,0,0,0.5)",
+          duration: 0.6,
+          ease: "cubic-bezier(0.16, 1, 0.3, 1)"
+        }, 9.48)
+        // Drawer slides in from right edge
+        .fromTo("#s4-drawer",
+          { x: 480 },
+          { x: 0, duration: 0.7, ease: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          10.15
+        )
+        // Exit scene 4
+        .to("#scene-4", { opacity: 0, scale: 0.88, duration: 0.3, ease: "power2.in" }, 11.75);
 
       // --------------------------------------------------------
-      // ACT V: THE FINALE MONOLITH STING (13.33s - 15.0s)
+      // ACT V: MULTI-SCREEN CLIMAX & GRAND OUTRO (12.0s - 15.0s)
       // --------------------------------------------------------
-      tl.to("#scene-5", { opacity: 1, scale: 1, duration: 0.3, ease: "power4.out" }, 13.33)
-        .fromTo("#monolith-emblem", { scale: 0.2, rotation: -90, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.6, ease: "back.out(2.2)" }, 13.33)
-        .fromTo("#brand-hero", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 13.55)
-        .fromTo("#brand-role", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 13.75)
-        .fromTo("#brand-footnote", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }, 13.95)
-        // Gentle cinematic fade to black at 14.8s
-        .to("#root", { opacity: 0, duration: 0.35, ease: "power2.in" }, 14.65);
+      tl.to("#scene-5", { opacity: 1, duration: 0.1 }, 11.9)
+        .fromTo("#s5-wall",
+          { scale: 0.6, opacity: 0, rotateX: 20 },
+          { scale: 1, opacity: 1, rotateX: 0, duration: 0.8, ease: "elastic.out(1.0, 0.6)" },
+          11.95
+        )
+        // Kinetic Climax Headline punches in
+        .fromTo("#s5-climax-text",
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.0)" },
+          12.05
+        )
+        // Disperse wall & headline into final monolith
+        .to("#s5-wall", { opacity: 0, scale: 1.4, duration: 0.4, ease: "power2.in" }, 13.1)
+        .to("#s5-climax-text", { opacity: 0, scale: 1.2, duration: 0.3, ease: "power2.in" }, 13.1)
+        // Final Brand Lockup
+        .to("#s5-final-lockup", {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          ease: "back.out(1.8)"
+        }, 13.25)
+        // Soft fade out at 14.8s
+        .to("#root", { opacity: 0, duration: 0.3, ease: "power2.in" }, 14.7);
 
       window.__timelines["main"] = tl;
     </script>

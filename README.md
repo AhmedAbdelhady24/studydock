@@ -39,6 +39,7 @@ The system natively supports **Docker Compose and standalone host execution**, *
 
 ## Video overview & architecture
 
+* **Product Motion Film**: [Watch / Download MP4 (15.0s, 1080p Master)](assets/showreel-motion.mp4) · [Preview GIF](assets/showreel-motion.gif)
 * **Interactive Architecture Diagram**: [Explore live interactive HTML/SVG diagram](public/docs/studydock-architecture.html)
 * **Product Setup & Demo Walkthrough**: [Watch / Download MP4 (10.0s)](assets/studydock-demo.mp4)
 * **System Architecture Walkthrough**: [Watch / Download MP4 (9.0s)](assets/studydock-architecture.mp4)
