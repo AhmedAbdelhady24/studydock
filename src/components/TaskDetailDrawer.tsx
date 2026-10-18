@@ -34,45 +34,45 @@ const CATEGORY_META: Record<
 > = {
   dsa: {
     label: "DSA / Algorithms",
-    dot: "bg-purple-400",
-    text: "text-purple-300",
+    dot: "bg-purple-500",
+    text: "text-purple-700 dark:text-purple-300",
     bg: "bg-purple-500/10 border-purple-500/20",
   },
   design: {
     label: "Architecture & Design",
-    dot: "bg-blue-400",
-    text: "text-blue-300",
+    dot: "bg-blue-500",
+    text: "text-blue-700 dark:text-blue-300",
     bg: "bg-blue-500/10 border-blue-500/20",
   },
   implementation: {
     label: "Coding & Implementation",
-    dot: "bg-amber-400",
-    text: "text-amber-300",
+    dot: "bg-amber-500",
+    text: "text-amber-700 dark:text-amber-300",
     bg: "bg-amber-500/10 border-amber-500/20",
   },
   course: {
     label: "Course & Core Lessons",
-    dot: "bg-emerald-400",
-    text: "text-emerald-300",
+    dot: "bg-emerald-500",
+    text: "text-emerald-700 dark:text-emerald-300",
     bg: "bg-emerald-500/10 border-emerald-500/20",
   },
   quality: {
     label: "Code Review & Quality Gate",
-    dot: "bg-indigo-400",
-    text: "text-indigo-300",
+    dot: "bg-indigo-500",
+    text: "text-indigo-700 dark:text-indigo-300",
     bg: "bg-indigo-500/10 border-indigo-500/20",
   },
   checkpoint: {
     label: "Exit Competency Checkpoint",
-    dot: "bg-rose-400",
-    text: "text-rose-300",
+    dot: "bg-rose-500",
+    text: "text-rose-700 dark:text-rose-300",
     bg: "bg-rose-500/10 border-rose-500/20",
   },
   other: {
     label: "Exercise Task",
     dot: "bg-zinc-400",
-    text: "text-zinc-300",
-    bg: "bg-white/[0.04] border-white/[0.08]",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-black/[0.04] dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.08]",
   },
 };
 
@@ -166,7 +166,7 @@ export function TaskDetailDrawer({
       />
 
       {/* Slide-over Drawer Panel */}
-      <div className="relative z-10 w-full max-w-lg bg-white dark:bg-[#0E1014] border-l border-black/[0.1] dark:border-white/[0.1] shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-250 ease-out text-zinc-900 dark:text-zinc-100">
+      <div className="relative z-10 w-full max-w-lg bg-white dark:bg-[#0E1014] border-l border-black/[0.1] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_1px_0_0_rgba(255,255,255,0.06)] flex flex-col h-[100dvh] animate-in slide-in-from-right duration-250 ease-out text-zinc-900 dark:text-zinc-100">
         {/* Header */}
         <div className="p-6 border-b border-black/[0.08] dark:border-white/[0.08] space-y-3 shrink-0">
           <div className="flex items-center justify-between">
@@ -196,7 +196,7 @@ export function TaskDetailDrawer({
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-black/[0.06] dark:bg-white/[0.06] hover:bg-black/[0.12] dark:hover:bg-white/[0.12] text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white flex items-center justify-center transition-all cursor-pointer"
+              className="w-8 h-8 rounded-full bg-black/[0.06] dark:bg-white/[0.06] hover:bg-black/[0.12] dark:hover:bg-white/[0.12] text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white flex items-center justify-center transition-all cursor-pointer active:scale-90"
               title="Close (Esc)"
               aria-label="Close details"
             >

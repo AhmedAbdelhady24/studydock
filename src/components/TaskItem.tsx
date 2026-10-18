@@ -58,38 +58,38 @@ const CATEGORY_META: Record<
 > = {
   dsa: {
     label: "DSA",
-    dot: "bg-purple-400",
-    text: "text-purple-300",
+    dot: "bg-purple-500",
+    text: "text-purple-700 dark:text-purple-300",
   },
   design: {
     label: "Architecture",
-    dot: "bg-blue-400",
-    text: "text-blue-300",
+    dot: "bg-blue-500",
+    text: "text-blue-700 dark:text-blue-300",
   },
   implementation: {
     label: "Coding",
-    dot: "bg-amber-400",
-    text: "text-amber-300",
+    dot: "bg-amber-500",
+    text: "text-amber-700 dark:text-amber-300",
   },
   course: {
     label: "Course",
-    dot: "bg-emerald-400",
-    text: "text-emerald-300",
+    dot: "bg-emerald-500",
+    text: "text-emerald-700 dark:text-emerald-300",
   },
   quality: {
     label: "Review",
-    dot: "bg-indigo-400",
-    text: "text-indigo-300",
+    dot: "bg-indigo-500",
+    text: "text-indigo-700 dark:text-indigo-300",
   },
   checkpoint: {
     label: "Checkpoint",
-    dot: "bg-rose-400",
-    text: "text-rose-300",
+    dot: "bg-rose-500",
+    text: "text-rose-700 dark:text-rose-300",
   },
   other: {
     label: "Task",
     dot: "bg-zinc-400",
-    text: "text-zinc-300",
+    text: "text-zinc-700 dark:text-zinc-300",
   },
 };
 

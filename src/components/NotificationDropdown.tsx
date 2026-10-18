@@ -168,7 +168,7 @@ export function NotificationDropdown() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-9 h-9 rounded-full border flex items-center justify-center transition-all relative cursor-pointer",
+          "w-9 h-9 rounded-full border flex items-center justify-center transition-all relative cursor-pointer active:scale-95",
           isOpen
             ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 border-transparent shadow-sm"
             : "bg-zinc-100 dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
@@ -184,7 +184,7 @@ export function NotificationDropdown() {
 
       {/* Flyout Popover Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2.5 w-[340px] sm:w-[400px] rounded-3xl bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.1] shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-zinc-900 dark:text-zinc-100">
+        <div className="absolute right-0 mt-2.5 w-[340px] sm:w-[400px] rounded-3xl bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-zinc-900 dark:text-zinc-100">
           
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
