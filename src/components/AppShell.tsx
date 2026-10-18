@@ -34,14 +34,14 @@ interface AppShellProps {
 }
 
 const NAV_ITEMS = [
-  { href: "/", label: "Overview & Today", icon: Compass, exact: true },
-  { href: "/roadmap", label: "Full Roadmap", icon: Layers },
-  { href: "/courses", label: "Our Courses", icon: GraduationCap },
-  { href: "/dsa", label: "DSA Practice", icon: Binary },
+  { href: "/", label: "Today", icon: Compass, exact: true },
+  { href: "/roadmap", label: "Roadmap", icon: Layers },
+  { href: "/courses", label: "Courses", icon: GraduationCap },
+  { href: "/dsa", label: "DSA practice", icon: Binary },
   { href: "/sessions", label: "Time Log", icon: Clock },
   { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/import", label: "Import & Export", icon: ArrowUpDown },
-  { href: "/profile", label: "Profile & Settings", icon: User },
+  { href: "/profile", label: "Profile", icon: User },
 ];
 
 export function AppShell({ children }: AppShellProps) {
@@ -179,11 +179,6 @@ export function AppShell({ children }: AppShellProps) {
 
           {/* Navigation Menu */}
           <nav className="space-y-1 w-full">
-            {!isCollapsed && (
-              <div className="px-3 pb-1.5 text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
-                Curriculum Nav
-              </div>
-            )}
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
               const isActive = item.exact

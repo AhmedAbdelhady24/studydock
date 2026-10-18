@@ -1,7 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Play, Pause, RotateCcw, Check, Clock, Plus } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  Check,
+  Clock,
+  Plus,
+  PictureInPicture2,
+  Sparkles,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -22,6 +31,38 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  // Picture-in-Picture State & Hardware Refs
+  const [isPipActive, setIsPipActive] = useState(false);
+  const [autoPipEnabled, setAutoPipEnabled] = useState(true);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Load auto-pip preference from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("studydock_timer_autopip");
+    if (saved !== null) {
+      setAutoPipEnabled(saved === "true");
+    }
+  }, []);
+
+  const toggleAutoPip = (enabled: boolean) => {
+    setAutoPipEnabled(enabled);
+    localStorage.setItem("studydock_timer_autopip", enabled ? "true" : "false");
+    if (enabled) {
+      toast.info("Auto-PiP enabled", {
+        description: "The timer will automatically float in Picture-in-Picture when you switch tabs.",
+      });
+    }
+  };
+
+  // Keep weekId synced with parent prop
+  useEffect(() => {
+    if (currentWeekId) {
+      setWeekId(currentWeekId);
+    }
+  }, [currentWeekId]);
+
+  // Main timer stopwatch tick
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (isActive) {
@@ -36,8 +77,235 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
     };
   }, [isActive, seconds]);
 
-  const toggleTimer = () => {
-    setIsActive(!isActive);
+  const formatTime = (totalSecs: number) => {
+    const hrs = Math.floor(totalSecs / 3600);
+    const mins = Math.floor((totalSecs % 3600) / 60);
+    const secs = totalSecs % 60;
+    return `${hrs.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const getWeekDisplay = useCallback(() => {
+    const match = weekId.match(/w(\d+)/i);
+    return match ? `Week ${match[1]} • Focus Session` : "Curriculum Focus Session";
+  }, [weekId]);
+
+  // Render high-DPI Studio HUD onto hidden canvas for native PiP stream
+  const drawCanvas = useCallback(
+    (secs: number, active: boolean) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // 1. Deep Obsidian Studio Background
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, "#0E1014");
+      grad.addColorStop(1, "#161821");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Subtle Outer Edge Ring
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(1, 1, w - 2, h - 2);
+
+      // 2. Brand Header with Status Dot
+      const dotColor = active ? "#10B981" : "#F59E0B";
+      ctx.fillStyle = dotColor;
+      ctx.beginPath();
+      ctx.arc(34, 38, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#A1A1AA";
+      ctx.font = "bold 13px system-ui, -apple-system, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("STUDYDOCK • FOCUS TIMER", 48, 42);
+
+      // Status pill badge
+      const badgeText = active ? "RUNNING" : "PAUSED";
+      ctx.fillStyle = active ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)";
+      ctx.beginPath();
+      ctx.roundRect(w - 105, 26, 75, 24, 12);
+      ctx.fill();
+      ctx.fillStyle = dotColor;
+      ctx.font = "bold 11px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(badgeText, w - 67, 42);
+
+      // 3. Large Digital Clock Display
+      const timeStr = formatTime(secs);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "bold 64px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(timeStr, w / 2, 128);
+
+      // 4. Subtitle / Associated Week
+      ctx.fillStyle = "#71717A";
+      ctx.font = "500 15px system-ui, sans-serif";
+      ctx.fillText(getWeekDisplay(), w / 2, 192);
+
+      // 5. Instruction / Status Footer
+      ctx.fillStyle = "#52525B";
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.fillText(
+        active ? "Focusing • Click StudyDock tab to return" : "Paused • Click Play to resume",
+        w / 2,
+        230
+      );
+      ctx.textAlign = "left";
+    },
+    [getWeekDisplay]
+  );
+
+  // Initialize canvas stream onto hidden video element
+  const initPipStream = useCallback(() => {
+    if (!canvasRef.current || !videoRef.current) return;
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+
+    if (!video.srcObject) {
+      try {
+        const stream = (canvas as any).captureStream ? (canvas as any).captureStream(10) : null;
+        if (stream) {
+          video.srcObject = stream;
+          video.muted = true;
+          video.playsInline = true;
+          (video as any).autoPictureInPicture = true;
+        }
+      } catch (err) {
+        console.warn("Could not capture canvas stream for PiP", err);
+      }
+    }
+  }, []);
+
+  // Update canvas & page title on timer ticks
+  useEffect(() => {
+    drawCanvas(seconds, isActive);
+
+    if (isActive) {
+      document.title = `(${formatTime(seconds)}) StudyDock | Focus`;
+    } else if (seconds > 0) {
+      document.title = `[Paused ${formatTime(seconds)}] StudyDock`;
+    } else {
+      document.title = "StudyDock | 33-Week Product Engineer Tracker";
+    }
+  }, [seconds, isActive, drawCanvas]);
+
+  // Listen for Picture-in-Picture enter / exit events
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const onEnterPip = () => setIsPipActive(true);
+    const onLeavePip = () => setIsPipActive(false);
+
+    video.addEventListener("enterpictureinpicture", onEnterPip);
+    video.addEventListener("leavepictureinpicture", onLeavePip);
+
+    return () => {
+      video.removeEventListener("enterpictureinpicture", onEnterPip);
+      video.removeEventListener("leavepictureinpicture", onLeavePip);
+    };
+  }, []);
+
+  // AUTO-PIP ON TAB SWITCH:
+  // When user switches to another tab while timer is active, automatically enter Picture-in-Picture!
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === "hidden") {
+        if (isActive && autoPipEnabled && videoRef.current) {
+          initPipStream();
+          drawCanvas(seconds, isActive);
+
+          const docAny = document as any;
+          if (!docAny.pictureInPictureElement && (videoRef.current as any).requestPictureInPicture) {
+            try {
+              await videoRef.current.play();
+              await (videoRef.current as any).requestPictureInPicture();
+              setIsPipActive(true);
+            } catch (err) {
+              // Handled by browser via autoPictureInPicture = true
+            }
+          }
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isActive, autoPipEnabled, seconds, drawCanvas, initPipStream]);
+
+  // MediaSession API integration for OS-level and PiP play/pause controls
+  useEffect(() => {
+    if (typeof window !== "undefined" && "mediaSession" in navigator && isActive) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: `Focus Timer: ${formatTime(seconds)}`,
+          artist: "StudyDock",
+          album: getWeekDisplay(),
+        });
+        navigator.mediaSession.setActionHandler("play", () => setIsActive(true));
+        navigator.mediaSession.setActionHandler("pause", () => setIsActive(false));
+      } catch {}
+    }
+  }, [seconds, isActive, getWeekDisplay]);
+
+  // Toggle Picture-in-Picture manually
+  const togglePiP = async () => {
+    const docAny = document as any;
+    if (docAny.pictureInPictureElement) {
+      try {
+        await docAny.exitPictureInPicture();
+        setIsPipActive(false);
+      } catch (err) {
+        console.warn("Error exiting PiP", err);
+      }
+    } else if (videoRef.current) {
+      initPipStream();
+      drawCanvas(seconds, isActive);
+
+      try {
+        await videoRef.current.play();
+        if ((videoRef.current as any).requestPictureInPicture) {
+          await (videoRef.current as any).requestPictureInPicture();
+          setIsPipActive(true);
+          toast.success("Timer floating in Picture-in-Picture", {
+            description: "The timer will float over other applications and tabs.",
+          });
+        } else {
+          toast.info("Picture-in-Picture not supported by your browser");
+        }
+      } catch (err: any) {
+        console.warn("PiP failed", err);
+        toast.error("Picture-in-Picture could not open", {
+          description: err?.message || "User interaction required.",
+        });
+      }
+    }
+  };
+
+  const toggleTimer = async () => {
+    const next = !isActive;
+    setIsActive(next);
+
+    // Warm up video stream in user gesture
+    if (next) {
+      initPipStream();
+      drawCanvas(seconds, next);
+      if (videoRef.current) {
+        try {
+          await videoRef.current.play();
+        } catch {}
+      }
+    }
   };
 
   const resetTimer = () => {
@@ -47,15 +315,6 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
 
   const addPresetMinutes = (mins: number) => {
     setSeconds((prev) => prev + mins * 60);
-  };
-
-  const formatTime = (totalSecs: number) => {
-    const hrs = Math.floor(totalSecs / 3600);
-    const mins = Math.floor((totalSecs % 3600) / 60);
-    const secs = totalSecs % 60;
-    return `${hrs.toString().padStart(2, "0")}:${mins
-      .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleSaveTimerSession = async () => {
@@ -118,6 +377,20 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
 
   return (
     <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] p-5 text-zinc-900 dark:text-zinc-200 shadow-sm space-y-4">
+      {/* Offscreen Canvas & Video for native Picture-in-Picture stream */}
+      <canvas
+        ref={canvasRef}
+        width={480}
+        height={270}
+        style={{ position: "fixed", top: -9999, left: -9999, opacity: 0, pointerEvents: "none" }}
+      />
+      <video
+        ref={videoRef}
+        playsInline
+        muted
+        style={{ position: "fixed", top: -9999, left: -9999, opacity: 0, pointerEvents: "none", width: 10, height: 10 }}
+      />
+
       <div className="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.06]">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-zinc-500" />
@@ -126,31 +399,50 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
           </h3>
         </div>
 
-        <div className="flex items-center bg-black/[0.04] dark:bg-white/[0.04] rounded-full p-1 border border-black/[0.06] dark:border-white/[0.06] text-xs">
-          <button
-            type="button"
-            onClick={() => setMode("timer")}
-            className={cn(
-              "px-3 py-1 rounded-full text-[11px] font-semibold transition-all",
-              mode === "timer"
-                ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
-            )}
-          >
-            Stopwatch
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("manual")}
-            className={cn(
-              "px-3 py-1 rounded-full text-[11px] font-semibold transition-all",
-              mode === "manual"
-                ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
-            )}
-          >
-            Manual
-          </button>
+        <div className="flex items-center gap-2">
+          {mode === "timer" && (
+            <button
+              type="button"
+              onClick={togglePiP}
+              className={cn(
+                "px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer border",
+                isPipActive
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 shadow-xs"
+                  : "bg-black/[0.04] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white border-black/[0.06] dark:border-white/[0.06]"
+              )}
+              title={isPipActive ? "Close Picture-in-Picture window" : "Open floating Picture-in-Picture window (floats across tabs)"}
+            >
+              <PictureInPicture2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isPipActive ? "In PiP" : "PiP"}</span>
+            </button>
+          )}
+
+          <div className="flex items-center bg-black/[0.04] dark:bg-white/[0.04] rounded-full p-1 border border-black/[0.06] dark:border-white/[0.06] text-xs">
+            <button
+              type="button"
+              onClick={() => setMode("timer")}
+              className={cn(
+                "px-3 py-1 rounded-full text-[11px] font-semibold transition-all",
+                mode === "timer"
+                  ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
+              )}
+            >
+              Stopwatch
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("manual")}
+              className={cn(
+                "px-3 py-1 rounded-full text-[11px] font-semibold transition-all",
+                mode === "manual"
+                  ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-bold"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
+              )}
+            >
+              Manual
+            </button>
+          </div>
         </div>
       </div>
 
@@ -176,7 +468,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
                 key={mins}
                 type="button"
                 onClick={() => addPresetMinutes(mins)}
-                className="px-2.5 py-1 text-xs font-mono rounded-full bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.06] font-semibold transition-colors"
+                className="px-2.5 py-1 text-xs font-mono rounded-full bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.06] font-semibold transition-colors cursor-pointer"
               >
                 +{mins}m
               </button>
@@ -216,6 +508,30 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
               title="Reset"
             >
               <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* Picture-in-Picture Auto-Float Toggle Option */}
+          <div className="flex items-center justify-between pt-2 pb-1 px-1 border-t border-black/[0.04] dark:border-white/[0.04] w-full text-[11px]">
+            <div className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 font-medium">
+              <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
+              <span>Auto-float in PiP on tab switch</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => toggleAutoPip(!autoPipEnabled)}
+              className={cn(
+                "w-7 h-4 rounded-full transition-colors relative cursor-pointer shrink-0",
+                autoPipEnabled ? "bg-emerald-500" : "bg-zinc-300 dark:bg-zinc-700"
+              )}
+              title="Automatically open floating timer in Picture-in-Picture when you switch to another tab"
+            >
+              <span
+                className={cn(
+                  "w-3 h-3 rounded-full bg-white block transition-transform absolute top-0.5 shadow-xs",
+                  autoPipEnabled ? "left-3.5" : "left-0.5"
+                )}
+              />
             </button>
           </div>
 
