@@ -45,7 +45,7 @@ export default function RoadmapPage() {
   if (!data?.plan) {
     return (
       <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111317] text-center space-y-4">
-        <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+        <div className="w-12 h-12 mx-auto rounded-2xl bg-black/[0.05] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 flex items-center justify-center">
           <Layers className="w-6 h-6" />
         </div>
         <h2 className="text-lg font-bold text-zinc-900 dark:text-white">
@@ -214,7 +214,7 @@ export default function RoadmapPage() {
               {/* Phase Header Strip */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full uppercase">
+                  <span className="text-[10px] font-mono font-bold text-zinc-900 dark:text-zinc-100 bg-black/[0.05] dark:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.12] px-2.5 py-0.5 rounded-full uppercase">
                     PHASE 0{pIdx + 1}
                   </span>
                   <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
@@ -261,20 +261,22 @@ export default function RoadmapPage() {
                           </span>
 
                           {isDone ? (
-                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] font-medium">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                               <span>Passed</span>
                             </span>
                           ) : w.checkpointPassed ? (
-                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                              Attested
+                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] font-medium">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                              <span>Attested</span>
                             </span>
                           ) : isStarted ? (
-                            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-                              {taskPercent}% done
+                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] font-medium">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                              <span>{taskPercent}% done</span>
                             </span>
                           ) : (
-                            <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-white/[0.04] text-zinc-500 border border-black/[0.06] dark:border-white/[0.06]">
+                            <span className="text-[10px] font-mono font-medium px-2.5 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.04] text-zinc-500 border border-black/[0.06] dark:border-white/[0.06]">
                               Pending
                             </span>
                           )}

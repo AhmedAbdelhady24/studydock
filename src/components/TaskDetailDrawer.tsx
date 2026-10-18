@@ -36,38 +36,38 @@ const CATEGORY_META: Record<
   dsa: {
     label: "DSA / Algorithms",
     dot: "bg-purple-500",
-    text: "text-purple-700 dark:text-purple-300",
-    bg: "bg-purple-500/10 border-purple-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   design: {
     label: "Architecture & Design",
     dot: "bg-blue-500",
-    text: "text-blue-700 dark:text-blue-300",
-    bg: "bg-blue-500/10 border-blue-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   implementation: {
     label: "Coding & Implementation",
     dot: "bg-amber-500",
-    text: "text-amber-700 dark:text-amber-300",
-    bg: "bg-amber-500/10 border-amber-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   course: {
     label: "Course & Core Lessons",
     dot: "bg-emerald-500",
-    text: "text-emerald-700 dark:text-emerald-300",
-    bg: "bg-emerald-500/10 border-emerald-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   quality: {
     label: "Code Review & Quality Gate",
     dot: "bg-indigo-500",
-    text: "text-indigo-700 dark:text-indigo-300",
-    bg: "bg-indigo-500/10 border-indigo-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   checkpoint: {
     label: "Exit Competency Checkpoint",
     dot: "bg-rose-500",
-    text: "text-rose-700 dark:text-rose-300",
-    bg: "bg-rose-500/10 border-rose-500/20",
+    text: "text-zinc-700 dark:text-zinc-300",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   other: {
     label: "Exercise Task",
@@ -192,7 +192,7 @@ export function TaskDetailDrawer({
         <div className="p-6 border-b border-black/[0.08] dark:border-white/[0.08] space-y-3 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
+              <span className="text-[10px] font-mono font-bold uppercase bg-black/[0.05] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-0.5 rounded-full">
                 Week {task.weekNumber ? task.weekNumber.toString().padStart(2, "0") : "01"}
               </span>
               <span className="text-[10px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] px-2.5 py-0.5 rounded-full font-medium">
@@ -209,8 +209,9 @@ export function TaskDetailDrawer({
                   : task.phaseTitle || "Curriculum"}
               </span>
               {task.topicBadge && (
-                <span className="text-[10px] font-mono text-purple-700 dark:text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full font-semibold">
-                  {task.topicBadge}
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] px-2.5 py-0.5 rounded-full font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                  <span>{task.topicBadge}</span>
                 </span>
               )}
             </div>
@@ -365,8 +366,9 @@ export function TaskDetailDrawer({
             </p>
 
             {task.dsaTargetCount && (
-              <div className="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 text-xs font-mono font-semibold">
-                Target: Solve at least {task.dsaTargetCount} problems independently without editor peek.
+              <div className="p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 text-xs font-mono font-medium flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                <span>Target: Solve at least {task.dsaTargetCount} problems independently without editor peek.</span>
               </div>
             )}
           </div>

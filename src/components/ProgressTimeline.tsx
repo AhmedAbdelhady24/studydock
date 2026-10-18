@@ -58,16 +58,16 @@ export function ProgressTimeline({
                 className={cn(
                   "absolute -left-[24px] top-0.5 w-[18px] h-[18px] rounded-full flex items-center justify-center transition-all duration-200 z-10",
                   isDone
-                    ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+                    ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 shadow-sm"
                     : isInProgress
-                    ? "bg-white dark:bg-[#18191E] ring-2 ring-amber-400 text-amber-500"
-                    : "bg-white dark:bg-[#18191E] border-2 border-zinc-300 dark:border-zinc-600 text-transparent group-hover:border-zinc-500"
+                    ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 ring-4 ring-black/10 dark:ring-white/10 shadow-sm"
+                    : "bg-white dark:bg-[#18191E] border border-black/20 dark:border-white/20 text-transparent group-hover:border-black/40 dark:group-hover:border-white/40"
                 )}
               >
                 {isDone ? (
                   <Check className="w-2.5 h-2.5 stroke-[3]" />
                 ) : isInProgress ? (
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white dark:bg-zinc-950" />
                 ) : (
                   <span className="w-1.5 h-1.5 rounded-full bg-transparent" />
                 )}
@@ -80,9 +80,9 @@ export function ProgressTimeline({
                     className={cn(
                       "text-xs leading-snug transition-colors",
                       isDone
-                        ? "font-medium text-zinc-400 line-through"
+                        ? "font-medium text-zinc-400 dark:text-zinc-500 line-through"
                         : isInProgress
-                        ? "font-bold text-amber-600 dark:text-amber-300"
+                        ? "font-bold text-zinc-900 dark:text-white"
                         : "font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-black dark:group-hover:text-white"
                     )}
                   >
@@ -93,6 +93,14 @@ export function ProgressTimeline({
 
                 <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-zinc-500">
                   <span className="capitalize">{task.category}</span>
+                  {isInProgress && (
+                    <>
+                      <span>•</span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-black/[0.06] dark:bg-white/[0.08] text-zinc-800 dark:text-zinc-200 font-semibold">
+                        In Flight
+                      </span>
+                    </>
+                  )}
                   {task.resourceLabel && (
                     <>
                       <span>•</span>

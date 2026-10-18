@@ -174,7 +174,7 @@ export default function ImportExportPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-semibold shrink-0">
+          <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] font-medium shrink-0">
             Schema v1.0 • Idempotent
           </span>
         </div>
@@ -243,8 +243,9 @@ export default function ImportExportPage() {
           <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50/70 dark:bg-[#15171D] p-4 flex flex-col justify-between space-y-4 hover:border-black/20 dark:hover:border-white/20 transition-all">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
-                  Required Format
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                  <span>Required Format</span>
                 </span>
                 <span className="text-[10px] font-mono text-zinc-400">.csv</span>
               </div>
@@ -289,8 +290,9 @@ export default function ImportExportPage() {
           <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50/70 dark:bg-[#15171D] p-4 flex flex-col justify-between space-y-4 hover:border-black/20 dark:hover:border-white/20 transition-all">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
-                  Optional Targets
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span>Optional Targets</span>
                 </span>
                 <span className="text-[10px] font-mono text-zinc-400">.csv</span>
               </div>
@@ -335,8 +337,9 @@ export default function ImportExportPage() {
           <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-zinc-50/70 dark:bg-[#15171D] p-4 flex flex-col justify-between space-y-4 hover:border-black/20 dark:hover:border-white/20 transition-all">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">
-                  Ready Starter Kit
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                  <span>Ready Starter Kit</span>
                 </span>
                 <span className="text-[10px] font-mono text-zinc-400">4 Weeks</span>
               </div>
@@ -419,7 +422,7 @@ export default function ImportExportPage() {
                       </td>
                       <td className="py-2 px-3">
                         {col.required ? (
-                          <span className="text-[10px] font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-mono font-bold text-zinc-900 dark:text-zinc-100 bg-black/[0.05] dark:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.1] px-1.5 py-0.5 rounded">
                             Required
                           </span>
                         ) : (
@@ -452,7 +455,7 @@ export default function ImportExportPage() {
       <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 space-y-5 shadow-sm">
         <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.05] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-800 dark:text-zinc-200 flex items-center justify-center font-bold">
               <UploadCloud className="w-4 h-4" />
             </div>
             <div>
@@ -541,8 +544,9 @@ export default function ImportExportPage() {
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>Validation Diff Summary</span>
               </h3>
-              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                Ready to apply
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-800 dark:text-zinc-200 font-medium bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span>Ready to apply</span>
               </span>
             </div>
 
@@ -574,7 +578,7 @@ export default function ImportExportPage() {
             </div>
 
             {preview.preview.warnings && preview.preview.warnings.length > 0 && (
-              <div className="p-4 rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-300 text-xs space-y-1.5">
+              <div className="p-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 text-xs space-y-1.5">
                 <strong className="block text-xs font-bold">Plan Diff Warnings:</strong>
                 <ul className="list-disc pl-5 space-y-0.5 text-[11px] font-mono">
                   {preview.preview.warnings.map((w: string, i: number) => (
@@ -612,7 +616,7 @@ export default function ImportExportPage() {
       <div className="rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111215] p-6 space-y-4 shadow-sm">
         <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.05] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-800 dark:text-zinc-200 flex items-center justify-center font-bold">
               <Download className="w-4 h-4" />
             </div>
             <div>
@@ -636,7 +640,7 @@ export default function ImportExportPage() {
             className="p-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/20 bg-zinc-50/60 dark:bg-[#14161B] flex items-center justify-between text-xs transition-all group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0">
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
               <div>
@@ -655,7 +659,7 @@ export default function ImportExportPage() {
             className="p-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/20 bg-zinc-50/60 dark:bg-[#14161B] flex items-center justify-between text-xs transition-all group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0">
                 <GraduationCap className="w-4 h-4" />
               </div>
               <div>
@@ -674,7 +678,7 @@ export default function ImportExportPage() {
             className="p-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/20 bg-zinc-50/60 dark:bg-[#14161B] flex items-center justify-between text-xs transition-all group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0">
                 <FileJson className="w-4 h-4" />
               </div>
               <div>

@@ -147,15 +147,15 @@ export default function WeekDetailPage() {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-0.5 rounded-full">
+              <span className="text-[11px] font-mono font-bold text-zinc-900 dark:text-zinc-100 bg-black/[0.05] dark:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.12] px-3 py-0.5 rounded-full">
                 WEEK {currentWeek.weekNumber.toString().padStart(2, "0")}
               </span>
               <span className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04] px-3 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.06] font-medium">
                 {currentWeek.phaseTitle}
               </span>
               {currentWeek.isCompleted && (
-                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1 font-semibold">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                   <span>Passed</span>
                 </span>
               )}

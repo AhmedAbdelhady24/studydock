@@ -194,7 +194,7 @@ export function NotificationDropdown() {
             <div className="flex items-center gap-2.5">
               <span className="font-bold text-sm tracking-tight">Notifications</span>
               {unreadCount > 0 ? (
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-xs">
                   {unreadCount} unread
                 </span>
               ) : (
@@ -249,8 +249,8 @@ export function NotificationDropdown() {
           <div className="max-h-[380px] overflow-y-auto divide-y divide-black/[0.04] dark:divide-white/[0.04]">
             {filteredNotifications.length === 0 ? (
               <div className="p-8 text-center space-y-2">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
-                  <Check className="w-5 h-5 stroke-[2.5]" />
+                <div className="w-10 h-10 rounded-full bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 flex items-center justify-center mx-auto">
+                  <Check className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
                   {filter === "unread" ? "No unread notifications" : "No notifications"}

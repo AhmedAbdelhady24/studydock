@@ -359,12 +359,12 @@ export default function DsaPage() {
           </div>
         ) : (
           filteredAttempts.map((a) => {
-            const diffStyle =
+            const diffDot =
               a.difficulty === "easy"
-                ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                ? "bg-emerald-500"
                 : a.difficulty === "hard"
-                ? "text-rose-700 dark:text-rose-400 bg-rose-500/10 border-rose-500/20"
-                : "text-amber-700 dark:text-amber-400 bg-amber-500/10 border-amber-500/20";
+                ? "bg-rose-500"
+                : "bg-amber-500";
 
             return (
               <div
@@ -373,20 +373,16 @@ export default function DsaPage() {
               >
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span
-                      className={cn(
-                        "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border font-semibold",
-                        diffStyle
-                      )}
-                    >
-                      {a.difficulty}
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 font-medium">
+                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", diffDot)} />
+                      <span>{a.difficulty}</span>
                     </span>
                     <span className="text-[10px] font-mono bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.06] text-zinc-600 dark:text-zinc-400 font-medium">
                       {a.pattern}
                     </span>
                     {a.solvedIndependently && (
-                      <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1 font-semibold">
-                        <ShieldCheck className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] font-medium">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span>Independent</span>
                       </span>
                     )}

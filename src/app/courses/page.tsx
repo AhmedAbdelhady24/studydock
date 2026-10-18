@@ -175,17 +175,18 @@ export default function CoursesPage() {
                     <span className="text-[10px] font-mono uppercase bg-black/[0.04] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.08] px-2.5 py-0.5 rounded-full font-semibold truncate max-w-[200px]">
                       {c.courseId.replace(/^product-engineer-33-week-course-/, "")}
                     </span>
-                    <span
-                      className={cn(
-                        "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border font-semibold",
-                        c.coverageKind === "full"
-                          ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
-                          : c.coverageKind === "targeted"
-                          ? "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30"
-                          : "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/30"
-                      )}
-                    >
-                      {c.coverageKind}
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 font-medium">
+                      <span
+                        className={cn(
+                          "w-1.5 h-1.5 rounded-full shrink-0",
+                          c.coverageKind === "full"
+                            ? "bg-emerald-500"
+                            : c.coverageKind === "targeted"
+                            ? "bg-blue-500"
+                            : "bg-purple-500"
+                        )}
+                      />
+                      <span>{c.coverageKind}</span>
                     </span>
                   </div>
 

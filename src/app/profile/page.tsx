@@ -83,8 +83,8 @@ export default function ProfilePage() {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full font-semibold flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] px-3 py-1 rounded-full font-medium flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span>Local PostgreSQL Sync</span>
           </span>
         </div>

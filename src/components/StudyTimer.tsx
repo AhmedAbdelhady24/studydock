@@ -155,8 +155,8 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
       </div>
 
       {successMessage && (
-        <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2 font-medium">
-          <Check className="w-3.5 h-3.5 text-emerald-500" />
+        <div className="p-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-800 dark:text-zinc-200 text-xs flex items-center gap-2 font-medium">
+          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
           <span>{successMessage}</span>
         </div>
       )}

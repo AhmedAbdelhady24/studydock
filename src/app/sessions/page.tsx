@@ -108,7 +108,7 @@ export default function SessionsPage() {
                       </span>
 
                       {s.weekId && (
-                        <span className="text-[10px] font-mono uppercase bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-semibold">
+                        <span className="text-[10px] font-mono uppercase bg-black/[0.05] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-0.5 rounded-full font-medium">
                           {s.weekId.replace(/^product-engineer-33-week-/, "")}
                         </span>
                       )}

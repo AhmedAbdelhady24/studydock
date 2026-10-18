@@ -179,9 +179,9 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             isDone
               ? "bg-emerald-500 border-emerald-400 text-white"
               : isInProgress
-              ? "border-amber-500/80 bg-amber-500/10 text-amber-500"
+              ? "border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-950"
               : isBlocked
-              ? "border-rose-400 bg-rose-500/10 text-rose-500"
+              ? "border-rose-500 bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
               : "border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/60 hover:border-zinc-500 text-transparent"
           )}
           title={`Status: ${status} (click to toggle completed)`}
@@ -228,8 +228,9 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             )}
 
             {task.dsaTargetCount ? (
-              <span className="text-[10px] font-mono text-purple-700 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20 font-semibold">
-                {task.dsaTargetCount} problems
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-zinc-700 dark:text-zinc-300 bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                <span>{task.dsaTargetCount} problems</span>
               </span>
             ) : null}
 

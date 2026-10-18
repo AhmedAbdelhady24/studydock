@@ -229,7 +229,7 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
         {/* Card 6: DSA Problem Bank Solved */}
         <div className="bg-white dark:bg-[#18191E] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white rounded-3xl p-5 shadow-sm dark:shadow-md flex flex-col justify-between min-h-[140px] group transition-all">
           <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-purple-500/10 dark:bg-white/[0.06] border border-purple-500/20 dark:border-white/[0.08] flex items-center justify-center text-purple-600 dark:text-purple-400">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300">
               <Sparkles className="w-4 h-4 stroke-[2.2]" />
             </div>
             <Link

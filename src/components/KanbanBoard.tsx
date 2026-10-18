@@ -36,44 +36,44 @@ const CATEGORY_META: Record<
   dsa: {
     label: "DSA",
     dot: "bg-purple-500",
-    text: "text-purple-700 dark:text-purple-300 font-semibold",
-    bg: "bg-purple-500/10 border-purple-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   design: {
     label: "Architecture",
     dot: "bg-blue-500",
-    text: "text-blue-700 dark:text-blue-300 font-semibold",
-    bg: "bg-blue-500/10 border-blue-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   implementation: {
     label: "Coding",
     dot: "bg-amber-500",
-    text: "text-amber-700 dark:text-amber-300 font-semibold",
-    bg: "bg-amber-500/10 border-amber-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   course: {
     label: "Course",
     dot: "bg-emerald-500",
-    text: "text-emerald-700 dark:text-emerald-300 font-semibold",
-    bg: "bg-emerald-500/10 border-emerald-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   quality: {
     label: "Review",
     dot: "bg-indigo-500",
-    text: "text-indigo-700 dark:text-indigo-300 font-semibold",
-    bg: "bg-indigo-500/10 border-indigo-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   checkpoint: {
     label: "Checkpoint",
     dot: "bg-rose-500",
-    text: "text-rose-700 dark:text-rose-300 font-semibold",
-    bg: "bg-rose-500/10 border-rose-500/25",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
   other: {
     label: "Task",
     dot: "bg-zinc-400",
-    text: "text-zinc-700 dark:text-zinc-300",
-    bg: "bg-black/[0.04] dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.08]",
+    text: "text-zinc-700 dark:text-zinc-300 font-medium",
+    bg: "bg-zinc-100 dark:bg-white/[0.06] border-black/[0.08] dark:border-white/[0.08]",
   },
 };
 
@@ -88,22 +88,22 @@ const COLUMNS: {
     id: "not_started",
     title: "To Do",
     dotColor: "bg-zinc-400",
-    borderColor: "border-zinc-700/60",
+    borderColor: "border-black/[0.08] dark:border-white/[0.08]",
     dropBorder: "ring-2 ring-zinc-400/60 bg-zinc-200/50 dark:bg-zinc-800/30",
   },
   {
     id: "in_progress",
     title: "In Progress",
-    dotColor: "bg-amber-400 animate-pulse",
-    borderColor: "border-amber-500/40",
-    dropBorder: "ring-2 ring-amber-400/70 bg-amber-500/10 dark:bg-amber-500/15",
+    dotColor: "bg-amber-500",
+    borderColor: "border-black/[0.08] dark:border-white/[0.08]",
+    dropBorder: "ring-2 ring-black/20 dark:ring-white/20 bg-black/[0.03] dark:bg-white/[0.03]",
   },
   {
     id: "done",
     title: "Done",
-    dotColor: "bg-emerald-400",
-    borderColor: "border-emerald-500/40",
-    dropBorder: "ring-2 ring-emerald-400/70 bg-emerald-500/10 dark:bg-emerald-500/15",
+    dotColor: "bg-emerald-500",
+    borderColor: "border-black/[0.08] dark:border-white/[0.08]",
+    dropBorder: "ring-2 ring-emerald-500/30 bg-emerald-500/[0.04]",
   },
 ];
 
@@ -329,7 +329,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                           task.status === "done"
                             ? "bg-zinc-100/60 dark:bg-[#101216]/50 border-black/[0.05] dark:border-white/[0.05] text-zinc-500 dark:text-zinc-400 hover:border-emerald-500/30"
                             : task.status === "in_progress"
-                            ? "bg-amber-500/[0.06] dark:bg-[#15171D] border-amber-500/30 hover:border-amber-500/60 shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                            ? "bg-white dark:bg-[#14151B] border-black/[0.14] dark:border-white/[0.14] hover:border-black/30 dark:hover:border-white/30 shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                             : "bg-white dark:bg-[#131418] border-black/[0.08] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/[0.2] shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                         )}
                       >
@@ -338,19 +338,19 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                           <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono min-w-0">
                             <span
                               className={cn(
-                                "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border shrink-0",
+                                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border shrink-0 text-[10px] font-mono shadow-sm",
                                 meta.bg,
                                 meta.text
                               )}
                             >
-                              <span className={cn("w-1 h-1 rounded-full", meta.dot)} />
+                              <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", meta.dot)} />
                               <span>{meta.label}</span>
                             </span>
 
                             {/* Authoritative Resource Attribution */}
                             {(task.resourceLabel || task.primaryCourses) && (
                               <span
-                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] text-zinc-700 dark:text-zinc-300 truncate max-w-[170px] hover:border-black/20 dark:hover:border-white/[0.16] transition-colors"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] text-zinc-600 dark:text-zinc-400 truncate max-w-[170px] hover:border-black/20 dark:hover:border-white/[0.16] transition-colors"
                                 title={`Assigned Resource: ${task.resourceName || task.resourceLabel || task.primaryCourses}`}
                               >
                                 {task.resourceCategory === "dsa" || task.category === "dsa" ? (
@@ -424,11 +424,11 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                 type="button"
                                 disabled={isBusy}
                                 onClick={(e) => handleMoveStatus(e, task, "in_progress")}
-                                className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                                className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-zinc-900 hover:bg-black text-white dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-950 flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                                 title="Move to In Progress"
                               >
                                 <span>Start</span>
-                                <ArrowRight className="w-2.5 h-2.5" />
+                                <ArrowRight className="w-2.5 h-2.5 stroke-[2.5]" />
                               </button>
                             )}
 
@@ -438,7 +438,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                   type="button"
                                   disabled={isBusy}
                                   onClick={(e) => handleMoveStatus(e, task, "not_started")}
-                                  className="p-1 rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] transition-all cursor-pointer active:scale-95"
+                                  className="p-1 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] transition-all cursor-pointer active:scale-95"
                                   title="Revert to To Do"
                                 >
                                   <ArrowLeft className="w-2.5 h-2.5" />
@@ -447,7 +447,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                   type="button"
                                   disabled={isBusy}
                                   onClick={(e) => handleMoveStatus(e, task, "done")}
-                                  className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                                  className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
                                   title="Complete task"
                                 >
                                   <span>Complete</span>
@@ -461,7 +461,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                                 type="button"
                                 disabled={isBusy}
                                 onClick={(e) => handleMoveStatus(e, task, "in_progress")}
-                                className="px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.08] flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                                className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-zinc-100 dark:bg-white/[0.05] hover:bg-zinc-200 dark:hover:bg-white/[0.1] border border-black/[0.08] dark:border-white/[0.08] flex items-center gap-1 transition-all cursor-pointer active:scale-95"
                                 title="Reopen task"
                               >
                                 <RotateCcw className="w-2.5 h-2.5" />
