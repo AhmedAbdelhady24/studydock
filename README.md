@@ -131,8 +131,8 @@ Launch both the Next.js web application and isolated PostgreSQL database:
 
 ```bash
 # Clone the repository
-git clone https://github.com/AhmedAbdelHady24/Learning-Tracker.git
-cd Learning-Tracker
+git clone https://github.com/AhmedAbdelHady24/studydock.git
+cd studydock
 
 # Build and start all services in detached mode
 docker compose up --build -d
