@@ -20,6 +20,7 @@ import {
   Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const PLAN_COLUMNS = [
   { name: "plan_slug", required: true, type: "string (slug)", desc: "Lowercase URL-safe identifier (e.g. my-learning-track)", example: "product-engineer" },
@@ -104,11 +105,18 @@ export default function ImportExportPage() {
       const json = await res.json();
       if (!res.ok || !json.success) {
         setErrors(json.errors || [{ message: json.error || "Preview failed" }]);
+        toast.error("CSV Validation Failed", {
+          description: "Found schema or column errors in the uploaded file.",
+        });
       } else {
         setPreview(json);
+        toast.info("CSV Validated", {
+          description: `${json.planRows?.length || 0} tasks ready for database synchronization.`,
+        });
       }
     } catch (err: any) {
       setErrors([{ message: err.message || "Failed to parse files" }]);
+      toast.error("File Parse Error", { description: err.message });
     } finally {
       setLoadingPreview(false);
     }
@@ -133,14 +141,21 @@ export default function ImportExportPage() {
       const json = await res.json();
       if (!res.ok || !json.success) {
         setErrors(json.errors || [{ message: json.error || "Import failed" }]);
+        toast.error("Import Failed", {
+          description: json.error || "Database transaction could not be committed.",
+        });
       } else {
         setResultMessage(json.message);
+        toast.success("Curriculum Synchronized", {
+          description: json.message || "All curriculum weeks and tasks were updated.",
+        });
         setPreview(null);
         setPlanFile(null);
         setCourseFile(null);
       }
     } catch (err: any) {
       setErrors([{ message: err.message || "Import execution failed" }]);
+      toast.error("Import Execution Failed", { description: err.message });
     } finally {
       setIsExecuting(false);
     }

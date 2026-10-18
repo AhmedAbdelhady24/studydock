@@ -16,6 +16,7 @@ import {
 import { useProfile } from "@/context/ProfileContext";
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { profile, updateProfile, loading } = useProfile();
@@ -57,7 +58,14 @@ export default function ProfilePage() {
     if (success) {
       setTheme(selectedTheme as "dark" | "light");
       setSavedSuccess(true);
+      toast.success("Profile updated", {
+        description: "Your engineer profile and study targets have been saved.",
+      });
       setTimeout(() => setSavedSuccess(false), 3000);
+    } else {
+      toast.error("Failed to update profile", {
+        description: "Please check your database connection.",
+      });
     }
     setSaving(false);
   };

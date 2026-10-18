@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProfile } from "@/context/ProfileContext";
+import { toast } from "sonner";
 
 interface NotificationItem {
   id: string;
@@ -129,6 +130,7 @@ export function NotificationDropdown() {
     const updated = notifications.map((n) => ({ ...n, unread: false }));
     setNotifications(updated);
     saveReadStatus(updated);
+    toast.success("Notifications marked as read");
   };
 
   const markSingleAsRead = (id: string) => {
@@ -141,6 +143,7 @@ export function NotificationDropdown() {
     e.stopPropagation();
     const updated = notifications.filter((n) => n.id !== id);
     setNotifications(updated);
+    toast("Notification dismissed");
   };
 
   const filteredNotifications =
@@ -168,7 +171,7 @@ export function NotificationDropdown() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-9 h-9 rounded-full border flex items-center justify-center transition-all relative cursor-pointer active:scale-95",
+          "w-9 h-9 rounded-full border flex items-center justify-center transition-colors duration-150 relative cursor-pointer active:scale-95",
           isOpen
             ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 border-transparent shadow-sm"
             : "bg-zinc-100 dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
@@ -182,9 +185,9 @@ export function NotificationDropdown() {
         )}
       </button>
 
-      {/* Flyout Popover Panel */}
+      {/* Flyout Popover Panel (Origin-aware: scales from top-right trigger) */}
       {isOpen && (
-        <div className="absolute right-0 mt-2.5 w-[340px] sm:w-[400px] rounded-3xl bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-zinc-900 dark:text-zinc-100">
+        <div className="absolute right-0 mt-2.5 w-[340px] sm:w-[400px] rounded-3xl bg-white dark:bg-[#111215] border border-black/[0.08] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] z-50 overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-150 text-zinc-900 dark:text-zinc-100 overscroll-contain">
           
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
@@ -220,7 +223,7 @@ export function NotificationDropdown() {
               type="button"
               onClick={() => setFilter("all")}
               className={cn(
-                "px-3 py-1 rounded-full font-semibold transition-all duration-150 cursor-pointer",
+                "px-3 py-1 rounded-full font-semibold transition-colors duration-150 cursor-pointer",
                 filter === "all"
                   ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-xs"
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
@@ -232,7 +235,7 @@ export function NotificationDropdown() {
               type="button"
               onClick={() => setFilter("unread")}
               className={cn(
-                "px-3 py-1 rounded-full font-semibold transition-all duration-150 cursor-pointer",
+                "px-3 py-1 rounded-full font-semibold transition-colors duration-150 cursor-pointer",
                 filter === "unread"
                   ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-xs"
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"

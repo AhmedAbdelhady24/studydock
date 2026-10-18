@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskStatus, TaskCategory } from "@/lib/types";
+import { toast } from "sonner";
 
 interface TaskDetailDrawerProps {
   task: any | null;
@@ -115,17 +116,34 @@ export function TaskDetailDrawer({
   const handleStatusChange = async (nextStatus: TaskStatus) => {
     setStatus(nextStatus);
     await saveTaskUpdate({ status: nextStatus });
+    const labelMap: Record<string, string> = {
+      not_started: "To Do",
+      in_progress: "In Flight",
+      done: "Done",
+      blocked: "Blocked",
+    };
+    toast.success(`Task moved to ${labelMap[nextStatus] || nextStatus}`, {
+      description: task.title,
+    });
   };
 
   const handleConfidenceChange = async (level: number) => {
     const newConf = confidence === level ? 0 : level;
     setConfidence(newConf);
     await saveTaskUpdate({ confidence: newConf || null });
+    if (newConf > 0) {
+      toast.info(`Confidence set to ${newConf}/5`, {
+        description: task.title,
+      });
+    }
   };
 
   const handleSaveNotes = async () => {
     await saveTaskUpdate({ notes });
     setSaveSuccess(true);
+    toast.success("Notes saved", {
+      description: "Your study notes and key takeaways were saved locally.",
+    });
     setTimeout(() => setSaveSuccess(false), 2000);
   };
 
@@ -146,6 +164,9 @@ export function TaskDetailDrawer({
       }
     } catch (err) {
       console.error("Failed to update task", err);
+      toast.error("Failed to update task", {
+        description: "Please check your database connection.",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -196,7 +217,7 @@ export function TaskDetailDrawer({
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-black/[0.06] dark:bg-white/[0.06] hover:bg-black/[0.12] dark:hover:bg-white/[0.12] text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white flex items-center justify-center transition-all cursor-pointer active:scale-90"
+              className="w-8 h-8 rounded-full bg-black/[0.06] dark:bg-white/[0.06] hover:bg-black/[0.12] dark:hover:bg-white/[0.12] text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white flex items-center justify-center transition-colors duration-150 cursor-pointer active:scale-90"
               title="Close (Esc)"
               aria-label="Close details"
             >
@@ -205,13 +226,13 @@ export function TaskDetailDrawer({
           </div>
 
           <div>
-            <h2 className="text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug">
+            <h2 className="text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug break-words [overflow-wrap:anywhere]">
               {task.title}
             </h2>
             <div className="flex items-center gap-2 mt-2.5">
               <span
                 className={cn(
-                  "inline-flex items-center gap-1.5 text-[11px] font-mono px-3 py-0.5 rounded-full border font-semibold",
+                  "inline-flex items-center gap-1.5 text-[11px] font-mono px-3 py-0.5 rounded-full border font-semibold shrink-0",
                   meta.bg,
                   meta.text
                 )}
@@ -220,7 +241,7 @@ export function TaskDetailDrawer({
                 <span>{meta.label}</span>
               </span>
 
-              <span className="text-[11px] font-mono text-zinc-500 font-semibold">
+              <span className="text-[11px] font-mono text-zinc-500 font-semibold tabular-nums">
                 {task.weekNumber ? `W${task.weekNumber.toString().padStart(2, "0")} · Task ${task.sortOrder || 1}` : task.taskId}
               </span>
             </div>
@@ -228,7 +249,7 @@ export function TaskDetailDrawer({
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs text-zinc-700 dark:text-zinc-300">
+        <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs text-zinc-700 dark:text-zinc-300 overscroll-contain">
           {/* Quick Status Bar */}
           <div className="space-y-2">
             <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block font-semibold">
@@ -249,7 +270,7 @@ export function TaskDetailDrawer({
                   onClick={() => handleStatusChange(s.id)}
                   disabled={isSaving}
                   className={cn(
-                    "py-2 rounded-xl font-mono text-[11px] font-bold transition-all text-center cursor-pointer",
+                    "py-2 rounded-xl font-mono text-[11px] font-bold transition-colors duration-150 active:scale-95 text-center cursor-pointer",
                     status === s.id
                       ? "bg-white dark:bg-white/[0.1] text-zinc-950 dark:text-white shadow-sm border border-black/10 dark:border-white/[0.15]"
                       : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -339,7 +360,7 @@ export function TaskDetailDrawer({
               </span>
             </div>
 
-            <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-sm">
+            <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-sm break-words [overflow-wrap:anywhere]">
               {task.description || task.title}
             </p>
 
@@ -357,7 +378,7 @@ export function TaskDetailDrawer({
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>Week Exit Criteria Gatekeeper</span>
               </div>
-              <p className="text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed">
+              <p className="text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed break-words [overflow-wrap:anywhere]">
                 {task.exitCriteria}
               </p>
             </div>
@@ -369,7 +390,7 @@ export function TaskDetailDrawer({
               <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-semibold">
                 Understanding & Confidence
               </label>
-              <span className="text-[10px] font-mono text-zinc-500">
+              <span className="text-[10px] font-mono text-zinc-500 tabular-nums">
                 {confidence > 0 ? `${confidence} / 5 stars` : "Unrated"}
               </span>
             </div>
@@ -381,7 +402,7 @@ export function TaskDetailDrawer({
                   type="button"
                   onClick={() => handleConfidenceChange(lvl)}
                   disabled={isSaving}
-                  className="p-1 hover:scale-110 transition-transform cursor-pointer"
+                  className="p-1 hover:scale-110 active:scale-95 transition-transform cursor-pointer"
                   title={`Rate confidence ${lvl}/5`}
                 >
                   <Star
@@ -437,7 +458,7 @@ export function TaskDetailDrawer({
                   type="button"
                   onClick={handleSaveNotes}
                   disabled={isSaving}
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 hover:opacity-90 transition-opacity shadow-sm flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
                 >
                   <FileText className="w-3.5 h-3.5" />
                   <span>{isSaving ? "Saving..." : "Save Notes"}</span>

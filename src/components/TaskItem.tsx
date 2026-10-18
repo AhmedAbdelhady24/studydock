@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskCategory, TaskStatus } from "@/lib/types";
+import { toast } from "sonner";
 
 interface TaskItemProps {
   task: {
@@ -106,6 +107,11 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
     e.stopPropagation();
     const nextStatus: TaskStatus = status === "done" ? "not_started" : "done";
     setStatus(nextStatus);
+    if (nextStatus === "done") {
+      toast.success("Task completed!", { description: task.title });
+    } else {
+      toast.info("Task marked incomplete", { description: task.title });
+    }
     await saveTaskUpdate({ status: nextStatus });
   };
 
@@ -113,12 +119,16 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
     e.stopPropagation();
     const newConf = confidence === level ? 0 : level;
     setConfidence(newConf);
+    if (newConf > 0) {
+      toast.info(`Confidence set to ${newConf}/5`, { description: task.title });
+    }
     await saveTaskUpdate({ confidence: newConf || null });
   };
 
   const handleSaveNotes = async (e: React.MouseEvent) => {
     e.stopPropagation();
     await saveTaskUpdate({ notes });
+    toast.success("Notes saved", { description: "Task notes saved to database." });
   };
 
   const saveTaskUpdate = async (updates: Partial<{
@@ -237,7 +247,7 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
           <p
             onClick={() => onSelectTask?.(task)}
             className={cn(
-              "font-bold leading-relaxed transition-all cursor-pointer hover:text-blue-600 dark:hover:text-blue-400",
+              "font-bold leading-relaxed transition-colors duration-150 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 break-words [overflow-wrap:anywhere]",
               isDone ? "text-zinc-400 dark:text-zinc-500 line-through decoration-zinc-400 dark:decoration-zinc-600" : "text-zinc-900 dark:text-zinc-100"
             )}
             title="Click to view full course and task details"
@@ -246,7 +256,7 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
           </p>
 
           {task.description && (
-            <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400/90 leading-relaxed font-normal">
+            <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400/90 leading-relaxed font-normal break-words [overflow-wrap:anywhere]">
               {task.description}
             </p>
           )}
@@ -263,12 +273,12 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
                   key={lvl}
                   type="button"
                   onClick={(e) => handleConfidenceClick(e, lvl)}
-                  className="p-0.5 hover:scale-110 transition-transform"
+                  className="p-0.5 hover:scale-110 active:scale-95 transition-transform cursor-pointer"
                   title={`Rate confidence ${lvl}/5`}
                 >
                   <Star
                     className={cn(
-                      "w-3 h-3",
+                      "w-3 h-3 transition-colors",
                       confidence >= lvl
                         ? "fill-amber-400 text-amber-400"
                         : "text-zinc-700 hover:text-amber-400/40"

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskStatus, TaskCategory } from "@/lib/types";
+import { toast } from "sonner";
 
 interface KanbanBoardProps {
   tasks: any[];
@@ -127,6 +128,12 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
     if (task.status === targetStatus) return;
 
     const previousStatus = task.status;
+    const labelMap: Record<string, string> = {
+      not_started: "To Do",
+      in_progress: "In Progress",
+      done: "Done",
+      blocked: "Blocked",
+    };
 
     // 1. Immediately update local UI optimistically for seamless 60fps card movement
     setLocalTasks((prev) =>
@@ -141,15 +148,24 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
         body: JSON.stringify({ status: targetStatus }),
       });
       if (res.ok) {
+        if (targetStatus === "done") {
+          toast.success("Task completed!", { description: task.title });
+        } else {
+          toast.info(`Task status: ${labelMap[targetStatus] || targetStatus}`, {
+            description: task.title,
+          });
+        }
         if (onUpdate) onUpdate();
       } else {
         // Revert on error
+        toast.error("Failed to update status", { description: "Reverted to previous column." });
         setLocalTasks((prev) =>
           prev.map((t) => (t.taskId === task.taskId ? { ...t, status: previousStatus } : t))
         );
       }
     } catch (err) {
       console.error("Failed to move task status", err);
+      toast.error("Network error while moving task", { description: "Reverted to previous column." });
       // Revert on network exception
       setLocalTasks((prev) =>
         prev.map((t) => (t.taskId === task.taskId ? { ...t, status: previousStatus } : t))
@@ -271,13 +287,13 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                   <span className={cn("w-2 h-2 rounded-full", col.dotColor)} />
                   <span className="font-bold text-zinc-900 dark:text-zinc-100">{col.title}</span>
                 </div>
-                <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.08] font-semibold">
-                  {colTasks.length}
+                <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.08] font-semibold tabular-nums">
+                  {colTasks.length} {colTasks.length === 1 ? "task" : "tasks"}
                 </span>
               </div>
 
               {/* Tasks List in Column */}
-              <div className="flex-1 space-y-3 overflow-y-auto">
+              <div className="flex-1 space-y-3 overflow-y-auto overscroll-contain">
                 {colTasks.length === 0 ? (
                   <div className="h-32 flex flex-col items-center justify-center border border-dashed border-black/[0.08] dark:border-white/[0.06] rounded-2xl text-zinc-500 dark:text-zinc-600 text-xs font-mono p-4 text-center">
                     <span>No {col.title.toLowerCase()} tasks</span>
@@ -318,11 +334,11 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                         )}
                       >
                         {/* Top Metadata Row: Category & Authoritative Resource Pill & Circular Action Icon */}
-                        <div className="flex items-center justify-between gap-1.5">
-                          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
+                        <div className="flex items-center justify-between gap-1.5 min-w-0">
+                          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono min-w-0">
                             <span
                               className={cn(
-                                "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border",
+                                "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border shrink-0",
                                 meta.bg,
                                 meta.text
                               )}
@@ -357,7 +373,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
 
                           {/* Circular Action Button */}
                           <div
-                            className="w-6 h-6 rounded-full bg-black/[0.06] dark:bg-white/[0.06] group-hover:bg-zinc-900 dark:group-hover:bg-white text-zinc-600 dark:text-zinc-400 group-hover:text-white dark:group-hover:text-zinc-950 flex items-center justify-center transition-all duration-200 shrink-0 shadow-sm"
+                            className="w-6 h-6 rounded-full bg-black/[0.06] dark:bg-white/[0.06] group-hover:bg-zinc-900 dark:group-hover:bg-white text-zinc-600 dark:text-zinc-400 group-hover:text-white dark:group-hover:text-zinc-950 flex items-center justify-center transition-colors duration-150 shrink-0 shadow-sm"
                             title="Inspect details"
                           >
                             <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.2]" />
@@ -367,7 +383,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                         {/* Title */}
                         <h4
                           className={cn(
-                            "text-xs sm:text-sm font-bold leading-snug transition-colors group-hover:text-black dark:group-hover:text-white",
+                            "text-xs sm:text-sm font-bold leading-snug transition-colors duration-150 group-hover:text-black dark:group-hover:text-white break-words [overflow-wrap:anywhere]",
                             task.status === "done" ? "line-through text-zinc-400 dark:text-zinc-500" : "text-zinc-900 dark:text-zinc-100"
                           )}
                         >
@@ -376,7 +392,7 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
 
                         {/* Description Preview */}
                         {task.description && (
-                          <p className="text-[11px] text-zinc-600 dark:text-zinc-400/90 line-clamp-2 leading-relaxed font-normal">
+                          <p className="text-[11px] text-zinc-600 dark:text-zinc-400/90 line-clamp-2 leading-relaxed font-normal break-words [overflow-wrap:anywhere]">
                             {task.description}
                           </p>
                         )}

@@ -148,7 +148,7 @@ export function AppShell({ children }: AppShellProps) {
           {/* ========================================================= */}
           <aside
             className={cn(
-              "hidden lg:flex flex-col justify-between p-5 border-r border-black/[0.06] dark:border-white/[0.06] bg-[#FBFBFC] dark:bg-[#111215]/95 shrink-0 select-none transition-all duration-300 ease-in-out relative",
+              "hidden lg:flex flex-col justify-between p-5 border-r border-black/[0.06] dark:border-white/[0.06] bg-[#FBFBFC] dark:bg-[#111215]/95 shrink-0 select-none transition-[width] duration-200 ease-out relative",
               isCollapsed ? "w-20 items-center" : "w-64 xl:w-72"
             )}
           >
@@ -229,7 +229,7 @@ export function AppShell({ children }: AppShellProps) {
                       href={item.href}
                       title={isCollapsed ? item.label : undefined}
                       className={cn(
-                        "flex items-center rounded-2xl text-xs font-semibold transition-all duration-200 group",
+                        "flex items-center rounded-2xl text-xs font-semibold transition-colors duration-150 group",
                         isCollapsed
                           ? "justify-center w-10 h-10 mx-auto"
                           : "gap-3.5 px-4 py-3 w-full",
@@ -347,7 +347,7 @@ export function AppShell({ children }: AppShellProps) {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search topics or concepts..."
-                    className="w-48 xl:w-60 pl-9 pr-4 py-2 text-xs rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-all"
+                    className="w-48 xl:w-60 pl-9 pr-4 py-2 text-xs rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#C8B6FF] transition-shadow duration-150"
                   />
                 </div>
 
@@ -355,7 +355,7 @@ export function AppShell({ children }: AppShellProps) {
                 <button
                   type="button"
                   onClick={toggleTheme}
-                  className="w-9 h-9 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-sm"
+                  className="w-9 h-9 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:scale-105 active:scale-95 transition-transform duration-150 cursor-pointer shadow-sm"
                   title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
                   aria-label="Toggle Theme"
                 >

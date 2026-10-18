@@ -1,7 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "sonner/dist/styles.css";
 import { AppShell } from "@/components/AppShell";
 import { Providers } from "@/components/Providers";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4F2F7" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C0D10" },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "StudyDock | 33-Week Product Engineer Tracker",

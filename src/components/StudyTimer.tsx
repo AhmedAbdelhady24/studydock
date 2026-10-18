@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Play, Pause, RotateCcw, Check, Clock, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface StudyTimerProps {
   currentWeekId?: string;
@@ -95,11 +96,21 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
 
       if (res.ok) {
         setSuccessMessage(`Logged ${durationMinutes}m focus block`);
+        toast.success(`Logged ${durationMinutes}m focus session`, {
+          description: "Credited to your weekly study target and velocity metrics.",
+        });
         setTimeout(() => setSuccessMessage(""), 2500);
         if (onSessionLogged) onSessionLogged();
+      } else {
+        toast.error("Failed to log session", {
+          description: "Please check your network or database connection.",
+        });
       }
     } catch (err) {
       console.error("Failed to log study session", err);
+      toast.error("Network error logging session", {
+        description: "Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }

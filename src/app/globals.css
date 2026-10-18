@@ -34,6 +34,11 @@
     --ring: 217 91% 60%;
 
     --radius: 0.75rem;
+
+    /* Custom physical cubic-bezier easing curves (Emil Design Eng / Apple standards) */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   .dark {
@@ -67,9 +72,10 @@
     --ring: 217 91% 60%;
   }
 
-  html {
+  html, body {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    overscroll-behavior: none;
   }
 
   * {
@@ -105,7 +111,32 @@
     cursor: pointer;
   }
 
-  /* Tactile feedback on press (Taste / Emil Design Eng standard) */
+  /* Controls shouldn't have selectable text on long-press (mobile-native §8) */
+  button,
+  [role="button"],
+  .tab,
+  .chip,
+  .drag-handle {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Prevent iOS Safari auto-zoom on inputs (mobile-native §4) */
+  @media (pointer: coarse) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+  }
+
+  /* Touch device hover states: prevent sticky hover after tap (mobile-native §1) */
+  @media (hover: none) and (pointer: coarse) {
+    *:hover {
+      transform: none !important;
+    }
+  }
+
+  /* Tactile feedback on press (Emil Design Eng / Apple 1:1 response) */
   button:active:not(:disabled),
   [role="button"]:active:not([aria-disabled="true"]) {
     transform: scale(0.975);
@@ -118,9 +149,19 @@
     outline-offset: 2px;
   }
 
-  /* Tabular numbers for clean stats and timers */
+  /* Tabular numbers for clean stats and timers (prevents jitter) */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Accessible motion reduction */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -163,7 +204,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, background-color 180ms ease;
   flex-shrink: 0;
 }
 
@@ -186,7 +227,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(224, 83, 83, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, background-color 180ms ease;
   flex-shrink: 0;
 }
 

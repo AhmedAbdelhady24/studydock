@@ -16,6 +16,64 @@ import { CheckpointBanner } from "@/components/CheckpointBanner";
 import { BentoOverview } from "@/components/BentoOverview";
 import { ProgressTimeline } from "@/components/ProgressTimeline";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+
+const WORST_CASE_TASKS = [
+  {
+    id: 9991,
+    taskId: "stress-task-1",
+    weekId: "product-engineer-33-week-w01",
+    weekNumber: 1,
+    sortOrder: 1,
+    category: "implementation",
+    title: "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft Implementierung",
+    description: "Deep-dive Architectural Microkernel Boundary Verification & Cryptographic TLS 1.3 Handshake Zero-Copy Buffer Invalidation Strategy [RFC-8446-Compliant & SOC2-Certified]. Spec available at https://subdomain.deeply-nested-internal-system.enterprise-cluster.corp.internal/v2/workspaces/engineering/tasks/verify-contract?session_token=abcdef0123456789&signature=sha256_mock_hash",
+    status: "todo",
+    required: true,
+    dsaTargetCount: null,
+    confidence: 0,
+    resourceLabel: "Supercalifragilisticexpialidocious Systems",
+    resourceCategory: "implementation",
+    phaseTitle: "Syntax & Architecture",
+    exitCriteria: "Verify 100% boundary isolation across all cluster nodes.",
+  },
+  {
+    id: 9992,
+    taskId: "stress-task-2",
+    weekId: "product-engineer-33-week-w01",
+    weekNumber: 1,
+    sortOrder: 2,
+    category: "dsa",
+    title: "Jo",
+    description: "Minimal short title with empty optional fields.",
+    status: "in_progress",
+    required: true,
+    dsaTargetCount: 9999,
+    confidence: 5,
+    resourceLabel: "Alg",
+    resourceCategory: "dsa",
+    phaseTitle: "Syntax & Architecture",
+    exitCriteria: "Pass all edge case tests.",
+  },
+  {
+    id: 9993,
+    taskId: "stress-task-3",
+    weekId: "product-engineer-33-week-w01",
+    weekNumber: 1,
+    sortOrder: 3,
+    category: "checkpoint",
+    title: "Milestone Attestation: Aleksandra Wiśniewska-Kowalczyk & Bartholomew Fitzgerald III (SOC-2 Type II Audit)",
+    description: "Attestation criteria: Verify 100% test coverage and ensure zero memory leaks across 100,000 concurrency runs.",
+    status: "done",
+    required: true,
+    dsaTargetCount: null,
+    confidence: 4,
+    resourceLabel: "Exit Gatekeeper",
+    resourceCategory: "checkpoint",
+    phaseTitle: "Syntax & Architecture",
+    exitCriteria: "Explain and trace code without AI copilot assistance.",
+  },
+];
 
 export default function TodayPage() {
   const [data, setData] = useState<any>(null);
@@ -24,6 +82,7 @@ export default function TodayPage() {
   const [viewMode, setViewMode] = useState<"kanban" | "list">("kanban");
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [stressMode, setStressMode] = useState<"normal" | "worst" | "one" | "empty">("normal");
 
   const fetchPlanData = async (silent = false) => {
     try {
@@ -96,7 +155,15 @@ export default function TodayPage() {
 
   const { metrics, weeks } = data;
   const activeWeek = weeks.find((w: any) => !w.isCompleted) || weeks[0];
-  const activeWeekTasks = activeWeek?.tasks || [];
+  const dbTasks = activeWeek?.tasks || [];
+  const activeWeekTasks =
+    stressMode === "worst"
+      ? WORST_CASE_TASKS
+      : stressMode === "one"
+      ? [WORST_CASE_TASKS[0]]
+      : stressMode === "empty"
+      ? []
+      : dbTasks;
   const requiredTasks = activeWeekTasks.filter((t: any) => t.required);
   const allRequiredDone =
     requiredTasks.length > 0 &&
@@ -289,6 +356,41 @@ export default function TodayPage() {
         onClose={() => setIsDrawerOpen(false)}
         onUpdate={handleSilentUpdate}
       />
+
+      {/* Dev Stress-Testing Toggle Pill (break-ui skill) */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 p-1.5 bg-zinc-900/90 dark:bg-black/90 backdrop-blur-md border border-black/10 dark:border-white/15 rounded-full shadow-2xl text-[11px] font-sans">
+        <span className="text-zinc-400 pl-2 font-mono text-[10px] uppercase font-bold tracking-wider">
+          Break UI:
+        </span>
+        {(["normal", "worst", "one", "empty"] as const).map((m) => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => {
+              setStressMode(m);
+              toast.info(
+                `Switched to ${
+                  m === "normal"
+                    ? "Production DB Data"
+                    : m === "worst"
+                    ? "Adversarial Worst-Case Data"
+                    : m === "one"
+                    ? "Single Item Pluralization"
+                    : "Zero-Item Empty State"
+                }`
+              );
+            }}
+            className={cn(
+              "px-3 py-1 rounded-full font-semibold transition-colors cursor-pointer",
+              stressMode === m
+                ? "bg-white text-zinc-950 font-bold shadow-sm"
+                : "text-zinc-400 hover:text-white"
+            )}
+          >
+            {m === "normal" ? "Normal" : m === "worst" ? "Worst Case" : m === "one" ? "1 Item" : "Empty"}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
