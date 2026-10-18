@@ -30,19 +30,19 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
       {/* Greeting & Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
-          <span className="text-xs font-mono text-zinc-400 font-semibold tracking-wider uppercase block mb-1">
+          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-semibold tracking-wider uppercase block mb-1">
             Product Engineer Track • Week {activeWeek?.weekNumber || 1}
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
             Your Progress Today
           </h2>
         </div>
         <Link
           href={`/weeks/${activeWeek?.weekId}`}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-colors group"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group"
         >
           <span>View Full Week Syllabus</span>
-          <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>
       </div>
 
@@ -198,9 +198,9 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
         </div>
 
         {/* Card 5: Overall 33-Week Completion Rate */}
-        <div className="bg-[#18191E] border border-white/[0.08] text-white rounded-3xl p-5 shadow-md flex flex-col justify-between min-h-[140px] group">
+        <div className="bg-white dark:bg-[#18191E] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white rounded-3xl p-5 shadow-sm dark:shadow-md flex flex-col justify-between min-h-[140px] group transition-all">
           <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-zinc-300">
+            <div className="w-8 h-8 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-zinc-700 dark:text-zinc-300">
               <Layers className="w-4 h-4 stroke-[2.2]" />
             </div>
             <Link
@@ -212,14 +212,14 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
             </Link>
           </div>
           <div>
-            <span className="text-xs font-semibold text-zinc-400 block">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block">
               33w Program
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-3xl font-extrabold tracking-tight text-white tabular-nums">
+              <span className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white tabular-nums">
                 {metrics?.completedWeeksCount || 0}
               </span>
-              <span className="text-xs font-semibold text-zinc-400">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                 of 33 weeks
               </span>
             </div>
@@ -227,10 +227,10 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
         </div>
 
         {/* Card 6: DSA Problem Bank Solved */}
-        <div className="bg-[#18191E] border border-white/[0.08] text-white rounded-3xl p-5 shadow-md flex flex-col justify-between min-h-[140px] group">
+        <div className="bg-white dark:bg-[#18191E] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-white rounded-3xl p-5 shadow-sm dark:shadow-md flex flex-col justify-between min-h-[140px] group transition-all">
           <div className="flex items-start justify-between">
-            <div className="w-8 h-8 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-zinc-300">
-              <Sparkles className="w-4 h-4 text-purple-400 stroke-[2.2]" />
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 dark:bg-white/[0.06] border border-purple-500/20 dark:border-white/[0.08] flex items-center justify-center text-purple-600 dark:text-purple-400">
+              <Sparkles className="w-4 h-4 stroke-[2.2]" />
             </div>
             <Link
               href="/dsa"
@@ -241,14 +241,14 @@ export function BentoOverview({ activeWeek, metrics }: BentoOverviewProps) {
             </Link>
           </div>
           <div>
-            <span className="text-xs font-semibold text-zinc-400 block">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block">
               DSA Solved
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-3xl font-extrabold tracking-tight text-white tabular-nums">
+              <span className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white tabular-nums">
                 {metrics?.distinctDsaSolvedCount || 0}
               </span>
-              <span className="text-xs font-semibold text-zinc-400">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                 unique drills
               </span>
             </div>
