@@ -162,7 +162,7 @@ export default function ImportExportPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full max-w-7xl mx-auto">
       {/* Header Banner */}
       <div className="pb-5 border-b border-black/[0.06] dark:border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
