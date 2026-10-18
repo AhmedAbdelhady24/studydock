@@ -37,6 +37,14 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // Wall-Clock Timing Refs (Guarantees zero-drift & immune to background tab throttling)
+  const startTimeRef = useRef<number | null>(null);
+  const accumulatedSecondsRef = useRef(0);
+  const isActiveRef = useRef(false);
+  isActiveRef.current = isActive;
+  const secondsRef = useRef(0);
+  secondsRef.current = seconds;
+
   // Load auto-pip preference from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("studydock_timer_autopip");
@@ -62,20 +70,21 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
     }
   }, [currentWeekId]);
 
-  // Main timer stopwatch tick
+  // Main timer stopwatch tick (wall-clock based: immune to background tab throttling)
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSeconds((prev) => prev + 1);
-      }, 1000);
-    } else if (!isActive && seconds !== 0) {
-      if (interval) clearInterval(interval);
+        if (startTimeRef.current !== null) {
+          const elapsedSecs = Math.floor((Date.now() - startTimeRef.current) / 1000);
+          setSeconds(accumulatedSecondsRef.current + elapsedSecs);
+        }
+      }, 500);
     }
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, seconds]);
+  }, [isActive]);
 
   const formatTime = (totalSecs: number) => {
     const hrs = Math.floor(totalSecs / 3600);
@@ -163,7 +172,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
     [getWeekDisplay]
   );
 
-  // Initialize canvas stream onto hidden video element
+  // Initialize canvas stream onto hidden video element with silent audio track for full OS/PiP media controls
   const initPipStream = useCallback(() => {
     if (!canvasRef.current || !videoRef.current) return;
     const canvas = canvasRef.current;
@@ -171,8 +180,25 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
 
     if (!video.srcObject) {
       try {
-        const stream = (canvas as any).captureStream ? (canvas as any).captureStream(10) : null;
+        const stream = (canvas as any).captureStream ? (canvas as any).captureStream(30) : null;
         if (stream) {
+          // Add silent audio track so browser enables full media controls in PiP and Control Center
+          try {
+            const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+            if (AudioCtx) {
+              const audioCtx = new AudioCtx();
+              const osc = audioCtx.createOscillator();
+              const dst = audioCtx.createMediaStreamDestination();
+              osc.connect(dst);
+              osc.start();
+              const audioTrack = dst.stream.getAudioTracks()[0];
+              if (audioTrack) {
+                audioTrack.enabled = false;
+                stream.addTrack(audioTrack);
+              }
+            }
+          } catch {}
+
           video.srcObject = stream;
           video.muted = true;
           video.playsInline = true;
@@ -183,6 +209,56 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
       }
     }
   }, []);
+
+  // Core play/resume handler used by website button, PiP controls, and MediaSession
+  const handlePlay = useCallback(async () => {
+    setIsActive(true);
+    isActiveRef.current = true;
+    startTimeRef.current = Date.now();
+
+    initPipStream();
+
+    if (videoRef.current && videoRef.current.paused) {
+      try {
+        await videoRef.current.play();
+      } catch (err) {
+        console.warn("Video play error in handlePlay", err);
+      }
+    }
+
+    if (typeof window !== "undefined" && "mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "playing";
+    }
+
+    drawCanvas(accumulatedSecondsRef.current, true);
+  }, [drawCanvas, initPipStream]);
+
+  // Core pause handler used by website button, PiP controls, and MediaSession
+  const handlePause = useCallback(() => {
+    setIsActive(false);
+    isActiveRef.current = false;
+
+    if (startTimeRef.current !== null) {
+      const elapsedSecs = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      accumulatedSecondsRef.current += elapsedSecs;
+      startTimeRef.current = null;
+      setSeconds(accumulatedSecondsRef.current);
+    }
+
+    if (videoRef.current && !videoRef.current.paused) {
+      try {
+        videoRef.current.pause();
+      } catch (err) {
+        console.warn("Video pause error in handlePause", err);
+      }
+    }
+
+    if (typeof window !== "undefined" && "mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "paused";
+    }
+
+    drawCanvas(accumulatedSecondsRef.current, false);
+  }, [drawCanvas]);
 
   // Update canvas & page title on timer ticks
   useEffect(() => {
@@ -197,7 +273,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
     }
   }, [seconds, isActive, drawCanvas]);
 
-  // Listen for Picture-in-Picture enter / exit events
+  // Listen for video element events and Picture-in-Picture controls
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -205,14 +281,31 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
     const onEnterPip = () => setIsPipActive(true);
     const onLeavePip = () => setIsPipActive(false);
 
+    // Native PiP player control events
+    const onVideoPlay = () => {
+      if (!isActiveRef.current) {
+        handlePlay();
+      }
+    };
+
+    const onVideoPause = () => {
+      if (isActiveRef.current) {
+        handlePause();
+      }
+    };
+
     video.addEventListener("enterpictureinpicture", onEnterPip);
     video.addEventListener("leavepictureinpicture", onLeavePip);
+    video.addEventListener("play", onVideoPlay);
+    video.addEventListener("pause", onVideoPause);
 
     return () => {
       video.removeEventListener("enterpictureinpicture", onEnterPip);
       video.removeEventListener("leavepictureinpicture", onLeavePip);
+      video.removeEventListener("play", onVideoPlay);
+      video.removeEventListener("pause", onVideoPause);
     };
-  }, []);
+  }, [handlePlay, handlePause]);
 
   // AUTO-PIP ON TAB SWITCH:
   // When user switches to another tab while timer is active, automatically enter Picture-in-Picture!
@@ -245,18 +338,28 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
 
   // MediaSession API integration for OS-level and PiP play/pause controls
   useEffect(() => {
-    if (typeof window !== "undefined" && "mediaSession" in navigator && isActive) {
-      try {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: `Focus Timer: ${formatTime(seconds)}`,
-          artist: "StudyDock",
-          album: getWeekDisplay(),
-        });
-        navigator.mediaSession.setActionHandler("play", () => setIsActive(true));
-        navigator.mediaSession.setActionHandler("pause", () => setIsActive(false));
-      } catch {}
+    if (typeof window === "undefined" || !("mediaSession" in navigator)) return;
+
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: `Focus Timer: ${formatTime(seconds)}`,
+        artist: "StudyDock",
+        album: getWeekDisplay(),
+      });
+
+      // Explicitly setting playbackState tells the PiP window whether to show Play or Pause button!
+      navigator.mediaSession.playbackState = isActive ? "playing" : "paused";
+
+      navigator.mediaSession.setActionHandler("play", () => {
+        handlePlay();
+      });
+      navigator.mediaSession.setActionHandler("pause", () => {
+        handlePause();
+      });
+    } catch (err) {
+      console.warn("MediaSession setup error", err);
     }
-  }, [seconds, isActive, getWeekDisplay]);
+  }, [seconds, isActive, getWeekDisplay, handlePlay, handlePause]);
 
   // Toggle Picture-in-Picture manually
   const togglePiP = async () => {
@@ -293,28 +396,34 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
   };
 
   const toggleTimer = async () => {
-    const next = !isActive;
-    setIsActive(next);
-
-    // Warm up video stream in user gesture
-    if (next) {
-      initPipStream();
-      drawCanvas(seconds, next);
-      if (videoRef.current) {
-        try {
-          await videoRef.current.play();
-        } catch {}
-      }
+    if (isActive) {
+      handlePause();
+    } else {
+      await handlePlay();
     }
   };
 
   const resetTimer = () => {
     setIsActive(false);
+    isActiveRef.current = false;
+    startTimeRef.current = null;
+    accumulatedSecondsRef.current = 0;
     setSeconds(0);
+    if (videoRef.current && !videoRef.current.paused) {
+      try {
+        videoRef.current.pause();
+      } catch {}
+    }
+    if (typeof window !== "undefined" && "mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "none";
+    }
+    drawCanvas(0, false);
   };
 
   const addPresetMinutes = (mins: number) => {
+    accumulatedSecondsRef.current += mins * 60;
     setSeconds((prev) => prev + mins * 60);
+    drawCanvas(accumulatedSecondsRef.current, isActiveRef.current);
   };
 
   const handleSaveTimerSession = async () => {
@@ -488,7 +597,7 @@ export function StudyTimer({ currentWeekId, onSessionLogged }: StudyTimerProps) 
               )}
             >
               {isActive ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              <span>{isActive ? "Pause" : "Start"}</span>
+              <span>{isActive ? "Pause" : seconds > 0 ? "Resume" : "Start"}</span>
             </button>
 
             <button
