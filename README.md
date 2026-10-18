@@ -83,7 +83,7 @@ StudyDock exposes eight modular subsystems engineered around the learner: **curr
 | **5. Persistence & Drizzle Schema** | Relational data layer over PostgreSQL 16 | Type-safe migrations (`drizzle-kit`), relational integrity, immutable task keys, and automated SQL snapshot scripts. |
 | **6. Tactile Interaction System** | Emil Kowalski & Apple WWDC motion standard | `:active { transform: scale(0.97) }`, `cubic-bezier(0.16, 1, 0.3, 1)` easing curves, zero tap-highlight delays, and mobile-native polish. |
 | **7. Toast Notification Bus** | Zero-layout-shift feedback bus via Sonner | Light/dark theme awareness, action confirmations, asynchronous operation status, and non-intrusive error reporting. |
-| **8. Break-UI Adversarial Harness** | Dev-time visual stress-testing switcher | Instant toggle between *Normal*, *Worst-case* (German compounds, 200-char URLs), *1-item count*, and *0-item empty state*. |
+| **8. Adversarial Edge Case Suite** | Verified layout resilience engine | Verified tolerance against adversarial conditions: German compounds, 200-char unbroken URLs, 1-item counts, and 0-item empty states. |
 
 ## Empirical invariants
 
@@ -189,22 +189,14 @@ pnpm run audit
 
 ## Experiments & adversarial stress-testing
 
-StudyDock includes a dedicated **Break-UI Adversarial Harness** (`src/components/BreakUIToggle.tsx`) to verify visual resilience under extreme data conditions without corrupting production database tables.
+StudyDock incorporates an **Adversarial Stress-Testing Methodology** to verify visual resilience under extreme data conditions without corrupting production database tables.
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│ [Break-UI Mode]  ● Normal   ○ Worst Case   ○ 1 Item   ○ 0 Items (Empty)│
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-The harness tests four deterministic states:
+The UI architecture is certified against four deterministic boundary states:
 
 * **Normal**: Standard curriculum data with typical word lengths and card densities.
 * **Worst-Case**: Stresses flexbox and CSS grid with German compound nouns (`Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft`), unbroken 250-character URLs, extreme numeric counts, and Unicode emoji clusters.
-* **1-Item**: Verifies that layout containers do not stretch awkwardly when only a single record exists.
+* **1-Item**: Verifies that layout containers and Bento statistics do not stretch awkwardly when only a single record exists.
 * **0-Items (Empty)**: Verifies that empty state illustrations, instructions, and CTA actions render cleanly without layout collapse.
-
-Activate the toggle in development by clicking the **Break-UI** badge in the global navigation bar.
 
 ## Local-first privacy & zero telemetry
 

@@ -34,4 +34,4 @@ Before opening a pull request, ensure all checks pass:
 - [ ] `pnpm typecheck` passes with zero errors.
 - [ ] `pnpm test` passes all Vitest unit and integration suites (12/12).
 - [ ] `pnpm run audit` passes Fallow architectural boundaries.
-- [ ] Verify Break-UI stress-test modes in development to ensure no layout overflows.
+- [ ] Verify edge cases (extreme text lengths, 0-item empty states, 1-item counts) to ensure no layout overflows.
