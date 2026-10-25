@@ -38,6 +38,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Today", icon: Compass, exact: true },
   { href: "/roadmap", label: "Roadmap", icon: Layers },
   { href: "/courses", label: "Courses", icon: GraduationCap },
+  { href: "/library", label: "Video Library", icon: BookOpen },
   { href: "/dsa", label: "DSA practice", icon: Binary },
   { href: "/sessions", label: "Time Log", icon: Clock },
   { href: "/analytics", label: "Analytics", icon: BarChart3 },
@@ -88,6 +89,12 @@ export function AppShell({ children }: AppShellProps) {
         { label: "Dashboard", href: "/" },
         { label: "Curriculum", href: "/roadmap" },
         { label: "Primary Video Courses" },
+      ];
+    }
+    if (pathname.startsWith("/library")) {
+      return [
+        { label: "Dashboard", href: "/" },
+        { label: "Verified learning library", href: "/library" },
       ];
     }
     if (pathname.startsWith("/dsa")) {

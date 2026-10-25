@@ -251,6 +251,13 @@ export function TaskDetailDrawer({
 
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs text-zinc-700 dark:text-zinc-300 overscroll-contain">
+          {task.video && (
+            <div className="rounded-2xl border border-black/10 dark:border-white/10 p-4 space-y-2">
+              <p className="font-semibold">Measured viewing time: {(task.video.durationSeconds / 60).toFixed(1)} min at 1×</p>
+              <p className="break-all text-zinc-500">{task.video.relativePath}</p>
+              <p>Exercises and review need additional time. Duration metadata does not verify full playback.</p>
+            </div>
+          )}
           {/* Quick Status Bar */}
           <div className="space-y-2">
             <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block font-semibold">

@@ -26,6 +26,13 @@ export interface NavShortcut {
 
 export const NAV_SHORTCUTS: NavShortcut[] = [
   {
+    id: "nav-library",
+    title: "Verified Video Library & Workload",
+    subtitle: "Measured video durations, weekly estimates, coverage and DSA proposals",
+    url: "/library",
+    keywords: ["library", "videos", "duration", "workload", "catalog", "coverage", "verified"],
+  },
+  {
     id: "nav-today",
     title: "Today's Workbench",
     subtitle: "Active focus tasks, pomodoro timer, and daily velocity",

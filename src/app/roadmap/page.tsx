@@ -310,6 +310,11 @@ export default function RoadmapPage() {
                       </div>
 
                       {/* Hairline Progress Indicator at Card Bottom */}
+                      {w.workload && (
+                        <p className="mt-2 text-xs text-zinc-500">
+                          {w.workload.required_viewing_hours.toFixed(2)}h measured viewing · {w.workload.allocated_practice_hours.toFixed(2)}h estimated practice
+                        </p>
+                      )}
                       <div className="mt-2.5 w-full bg-black/5 dark:bg-white/[0.06] rounded-full h-1.5 overflow-hidden p-0.5">
                         <div
                           className={cn(

@@ -4,6 +4,7 @@ import { plans, weeks, tasks, taskProgress, checkpointAttestations, studySession
 import { eq, isNull, asc } from "drizzle-orm";
 import { calculateDashboardMetrics, WeekWithDetails, TaskWithProgress } from "@/lib/metrics";
 import { getTaskResource } from "@/lib/taskResources";
+import { getLearningMetadata, getTaskVideo } from "@/lib/learning-metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,7 @@ export async function GET() {
             referenceUrl: resource.referenceUrl,
             topicBadge: resource.topicBadge,
             taskConcepts: resource.taskConcepts,
+            video: getTaskVideo(plan.slug, t),
           };
         });
 
@@ -116,6 +118,9 @@ export async function GET() {
         tasksCount: weekTasksList.length,
         completedTasksCount: doneReqTasks.length,
         tasks: weekTasksList,
+        workload: getLearningMetadata().planSlug === plan.slug
+          ? getLearningMetadata().weeks.find((row) => row.week_id === w.weekId) ?? null
+          : null,
       };
     });
 

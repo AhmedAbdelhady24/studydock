@@ -199,6 +199,14 @@ export default function WeekDetailPage() {
         </div>
 
         {/* Primary Courses & Concepts */}
+        {currentWeek.workload && (
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 p-4 text-sm space-y-2">
+            <h2 className="font-semibold">Viewing & practice budget</h2>
+            <p>{currentWeek.workload.required_viewing_hours.toFixed(2)}h required viewing · {currentWeek.workload.optional_viewing_hours.toFixed(2)}h optional viewing, measured at 1×.</p>
+            <p>{currentWeek.workload.allocated_practice_hours.toFixed(2)}h estimated practice · {currentWeek.workload.required_total_estimated_hours.toFixed(2)}h proposed required total / {currentWeek.targetHours}h target.</p>
+            <p className="text-xs text-zinc-500">Verified bundle snapshot. Practice timing is unverified; compare with your real study sessions. <Link href="/library" className="underline">View full library and workload</Link></p>
+          </div>
+        )}
         <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06] grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div>
             <span className="text-zinc-500 dark:text-zinc-400 font-semibold block mb-1">

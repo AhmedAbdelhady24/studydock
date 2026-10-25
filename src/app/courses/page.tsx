@@ -82,10 +82,10 @@ export default function CoursesPage() {
     );
   }
 
-  const targetsMetCount = courses.filter((c) => (c.actualPercent ?? 0) >= (c.targetMin ?? 100)).length;
-  const fullCoverageCount = courses.filter((c) => c.coverageKind === "full").length;
-  const targetedCount = courses.filter((c) => c.coverageKind === "targeted").length;
-  const selectiveCount = courses.filter((c) => c.coverageKind === "selective").length;
+  const targetsMetCount = courses.filter((c) => c.coverageKind === "percentage" && c.actualPercent !== null && c.actualPercent >= (c.targetMin ?? 100)).length;
+  const fullCoverageCount = courses.filter((c) => c.coverageKind === "percentage").length;
+  const targetedCount = courses.filter((c) => c.coverageKind === "count").length;
+  const selectiveCount = courses.filter((c) => c.coverageKind === "text").length;
 
   return (
     <div className="space-y-8">
@@ -105,7 +105,7 @@ export default function CoursesPage() {
 
         {/* Filter Pills */}
         <div className="flex items-center gap-1.5 p-1 rounded-full bg-zinc-100 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs self-start sm:self-auto">
-          {["all", "full", "targeted", "selective"].map((k) => (
+          {["all", "percentage", "count", "text"].map((k) => (
             <button
               key={k}
               type="button"
@@ -126,25 +126,25 @@ export default function CoursesPage() {
       {/* Curriculum Summary Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl sm:rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] shadow-sm hover:shadow-md transition-all">
-          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Targets Met</span>
+          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Percentage targets met</span>
           <span className="text-2xl font-extrabold font-mono text-zinc-900 dark:text-white tabular-nums">
-            {targetsMetCount} / {courses.length}
+            {targetsMetCount} / {fullCoverageCount}
           </span>
         </div>
         <div className="p-5 rounded-2xl sm:rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] shadow-sm hover:shadow-md transition-all">
-          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Full Coverage (100%)</span>
+          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Percentage goals</span>
           <span className="text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">
             {fullCoverageCount} courses
           </span>
         </div>
         <div className="p-5 rounded-2xl sm:rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] shadow-sm hover:shadow-md transition-all">
-          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Targeted Coverage</span>
+          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Count goals</span>
           <span className="text-2xl font-extrabold font-mono text-blue-600 dark:text-blue-400 tabular-nums">
             {targetedCount} courses
           </span>
         </div>
         <div className="p-5 rounded-2xl sm:rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-50 dark:bg-[#111215] shadow-sm hover:shadow-md transition-all">
-          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Selective Coverage</span>
+          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 block mb-1 font-semibold uppercase tracking-wider">Text goals</span>
           <span className="text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-400 tabular-nums">
             {selectiveCount} courses
           </span>
@@ -156,7 +156,7 @@ export default function CoursesPage() {
         {filteredCourses.map((c) => {
           const target = c.targetMin ?? 100;
           const actual = c.actualPercent ?? 0;
-          const isTargetMet = actual >= target;
+          const isTargetMet = c.coverageKind === "percentage" && c.actualPercent !== null && actual >= target;
           const isEditing = editingCourseId === c.courseId;
 
           return (
@@ -212,15 +212,16 @@ export default function CoursesPage() {
               <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
                 <span>Weeks: {c.plannedWeeks || "Throughout roadmap"}</span>
                 <span>
-                  Target: {c.targetMin}%{c.targetMax ? `–${c.targetMax}%` : ""}
+                  Target: {c.targetMin}{c.targetMax ? `–${c.targetMax}` : ""} {c.targetUnit || (c.coverageKind === "percentage" ? "%" : "")}
                 </span>
               </div>
 
               {/* Progress Dual Bar */}
+              {c.coverageKind === "percentage" ? <>
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-zinc-600 dark:text-zinc-400 font-mono text-[11px]">
-                    Progress: <span className="text-zinc-900 dark:text-zinc-100 font-bold">{actual}%</span>
+                    Progress: <span className="text-zinc-900 dark:text-zinc-100 font-bold">{c.actualPercent === null ? "Not recorded" : `${actual}%`}</span>
                   </span>
                   {isTargetMet ? (
                     <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-semibold">
@@ -316,6 +317,7 @@ export default function CoursesPage() {
                   </div>
                 </div>
               )}
+              </> : <p className="text-xs text-zinc-500">Count goals measure distinct solved problems, separately from watched videos. <a className="underline" href="/dsa">Record actual problem attempts</a>.</p>}
 
               {/* Coverage Strategy Notes */}
               {c.coverageNote && (
