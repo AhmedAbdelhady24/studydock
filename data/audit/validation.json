@@ -1,0 +1,21 @@
+{
+  "core_existing_task_rows_unchanged": 543,
+  "new_core_optional_task_rows": 14,
+  "core_tasks_total": 557,
+  "original_course_goals_unchanged": 16,
+  "new_optional_course_goals": 2,
+  "core_course_goals_total": 18,
+  "measured_local_video_assignments_unchanged": 312,
+  "new_unmeasured_external_core_assignments": 14,
+  "optional_extension_weeks": 6,
+  "optional_extension_tasks": 42,
+  "optional_extension_course_goals": 4,
+  "optional_extension_plan_slug": "product-engineer-ai-fde-optional-6-week",
+  "BOM_in_generated_CSVs": false,
+  "core_ids_preserved": true,
+  "local_catalog_references_checked": 312,
+  "local_catalog_reference_errors": 0,
+  "deferred": "Andrew Ng Machine Learning Specialization; full CS50P; LLM Scientist",
+  "curriculum": "Original core tasks and required status unchanged; optional additions only",
+  "workload": "Existing local-video workload figures unchanged. External optional resource effort not measured and not included in 16h scenario."
+}

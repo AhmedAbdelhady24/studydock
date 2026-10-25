@@ -92,4 +92,49 @@ test-plan,test-w01,1,"Unclosed quote,I,Phase 1,Course,Concepts,Exit,10,w01,task-
     expect(result.success).toBe(false);
     expect(result.errors[0].message).toContain("Malformed CSV");
   });
+
+  it("should validate the updated 33-week core template with 557 tasks and 18 courses", () => {
+    const readyPlanPath = path.resolve(__dirname, "../data/import-ready/plan_template.csv");
+    const readyCoursesPath = path.resolve(__dirname, "../data/import-ready/courses_template.csv");
+
+    const planContent = fs.readFileSync(readyPlanPath, "utf-8");
+    const coursesContent = fs.readFileSync(readyCoursesPath, "utf-8");
+
+    const planRes = parsePlanImportCsv(planContent);
+    expect(planRes.success).toBe(true);
+    expect(planRes.data).toHaveLength(557);
+
+    const distinctWeeks = new Set(planRes.data.map((r) => r.week_id));
+    expect(distinctWeeks.size).toBe(33);
+
+    const optionalTasks = planRes.data.filter((r) => !r.required);
+    expect(optionalTasks.length).toBeGreaterThanOrEqual(14);
+
+    const coursesRes = parseCourseTargetsCsv(coursesContent);
+    expect(coursesRes.success).toBe(true);
+    expect(coursesRes.data).toHaveLength(18);
+
+    const harness = coursesRes.data.find((c) => c.course_id.includes("harness"));
+    expect(harness?.coverage_kind).toBe("count");
+    expect(harness?.target_max).toBe(10);
+  });
+
+  it("should validate the separate 6-week optional AI/FDE track templates", () => {
+    const fdePlanPath = path.resolve(__dirname, "../data/optional_ai_fde_6_weeks/plan_template.csv");
+    const fdeCoursesPath = path.resolve(__dirname, "../data/optional_ai_fde_6_weeks/courses_template.csv");
+
+    const planContent = fs.readFileSync(fdePlanPath, "utf-8");
+    const coursesContent = fs.readFileSync(fdeCoursesPath, "utf-8");
+
+    const planRes = parsePlanImportCsv(planContent);
+    expect(planRes.success).toBe(true);
+    expect(planRes.data).toHaveLength(42);
+
+    const distinctWeeks = new Set(planRes.data.map((r) => r.week_id));
+    expect(distinctWeeks.size).toBe(6);
+
+    const coursesRes = parseCourseTargetsCsv(coursesContent);
+    expect(coursesRes.success).toBe(true);
+    expect(coursesRes.data).toHaveLength(4);
+  });
 });
