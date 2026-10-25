@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   X,
   BookOpen,
@@ -89,6 +89,8 @@ export function TaskDetailDrawer({
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  const drawerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (task) {
       setStatus(task.status || "not_started");
@@ -98,15 +100,51 @@ export function TaskDetailDrawer({
     }
   }, [task]);
 
-  // Close on Escape key
+  // Trap focus inside drawer when open & handle Escape key
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (e.key === "Tab") {
+        if (!drawerRef.current) return;
+        const focusableElements = drawerRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const first = focusableElements[0];
+        const last = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
     };
-    if (isOpen) {
-      window.addEventListener("keydown", handleKeyDown);
-    }
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Initial focus on close button
+    const timer = setTimeout(() => {
+      drawerRef.current?.querySelector<HTMLElement>('button[aria-label="Close details"]')?.focus();
+    }, 50);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      clearTimeout(timer);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen || !task) return null;
@@ -187,7 +225,13 @@ export function TaskDetailDrawer({
       />
 
       {/* Slide-over Drawer Panel */}
-      <div className="relative z-10 w-full max-w-lg bg-white dark:bg-[#0E1014] border-l border-black/[0.1] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_1px_0_0_rgba(255,255,255,0.06)] flex flex-col h-[100dvh] animate-in slide-in-from-right duration-250 ease-out text-zinc-900 dark:text-zinc-100">
+      <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-task-title"
+        className="relative z-10 w-full max-w-lg bg-white dark:bg-[#0E1014] border-l border-black/[0.1] dark:border-white/[0.1] shadow-2xl dark:shadow-[inset_1px_0_0_rgba(255,255,255,0.06)] flex flex-col h-[100dvh] animate-in slide-in-from-right duration-250 ease-out text-zinc-900 dark:text-zinc-100"
+      >
         {/* Header */}
         <div className="p-6 border-b border-black/[0.08] dark:border-white/[0.08] space-y-3 shrink-0">
           <div className="flex items-center justify-between">
@@ -227,7 +271,10 @@ export function TaskDetailDrawer({
           </div>
 
           <div>
-            <h2 className="text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug break-words [overflow-wrap:anywhere]">
+            <h2
+              id="drawer-task-title"
+              className="text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug break-words [overflow-wrap:anywhere]"
+            >
               {task.title}
             </h2>
             <div className="flex items-center gap-2 mt-2.5">

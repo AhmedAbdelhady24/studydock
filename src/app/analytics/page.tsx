@@ -111,6 +111,7 @@ export default function AnalyticsPage() {
     name: cat.replace(/_/g, " "),
     count,
   }));
+  const totalCategoriesCount = categoryData.reduce((acc, c) => acc + c.count, 0);
 
   // Chart 3: First 12 Weeks Hours vs Actual
   const weekHoursData = weeks.slice(0, 12).map((w: any) => {
@@ -226,7 +227,9 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
               Task Category Balance
             </h3>
-            <span className="text-[10px] font-mono text-zinc-400">231 Total</span>
+            <span className="text-[10px] font-mono text-zinc-400">
+              {totalCategoriesCount} Total
+            </span>
           </div>
 
           <div className="h-56 w-full flex items-center justify-center">

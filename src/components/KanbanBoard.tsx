@@ -322,8 +322,17 @@ export function KanbanBoard({ tasks, onUpdate, onSelectTask }: KanbanBoardProps)
                           if (draggedTaskId) return;
                           onSelectTask(task);
                         }}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`Inspect task details for ${task.title}`}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onSelectTask(task);
+                          }
+                        }}
                         className={cn(
-                          "group rounded-2xl border p-4 transition-all duration-150 ease-out cursor-grab active:cursor-grabbing relative space-y-3 select-none",
+                          "group rounded-2xl border p-4 transition-all duration-150 ease-out cursor-grab active:cursor-grabbing relative space-y-3 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-white",
                           "hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]",
                           isBeingDragged && "opacity-40 scale-[0.98]",
                           task.status === "done"

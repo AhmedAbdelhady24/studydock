@@ -10,6 +10,7 @@ import {
   Check,
   Filter,
 } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { StatCard } from "@/components/StatCard";
 
@@ -41,6 +42,7 @@ export default function DsaPage() {
 
   // Form State
   const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState(false);
   const [pattern, setPattern] = useState(DSA_PATTERNS[0]);
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
   const [url, setUrl] = useState("");
@@ -70,10 +72,17 @@ export default function DsaPage() {
 
   const handleCreateAttempt = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      setTitleError(true);
+      toast.error("Problem title is required", {
+        description: "Please enter the problem name to record an attempt.",
+      });
+      return;
+    }
 
     try {
       setIsSubmitting(true);
+      setTitleError(false);
       const res = await fetch("/api/dsa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,10 +103,21 @@ export default function DsaPage() {
         setUrl("");
         setNotes("");
         setShowAddForm(false);
+        toast.success("Problem attempt recorded!", {
+          description: `Logged "${title.trim()}" in ${pattern}.`,
+        });
         await fetchDsaData();
+      } else {
+        const errorJson = await res.json().catch(() => ({}));
+        toast.error("Failed to record problem attempt", {
+          description: errorJson.error || "Please verify your input and try again.",
+        });
       }
     } catch (err) {
       console.error("Failed to log DSA attempt", err);
+      toast.error("Network or database error", {
+        description: "Could not connect to the local server.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -180,11 +200,26 @@ export default function DsaPage() {
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  if (titleError && e.target.value.trim()) setTitleError(false);
+                }}
                 placeholder="e.g. 3Sum, LRU Cache, Trapping Rain Water"
-                className="w-full bg-zinc-50 dark:bg-[#090A0C] border border-black/[0.08] dark:border-white/[0.08] rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-white font-medium"
+                className={cn(
+                  "w-full bg-zinc-50 dark:bg-[#090A0C] border rounded-xl px-3.5 py-2.5 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:ring-2 font-medium transition-colors",
+                  titleError
+                    ? "border-rose-500 focus:ring-rose-500 bg-rose-50/40 dark:bg-rose-950/20"
+                    : "border-black/[0.08] dark:border-white/[0.08] focus:ring-zinc-900 dark:focus:ring-white"
+                )}
+                aria-invalid={titleError}
+                aria-describedby={titleError ? "title-error" : undefined}
                 required
               />
+              {titleError && (
+                <p id="title-error" className="text-[11px] text-rose-500 font-medium">
+                  Problem title is required.
+                </p>
+              )}
             </div>
 
             <div className="space-y-1.5">

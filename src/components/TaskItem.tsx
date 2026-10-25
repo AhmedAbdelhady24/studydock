@@ -169,13 +169,14 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
       )}
     >
       <div className="flex items-start gap-3 p-4">
-        {/* Sleek Tactile Checkbox */}
+        {/* Sleek Tactile Checkbox with 44x44px accessible touch target */}
         <button
           type="button"
           onClick={handleToggleDone}
           disabled={isSaving}
+          aria-label={isDone ? `Mark "${task.title}" as incomplete` : `Mark "${task.title}" as completed`}
           className={cn(
-            "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-md border transition-all cursor-pointer",
+            "relative mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-md border transition-all cursor-pointer before:content-[''] before:absolute before:-inset-3.5 before:cursor-pointer",
             isDone
               ? "bg-emerald-500 border-emerald-400 text-white"
               : isInProgress
@@ -245,16 +246,23 @@ export function TaskItem({ task, onUpdate, onSelectTask }: TaskItemProps) {
             </span>
           </div>
 
-          <p
+          <button
+            type="button"
             onClick={() => onSelectTask?.(task)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelectTask?.(task);
+              }
+            }}
             className={cn(
-              "font-bold leading-relaxed transition-colors duration-150 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 break-words [overflow-wrap:anywhere]",
+              "text-left w-full font-bold leading-relaxed transition-colors duration-150 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 break-words [overflow-wrap:anywhere] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-white rounded-md",
               isDone ? "text-zinc-400 dark:text-zinc-500 line-through decoration-zinc-400 dark:decoration-zinc-600" : "text-zinc-900 dark:text-zinc-100"
             )}
-            title="Click to view full course and task details"
+            title="Click or press Enter to view full course and task details"
           >
             {task.title}
-          </p>
+          </button>
 
           {task.description && (
             <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400/90 leading-relaxed font-normal break-words [overflow-wrap:anywhere]">
